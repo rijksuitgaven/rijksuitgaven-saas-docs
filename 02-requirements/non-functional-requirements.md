@@ -138,6 +138,181 @@ Non-functional requirements define system qualities and constraints.
   - **Priority:**
   - **Rationale:**
 
+## Internationalization & Localization Requirements
+
+### Language Support
+- **NFR-I18N-001:** Multi-language architecture
+  - **Requirement:** System must be built with internationalization (i18n) from the ground up with no hard-coded strings in the codebase
+  - **Priority:** Critical
+  - **Rationale:** Platform is designed for franchise model to multiple countries. Hard-coded strings would require code changes for each new market, creating technical debt and scaling challenges.
+
+- **NFR-I18N-002:** Source language
+  - **Requirement:** English must be used as the source language for all UI strings, error messages, and system text in the codebase
+  - **Priority:** High
+  - **Rationale:** English as source language is industry best practice for international SaaS platforms, facilitating easier expansion to new markets and better developer experience with international teams.
+
+- **NFR-I18N-003:** Dutch as primary translation
+  - **Requirement:** Dutch (NL) must be the first complete translation and default language for the Netherlands market
+  - **Priority:** Critical
+  - **Rationale:** Current customer base is Dutch-speaking, requiring seamless migration experience with Dutch as the primary user-facing language.
+
+- **NFR-I18N-004:** Translation management
+  - **Requirement:** All translatable strings must be externalized in translation files (e.g., JSON, YAML, or dedicated i18n service) with unique keys
+  - **Priority:** Critical
+  - **Rationale:** Enables non-developers to manage translations and supports continuous localization without code deployments.
+
+- **NFR-I18N-005:** Language detection and selection
+  - **Requirement:** System must automatically detect user's preferred language from browser settings and allow manual language switching
+  - **Priority:** High
+  - **Rationale:** Improves user experience by showing content in user's preferred language while maintaining user control.
+
+### Content Localization
+- **NFR-I18N-006:** Date and time formatting
+  - **Requirement:** All dates and times must be displayed according to user's locale (DD-MM-YYYY for NL, locale-appropriate for other markets)
+  - **Priority:** High
+  - **Rationale:** Date format varies significantly by country; incorrect format creates confusion and reduces trust in financial data.
+
+- **NFR-I18N-007:** Number and currency formatting
+  - **Requirement:** Numbers and currency must be formatted per locale standards (e.g., "€ 1.234,56" for NL, "$1,234.56" for US)
+  - **Priority:** Critical
+  - **Rationale:** Financial platform requires precise, locale-appropriate number formatting to prevent misinterpretation of financial data.
+
+- **NFR-I18N-008:** Right-to-left (RTL) support preparation
+  - **Requirement:** UI architecture should not preclude future RTL language support (Arabic, Hebrew)
+  - **Priority:** Low
+  - **Rationale:** While not immediate priority, avoiding RTL-incompatible patterns now prevents costly refactoring if expanding to Middle East markets.
+
+### Database and Data
+- **NFR-I18N-009:** UTF-8 encoding
+  - **Requirement:** All database fields, API responses, and file storage must use UTF-8 encoding
+  - **Priority:** Critical
+  - **Rationale:** Ensures proper storage and display of special characters across all languages (accents, umlauts, etc.).
+
+- **NFR-I18N-010:** Translatable content storage
+  - **Requirement:** User-generated or admin-managed content that needs translation (e.g., help text, notifications) must support multi-language storage
+  - **Priority:** High
+  - **Rationale:** Enables localized content management for announcements, help documentation, and dynamic content.
+
+### API and Backend
+- **NFR-I18N-011:** Language-aware APIs
+  - **Requirement:** APIs must accept language preference parameter (e.g., Accept-Language header) and return localized error messages and responses
+  - **Priority:** High
+  - **Rationale:** Ensures consistent user experience across frontend and API interactions, including error messages.
+
+- **NFR-I18N-012:** Validation messages
+  - **Requirement:** All form validation and error messages must be translatable and never hard-coded
+  - **Priority:** High
+  - **Rationale:** Error messages are critical to user experience and must be understandable in user's language.
+
+### Email and Notifications
+- **NFR-I18N-013:** Localized email templates
+  - **Requirement:** All email templates (transactional, marketing, notifications) must be available in each supported language
+  - **Priority:** High
+  - **Rationale:** Email communication must match user's language preference for professional communication.
+
+- **NFR-I18N-014:** Locale-aware email timing
+  - **Requirement:** Scheduled emails and notifications should consider recipient's timezone
+  - **Priority:** Medium
+  - **Rationale:** Improves engagement by sending emails at appropriate local times.
+
+### Documentation and Support
+- **NFR-I18N-015:** Help documentation localization
+  - **Requirement:** User documentation, help articles, and tooltips must be available in all supported languages
+  - **Priority:** High
+  - **Rationale:** Users need help content in their native language for effective self-service support.
+
+- **NFR-I18N-016:** Support for localized content
+  - **Requirement:** Support system must handle inquiries in multiple languages
+  - **Priority:** Medium
+  - **Rationale:** Franchise model requires each market to provide localized customer support.
+
+### Expansion Strategy
+- **NFR-I18N-017:** Easy language addition
+  - **Requirement:** Adding a new language should require only translation files, not code changes
+  - **Priority:** Critical
+  - **Rationale:** Reduces time-to-market for new countries and enables rapid international expansion.
+
+- **NFR-I18N-018:** Initial language support
+  - **Requirement:** Launch with English (source) and Dutch (NL) fully implemented
+  - **Priority:** Critical
+  - **Rationale:** Validates i18n architecture while serving current market needs.
+
+- **NFR-I18N-019:** Future language roadmap
+  - **Requirement:** Architecture should accommodate 10+ languages without performance degradation
+  - **Priority:** Medium
+  - **Rationale:** Supports long-term franchise expansion to major European markets and beyond.
+
+### Performance Considerations
+- **NFR-I18N-020:** Translation loading performance
+  - **Requirement:** Language files should be lazy-loaded or cached to minimize initial page load impact
+  - **Priority:** Medium
+  - **Rationale:** Large translation files can impact performance; efficient loading strategy maintains speed.
+
+- **NFR-I18N-021:** Server-side rendering with i18n
+  - **Requirement:** If using SSR, it must properly handle language detection and rendering
+  - **Priority:** High (if using SSR)
+  - **Rationale:** SSR with i18n requires careful implementation to avoid serving wrong language from cache.
+
+### Testing Requirements
+- **NFR-I18N-022:** i18n test coverage
+  - **Requirement:** Automated tests must verify no hard-coded strings exist in UI code
+  - **Priority:** High
+  - **Rationale:** Prevents regression where developers inadvertently add hard-coded strings.
+
+- **NFR-I18N-023:** Translation completeness
+  - **Requirement:** CI/CD pipeline should check for missing translations before deployment
+  - **Priority:** Medium
+  - **Rationale:** Ensures no UI elements show translation keys instead of actual text.
+
+- **NFR-I18N-024:** Locale-specific testing
+  - **Requirement:** QA process must include testing with different locale settings (date formats, number formats)
+  - **Priority:** High
+  - **Rationale:** Catches locale-specific bugs before reaching users.
+
+## Implementation Recommendations
+
+### Recommended Technology Stack for i18n
+- **Frontend:** i18next, react-intl, or vue-i18n (depending on framework choice)
+- **Backend:** i18n libraries native to chosen backend framework
+- **Translation Management:** Lokalise, Crowdin, or Phrase for translation workflow
+- **Format Libraries:** date-fns, Luxon, or Intl API for date/time/number formatting
+
+### Translation Workflow
+1. Developers use translation keys in code (e.g., `t('login.username')`)
+2. Extract translation keys to base English file
+3. Translation service manages translations to other languages
+4. Translations sync back to application
+5. CI/CD validates translation completeness
+
+### Data Structure Example
+```json
+{
+  "en": {
+    "login": {
+      "username": "Username",
+      "password": "Password",
+      "submit": "Log in",
+      "forgotPassword": "Forgot password?"
+    }
+  },
+  "nl": {
+    "login": {
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord",
+      "submit": "Inloggen",
+      "forgotPassword": "Wachtwoord vergeten?"
+    }
+  }
+}
+```
+
+### Critical Success Factors
+1. **Developer discipline:** Enforce no hard-coded strings through code reviews and linting
+2. **Translation workflow:** Establish clear process for managing translations
+3. **Quality assurance:** Test all features in multiple languages
+4. **Performance monitoring:** Ensure i18n doesn't degrade user experience
+5. **Documentation:** Maintain clear guidelines for developers on i18n patterns
+
 ## Reliability Requirements
 
 ### Error Rate
