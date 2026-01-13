@@ -77,6 +77,18 @@ Project phases and milestones.
 - [Project Phases](./09-timelines/project-phases.md)
 - [Milestones](./09-timelines/milestones.md)
 
+### [Assets](./assets)
+Visual assets including screenshots, diagrams, wireframes, and mockups.
+
+- [Assets Guide](./assets/README.md) - How to add and organize visual assets
+- `/screenshots/current-ui/` - Current platform UI screenshots
+- `/screenshots/new-ui/` - New platform UI screenshots
+- `/diagrams/architecture/` - Architecture diagrams
+- `/diagrams/user-flows/` - User flow diagrams
+- `/diagrams/data-models/` - Database schemas and ER diagrams
+- `/wireframes/` - UI wireframes
+- `/design-mockups/` - High-fidelity design mockups
+
 ## How to Use This Documentation
 
 1. **Start with Project Overview** - Understand the context and goals
