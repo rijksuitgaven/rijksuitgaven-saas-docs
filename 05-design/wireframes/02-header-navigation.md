@@ -1,0 +1,305 @@
+# Wireframe: Header & Navigation
+
+**Date:** 2026-01-19
+**Status:** Draft
+**Related:** [Main Search Page](./01-main-search-page.md), [Current UI Overview](../../03-current-state/current-ui-overview.md)
+
+---
+
+## Purpose
+
+The header provides consistent navigation across all pages. Users can:
+- Access main sections of the platform
+- Switch between modules
+- Access profile and settings
+- Quickly focus search bar via keyboard shortcut
+
+---
+
+## Layout
+
+### Desktop Header (1200px+)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                 │
+│  [Logo] Rijksuitgaven     Zoeken ▾   Inzichten   Support ⓘ   Over ons   Contact │
+│         Snel inzicht...                BETA                                     │
+│                                                                     Profiel ▾   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Desktop Module Tabs (below header)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ [Financiële    ] [Apparaats-  ] [Provinciale  ] [Gemeentelijke] [Inkoop-      ] │
+│ [Instrumenten ●] [uitgaven    ] [subsidie...  ] [subsidie...  ] [uitgaven     ] │
+│                                                                                 │
+│ [Publiek       ] [Integraal   ]                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Tablet Header (768px - 1199px)
+
+```
+┌─────────────────────────────────────────────────┐
+│ [Logo] Rijksuitgaven              [☰ Menu] [👤] │
+└─────────────────────────────────────────────────┘
+
+Module selector (replaces tabs):
+┌─────────────────────────────────────────────────┐
+│ [Financiële Instrumenten                     ▾] │
+└─────────────────────────────────────────────────┘
+```
+
+### Mobile Header (< 768px)
+
+```
+┌─────────────────────────────┐
+│ [Logo]            [☰] [👤]  │
+└─────────────────────────────┘
+```
+
+---
+
+## Components
+
+### 1. Logo
+
+**Current:** "Rijksuitgaven" with magnifying glass icon and tagline
+**Tagline:** "Snel inzicht voor krachtige analyses"
+
+| State | Behavior |
+|-------|----------|
+| Click | Navigate to home/search page |
+| Hover | Subtle opacity change |
+
+**Design:**
+- Logo color: Pink/Magenta (#E91E63)
+- Tagline: Gray (#666666), smaller font
+
+---
+
+### 2. Main Navigation Items
+
+| Item | Type | Behavior |
+|------|------|----------|
+| Zoeken | Dropdown | Shows module quick links |
+| Inzichten BETA | Link | Navigate to insights page |
+| Support | Link with icon | Navigate to help/support |
+| Over ons | Link | Navigate to about page |
+| Contact | Link | Navigate to contact page |
+
+**Zoeken Dropdown:**
+```
+┌─────────────────────────────┐
+│ MODULES                     │
+│ ├ Financiële Instrumenten   │
+│ ├ Apparaatsuitgaven         │
+│ ├ Provinciale subsidie...   │
+│ ├ Gemeentelijke subsidie... │
+│ ├ Inkoopuitgaven            │
+│ ├ Publiek                   │
+│ └ Integraal                 │
+├─────────────────────────────┤
+│ Sneltoets: ⌘/ voor zoeken   │
+└─────────────────────────────┘
+```
+
+---
+
+### 3. Profile Dropdown
+
+**Trigger:** Click "Profiel ▾" or user avatar
+
+```
+┌─────────────────────────────┐
+│ Jan de Vries                │
+│ jan@example.com             │
+├─────────────────────────────┤
+│ Mijn account                │
+│ Instellingen                │
+│ Opgeslagen zoekopdrachten   │
+├─────────────────────────────┤
+│ Uitloggen                   │
+└─────────────────────────────┘
+```
+
+| Item | Behavior |
+|------|----------|
+| Mijn account | Navigate to account page |
+| Instellingen | Navigate to settings (column preferences, etc.) |
+| Opgeslagen zoekopdrachten | Navigate to saved searches |
+| Uitloggen | Log out, redirect to login page |
+
+---
+
+### 4. Module Tabs
+
+**Location:** Below main header, above search bar
+**Purpose:** Quick switching between data modules
+
+| State | Style |
+|-------|-------|
+| Active | Navy background (#2C3E50), white text |
+| Inactive | White background, dark text |
+| Hover | Light gray background |
+| With results | Badge showing count (when searching) |
+
+**Tab with results badge:**
+```
+┌────────────────────────┐
+│ Financiële Instrumenten│
+│                   (890)│
+└────────────────────────┘
+```
+
+**Behavior:**
+- Click → Filter results to that module
+- Badge appears during cross-module search
+- Active tab indicated by background color
+
+---
+
+### 5. Mobile Menu (Hamburger)
+
+**Trigger:** Click ☰ icon on tablet/mobile
+
+```
+┌─────────────────────────────────────────┐
+│ MENU                           [Sluiten]│
+├─────────────────────────────────────────┤
+│                                         │
+│ MODULES                                 │
+│ ▸ Financiële Instrumenten               │
+│ ▸ Apparaatsuitgaven                     │
+│ ▸ Provinciale subsidieregisters         │
+│ ▸ Gemeentelijke subsidieregisters       │
+│ ▸ Inkoopuitgaven                        │
+│ ▸ Publiek                               │
+│ ▸ Integraal                             │
+│                                         │
+│ ─────────────────────────────────────── │
+│                                         │
+│ Inzichten BETA                          │
+│ Support                                 │
+│ Over ons                                │
+│ Contact                                 │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+**Behavior:**
+- Slides in from right (or full-screen overlay)
+- Click outside or "Sluiten" to close
+- Tapping item navigates and closes menu
+
+---
+
+## Interactions
+
+| Action | Trigger | Result |
+|--------|---------|--------|
+| Go home | Click logo | Navigate to search page |
+| Switch module | Click tab | Filter to that module |
+| Open menu | Click ☰ (mobile) | Show mobile menu |
+| Open profile | Click Profiel ▾ | Show profile dropdown |
+| Focus search | Press ⌘/ or Ctrl+/ | Focus search bar input |
+
+---
+
+## States
+
+### Logged In
+- Shows: Profile dropdown with user name
+- Access: All navigation items
+
+### Logged Out
+- Shows: "Login" button instead of Profile
+- Access: Limited (redirect to login for protected pages)
+
+### Page-Specific
+- Search page: Module tabs visible
+- Other pages (Support, About): Module tabs hidden
+
+---
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| ⌘/ (Mac) or Ctrl+/ (Win) | Focus search bar |
+| Escape | Close any open dropdown |
+
+**Display:** Show hint in Zoeken dropdown: "Sneltoets: ⌘/ voor zoeken"
+
+---
+
+## Responsive Breakpoints
+
+| Breakpoint | Header Changes |
+|------------|----------------|
+| ≥1200px | Full navigation, horizontal tabs |
+| 768-1199px | Hamburger menu, module dropdown |
+| <768px | Compact header, hamburger menu |
+
+---
+
+## Design Tokens
+
+### Colors (preserved from current)
+| Element | Color |
+|---------|-------|
+| Header background | White (#FFFFFF) |
+| Logo accent | Pink/Magenta (#E91E63) |
+| Active tab | Navy (#2C3E50) |
+| Text | Dark gray (#333333) |
+| Secondary text | Gray (#666666) |
+| Hover background | Light gray (#F5F5F5) |
+
+### Typography
+| Element | Size | Weight |
+|---------|------|--------|
+| Logo text | 24px | Bold |
+| Tagline | 12px | Regular |
+| Nav items | 14px | Medium |
+| Tab labels | 14px | Medium |
+
+### Spacing
+| Element | Value |
+|---------|-------|
+| Header height | 64px |
+| Tab bar height | 48px |
+| Nav item padding | 16px horizontal |
+| Logo margin-right | 32px |
+
+---
+
+## Accessibility
+
+| Feature | Implementation |
+|---------|----------------|
+| Keyboard navigation | Tab through nav items, Enter to select |
+| ARIA labels | aria-label on icon-only buttons |
+| Focus indicators | Visible outline on focused items |
+| Skip link | "Skip to main content" for screen readers |
+| Mobile menu | Focus trap when open |
+
+---
+
+## Open Questions
+
+None - design follows current UI patterns.
+
+---
+
+## Next Steps
+
+1. Review and approve
+2. Proceed to Search Bar with Autocomplete wireframe
+
+---
+
+**Document Status:** Draft - Awaiting Review

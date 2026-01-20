@@ -1,76 +1,153 @@
 # Stakeholders
 
-## Key Stakeholders
+## Overview
 
-### Executive Sponsors
-<!-- People providing strategic direction and funding -->
+This is a **solo founder project**. One person handles all roles: development, design, product, marketing, and operations. AI (Claude Code) serves as the primary development partner across multiple roles.
 
-| Name | Role | Responsibilities | Contact |
-|------|------|------------------|---------|
-|      |      |                  |         |
+---
 
-### Product Owner
-<!-- Person responsible for product decisions -->
+## Solo Founder
 
-| Name | Role | Responsibilities | Contact |
-|------|------|------------------|---------|
-|      |      |                  |         |
+| Aspect | Detail |
+|--------|--------|
+| **Role** | Founder / Everything |
+| **Background** | Marketing savvy with tech background |
+| **Experience** | Co-founder of AI company (successfully sold) |
+| **Working style** | Visual preference, values speed |
+| **Decision authority** | Full authority on all decisions |
 
-### Technical Leadership
-<!-- Technical decision makers -->
+### Responsibilities
 
-| Name | Role | Responsibilities | Contact |
-|------|------|------------------|---------|
-|      |      |                  |         |
+| Area | Tasks |
+|------|-------|
+| **Product** | Requirements, priorities, feature decisions |
+| **Technical** | Architecture approvals, final sign-off, deployments |
+| **Business** | Pricing, marketing, customer relationships |
+| **Operations** | Infrastructure, monitoring, support |
 
-### Development Team
-<!-- Core development team members -->
+### Working Preferences
 
-| Name | Role | Responsibilities | Contact |
-|------|------|------------------|---------|
-|      |      |                  |         |
+| Preference | Detail |
+|------------|--------|
+| Communication | English |
+| Approach | Stay factual, ask 3+ questions when unclear |
+| Speed | Critical - avoid unnecessary delays |
+| Tooling | Minimal - each new tool needs strong justification |
+| Content | Can edit code/components directly (no CMS needed) |
 
-### Operations Team
-<!-- People responsible for running the platform -->
+---
 
-| Name | Role | Responsibilities | Contact |
-|------|------|------------------|---------|
-|      |      |                  |         |
+## AI Development Partner (Claude Code)
+
+See [development-methodology.md](./development-methodology.md) for the complete AI collaboration model.
+
+### AI Roles
+
+| Role | Responsibilities |
+|------|------------------|
+| **Solution Architect** | Architecture design, ADRs, tech evaluation |
+| **Full-Stack Developer** | Frontend, backend, database, tests |
+| **DevOps Engineer** | CI/CD, infrastructure, monitoring |
+| **Product Manager** | Specs, user stories, backlog management |
+| **QA Engineer** | Test design, code review, quality assurance |
+| **Technical Writer** | Documentation, API docs, guides |
+| **Security Specialist** | Security review, auth design, best practices |
+
+### Copy-Paste Execution Model
+
+AI provides ready-to-execute commands; human maintains all production access:
+- AI never stores credentials
+- Human reviews before execution
+- Human executes all production commands
+- Audit trail maintained
+
+---
 
 ## External Stakeholders
 
 ### Current Customers
-<!-- Description of customer base affected by migration -->
 
-- Number of customers:
-- Customer segments:
-- Key customer requirements:
+| Metric | Value |
+|--------|-------|
+| Current subscribers | ~10-20 (estimate) |
+| Customer type | Professionals needing government data |
+| Key requirement | Continuity during migration |
+
+### Future Customers (V2.0 Target)
+
+| Segment | Description |
+|---------|-------------|
+| **Political parties** | Budget for research, high willingness to pay |
+| **Well-funded media** | Investigative journalism teams |
+| **Consultancies** | Policy research firms |
 
 ### Partners/Vendors
-<!-- Third-party dependencies -->
 
-| Organization | Type | Role in Project | Contact |
-|--------------|------|-----------------|---------|
-|              |      |                 |         |
+| Vendor | Type | Role |
+|--------|------|------|
+| Supabase | Database/Auth provider | Core infrastructure |
+| Railway | Hosting provider | Application hosting |
+| Typesense | Search engine | Self-hosted search |
+| Anthropic (Claude) | AI provider | Development partner, V2.0 features |
+
+---
 
 ## Communication Plan
 
-### Stakeholder Communication Matrix
+### Solo Founder Context
+With a single person handling all roles, communication is simplified:
 
-| Stakeholder Group | Frequency | Method | Content |
-|-------------------|-----------|--------|---------|
-| Executive Sponsors | Monthly | Report | High-level progress, risks, decisions |
-| Product Owner | Weekly | Meeting | Detailed progress, blockers |
-| Development Team | Daily | Standup | Task progress, technical issues |
-| Customers | As needed | Email/Announcement | Migration updates, downtime notices |
+| Activity | Frequency | Method |
+|----------|-----------|--------|
+| AI progress updates | Per session | Claude Code output |
+| Customer updates | As needed | Email |
+| Documentation | Continuous | GitHub repository |
+
+### Documentation as Communication
+All decisions, progress, and context captured in:
+- `logs/SESSION-CONTEXT.md` - Current state
+- `logs/daily/*.md` - Daily logs
+- `08-decisions/ADR-*.md` - Architecture decisions
+
+---
 
 ## Decision Authority
 
-### Decision-Making Framework
+### Single Decision Maker
+Solo founder has full authority on all decisions. AI provides recommendations with clear rationale.
 
-| Decision Type | Authority | Process |
-|--------------|-----------|---------|
-| Strategic direction | Executive Sponsors | Board review |
-| Product features | Product Owner | Requirements review |
-| Technical architecture | Technical Leadership | ADR process |
-| Implementation details | Development Team | Team consensus |
+### Decision Framework
+
+| Decision Type | Process |
+|---------------|---------|
+| Strategic direction | Founder decides |
+| Product features | Founder decides (AI recommends) |
+| Technical architecture | ADR process, founder approves |
+| Implementation details | AI implements, founder reviews |
+| Production deployments | Founder executes |
+
+### Decision Documentation
+All significant decisions documented as Architecture Decision Records (ADRs) in `/08-decisions/`.
+
+---
+
+## RACI Matrix
+
+| Activity | Founder | AI |
+|----------|---------|-----|
+| Requirements gathering | A | R |
+| Architecture design | A | R |
+| Code implementation | I | R |
+| Code review | R | C |
+| Testing | R | C |
+| Documentation | A | R |
+| Deployment | R | C |
+| Customer communication | R | - |
+| Budget decisions | R | C |
+
+**Legend:** R = Responsible, A = Accountable, C = Consulted, I = Informed
+
+---
+
+**Document Version:** 1.0
+**Last Updated:** 2026-01-20

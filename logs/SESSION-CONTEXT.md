@@ -1,8 +1,8 @@
 # Session Context
 
-**Last Updated:** 2026-01-19
-**Project Phase:** Phase 1 - Requirements & Architecture
-**Current Sprint:** V1.0 MVP Scope Defined
+**Last Updated:** 2026-01-20
+**Project Phase:** Phase 1 - V1.0 Development
+**Current Sprint:** Pre-Sprint (Account Setup)
 
 ---
 
@@ -12,289 +12,272 @@
 - ✅ Documentation structure created
 - ✅ Current environment analyzed
 - ✅ Database structure documented
-- ✅ Technology stack recommended (initial)
+- ✅ Technology stack recommended
 - ✅ Search requirements deep-dive
 - ✅ Architecture impact analysis
-- ✅ 4 critical decisions answered
-- ✅ V1.0 MVP scope defined
-- ✅ **COMPLETED TODAY:** V2.0 Research Mode brainstorm (Eerste Kamer interview)
-- ✅ **COMPLETED TODAY:** V2.0 design document created
-- ⏳ **NEXT:** UI/UX wireframes (V1.0)
+- ✅ V2.0 Research Mode design
+- ✅ Batch 1 wireframes (for new features)
+- ✅ V1.0 scope finalized (single-view architecture + new search)
+- ✅ Sprint plan created (8 weeks)
+- ✅ Documentation audit completed
+- ⏳ **NEXT:** Create Supabase and Railway accounts
 
 ### Active Tasks
 | Task | Status | Notes |
 |------|--------|-------|
-| Search requirements gathering | ✅ Completed | 57-page comprehensive document |
-| Architecture impact analysis | ✅ Completed | Stack validated against requirements |
-| Define V1.0 MVP scope | ✅ Completed | All 4 decisions answered |
-| V2.0 Research Mode brainstorm | ✅ Completed | Eerste Kamer interview, design doc created |
-| UI/UX wireframes (V1.0) | 🔄 Next | Ready to start |
+| V1.0 scope redefinition | ✅ Completed | Single-view architecture, not 1:1 port |
+| Single-view architecture | ✅ Completed | ADR-014, no two-view toggle |
+| Cross-module requirements | ✅ Completed | `cross-module-requirements.md` |
+| Product backlog | ✅ Completed | `backlog.md` created |
+| Recipient normalization | ✅ Decided | V1.0: UPPER(), V2.0: entity table |
+| Project overview docs | ✅ Completed | All 4 files in `01-project-overview/` updated |
+| Sprint plan | ✅ Completed | `09-timelines/v1-sprint-plan.md` |
+| Auth decision | ✅ Completed | Magic Link (passwordless) |
+| Documentation audit | ✅ Completed | 14 empty files deleted, auth refs updated |
 
 ---
 
 ## Recent Work (Last 3 Files)
 
-1. **docs/plans/2026-01-19-v2-research-mode-design.md** ⭐ NEW
-   V2.0 Research Mode design: Bloomberg Terminal vision, IBOS domains, Eerste Kamer insights
+1. **09-timelines/v1-sprint-plan.md** ⭐ NEW
+   8-week sprint plan with daily tasks, ready for development
 
-2. **02-requirements/search-requirements.md**
-   Comprehensive search requirements (1,544 lines): Search Bar (V1.0) + Research Mode (V2.0)
+2. **CLAUDE.md** ⭐ UPDATED
+   Documentation Rules, Model Selection Policy, /closeday procedure
 
-3. **04-target-architecture/architecture-impact-analysis.md**
-   Evaluation of tech stack against requirements + updated recommendations
+3. **.claude/commands/closeday.md** ⭐ UPDATED
+   Added documentation audit as Step 0 (required before logging)
 
 ---
 
 ## Key Decisions Made
 
+### V1.0 Scope Change (2026-01-20) - UPDATED
+
+**V1.0 = Single-View Architecture + New Search Features**
+
+| Category | What's Included |
+|----------|-----------------|
+| **ARCHITECTURE** | Single smart view with on-the-fly aggregation (NO two-view toggle) |
+| **DATABASE** | Source tables only (7 tables, NOT 20+ pivot tables) |
+| **NEW FEATURES** | Global search bar, autocomplete, cross-module search, enhanced filters, CSV export |
+| **TECH STACK** | Next.js + Supabase + Typesense (future-proof foundation) |
+
+**Key Decision (ADR-014):** The two-view toggle was a database limitation, not a user need. Users want pattern discovery.
+
+**New UI Pattern:**
+- Year columns always visible (trend analysis)
+- Aggregated by recipient by default
+- Click to expand → shows grouped sub-rows
+- User chooses grouping (Regeling, Artikel, Instrument, etc.)
+- "Show all rows" for raw data access
+
+### Search & Semantic Architecture (2026-01-20) ⭐ NEW
+
+**ADR-013:** Search and Semantic Architecture
+
+| Component | Purpose | V1.0 | V2.0 |
+|-----------|---------|------|------|
+| **Supabase** | Database + Auth + pgvector | ✅ | ✅ |
+| **Typesense** | Keyword search <100ms, autocomplete <50ms | ✅ | ✅ |
+| **pgvector** | Vector search (~2-5K vectors only) | ❌ | ✅ |
+| **IBOS classification** | Semantic lookup (replaces most vector search) | ❌ | ✅ |
+| **Claude** | Complex reasoning (use sparingly) | ❌ | ✅ |
+
+**Key decisions:**
+- Migrate to Supabase (PostgreSQL) for V1.0 (not keep MySQL)
+- Typesense for V1.0 keyword search (meets all requirements)
+- IBOS domain classification for V2.0 semantics (500K recipients → 30 domains)
+- pgvector for edge cases only (~2-5K vectors, not 500K)
+- Nightly data sync: Supabase → Typesense
+- Regeling → Wet matching: V2.0 feature (not V1.0 prep)
+
+**Cost estimate:** €97-150/month (within €180 budget)
+
+### Cross-Module ("Integraal") Architecture (2026-01-20) ⭐ NEW
+
+| Decision | Outcome |
+|----------|---------|
+| Included modules | instrumenten, gemeente, provincie, publiek, inkoop |
+| Excluded | Apparaatsuitgaven (operational costs, no recipients) |
+| Data source | Keep aggregated `universal_search` table (normalized EUR) |
+| Results display | Recipient → Module breakdown → Grouping (click to navigate) |
+| Totals row | YES - grand total across all modules |
+| Sorting | Asc/desc on years and totaal |
+| Recipient normalization | V1.0: `UPPER(Ontvanger)`, V2.0: entity mapping table |
+| Navigation | Click grouping → module page with filter applied |
+
+**Key insight:** Cross-module = discovery layer, Module page = detail layer.
+
+### Overzicht Page (2026-01-20) ⭐ NEW
+
+Dedicated overview page showing module-level totals with year columns.
+
+| Feature | Description |
+|---------|-------------|
+| Purpose | High-level spending overview, entry point to platform |
+| Location | Dedicated page, first nav item after logo |
+| Modules | All 6 modules with totals per year |
+| Sub-sources | Publiek (RVO/COA/NWO), Provincies (12), Gemeentes (top 10 + "show all") |
+| Click behavior | Module/sub-source → navigate to module page (with filter) |
+| Data | Pre-computed `module_totals` table (monthly refresh) |
+| Footer | Grand total row across all modules |
+
+### Marketing Pages (2026-01-20) ⭐ NEW
+
+| Decision | Outcome |
+|----------|---------|
+| CMS | No - edit component files directly |
+| Homepage | Port from WordPress (same content) |
+| Support | Markdown files in repo |
+| Build approach | v0.dev for UI, Claude Code for logic |
+| Reason | Solo founder, infrequent changes, speed priority |
+
+### V2-Ready Architecture (2026-01-20) ⭐ NEW
+
+**Principle:** No platform migrations between V1 and V2.
+
+| Layer | Technology | V1 | V2 |
+|-------|------------|----|----|
+| UI Components | shadcn/ui | ✅ | ✅ |
+| Charts | Tremor | ✅ | ✅ |
+| Tables | TanStack Table | ✅ | ✅ |
+| Backend | FastAPI | ✅ | ✅ |
+| Database | Supabase + pgvector | ✅ | ✅ |
+| Search | Typesense | ✅ | ✅ |
+| Maps | react-map-gl | - | ✅ |
+| PDF Export | Puppeteer | - | ✅ |
+
+**V2 tables created empty in V1** - no schema migrations needed.
+**Feature flags** control V2 functionality - flip to enable.
+
+### UI/UX Decisions (2026-01-19)
+
+**Wireframe Decisions (for NEW features):**
+| Decision | Outcome |
+|----------|---------|
+| Default view | Random recipients with amounts in 4+ years |
+| Filter application | Real-time (no Apply button) |
+| Row expansion | ▶ expands to show line items inline |
+| Column customization | User selects, saved per user |
+| Mobile table | Horizontal scroll, fixed first column |
+
 ### Architecture Decisions (2026-01-14)
 
-**ADR-001: Technology Stack (Initial)**
-- **Tech Stack:** Python + FastAPI + Next.js + Railway + Typesense
-- **Rationale:** Best balance of ease-of-use, performance, cost, and AI capabilities
-- **Cost:** €89-152/month (within €180 budget)
-- **Timeline:** 8 weeks to V1
+**ADR-001 to ADR-007:** Technology stack, migration strategy, search engine, AI strategy, agent orchestration, visualization, analytics layer
 
-**ADR-002: Migration Strategy**
-- **Decision:** Phase 1 = Keep MySQL, Phase 2 = Consider PostgreSQL
-- **Rationale:** Minimize risk, validate architecture first
+### V2.0 Research Mode Decisions (2026-01-19)
 
-**ADR-003: Search Engine**
-- **Decision:** Typesense over Elasticsearch
-- **Rationale:** Simpler, cheaper (€15-25 vs €50-100), perfect for dataset size
-
-**ADR-004: AI Primary (UPDATED TODAY)** ⭐
-- **Decision:** Claude Sonnet 4.5 (primary), OpenAI GPT-4 (fallback only)
-- **Changed from:** OpenAI primary, Claude secondary
-- **Rationale:** 10x cheaper for conversations (€0.003 vs €0.03 per 1K tokens), native MCP support, 200K context window
-- **Impact:** Research Mode cost: €28/month vs €280/month for 1,000 conversations
-
-**ADR-005: Agent Orchestration (NEW TODAY)** ⭐
-- **Decision:** Use LangChain for Research Mode
-- **Rationale:** Built-in conversation memory, tool orchestration, proven framework
-- **Impact:** Faster development, don't rebuild agent framework
-
-**ADR-006: Data Visualization (NEW TODAY)** ⭐
-- **Decision:** Frontend generates charts (Recharts library)
-- **Rationale:** Interactive visualizations, no server-side rendering cost
-- **Impact:** Better UX, faster rendering
-
-**ADR-007: Analytics Data Layer (NEW TODAY)** ⭐
-- **Decision:** Add pre-computed analytics tables for Research Mode
-- **Tables:** analytics_recipient_yearly, analytics_recipient_summary, analytics_module_trends
-- **Rationale:** 10x faster AI queries (<100ms vs 2-3s)
-- **Impact:** Research Mode performance meets <3s target
-
-### Development Decisions
-- **Development Methodology:** AI takes multiple roles, copy-paste execution
-- **Internationalization:** Dutch primary (V1.0), English UI option (V2.0), i18n framework from day 1
+**ADR-008 to ADR-012:** IBOS domain classification, domain-first entry point, wetten.overheid.nl integration, advanced visualizations, V3.0 data requirements
 
 ### Product Decisions
-- **Two Search Modes:** Search Bar (V1.0) + Research Mode (V2.0)
-- **"Bloomberg Terminal for Rijksfinanciën":** Domain-first analysis, not recipient-first
-- **Target Users:** Eerste Kamer, journalists, researchers, political parties
-- **Pricing Tiers:** Pro Account (search) + Research Account (AI mode - upsell later)
-
-### V2.0 Research Mode Decisions (2026-01-19) ⭐ NEW
-
-**ADR-008: Domain Classification**
-- **Decision:** Use IBOS (30 official policy domains) as standard classification
-- **AI Classification:** For ambiguous recipients, AI infers IBOS code from metadata
-- **Personalization:** Users select their focus domains
-
-**ADR-009: Entry Point Paradigm**
-- **Decision:** V2.0 entry point is Domain, not Recipient
-- **Question:** "Where does the tax euro go?" (not "Who received money?")
-- **Flow:** Domain → Trends → Recipients (drill-down)
-
-**ADR-010: wetten.overheid.nl Integration**
-- **Decision:** Must-have for V2.0
-- **Rationale:** Every Regeling links to legislation, users need legal context
-
-**ADR-011: Visualizations**
-- **Decision:** Standard + Advanced charts
-- **Standard:** Bar, Line, Pie
-- **Advanced:** Sankey (money flow), Treemap (hierarchy), Heatmap (year × domain)
-
-**ADR-012: V3.0 Data Requirement**
-- **Decision:** Budget analysis (onderuitputting, kasverschuivingen) requires begroting data
-- **Current data:** Realisatie only
-- **Impact:** Budget vs actual analysis parked for V3.0
-
-### Critical Decisions - RESOLVED (2026-01-19) ⭐
-
-**DECISION 1: V1.0 Timeline** ✅
-- **Decision:** V1.0 = Search Bar only (8 weeks), V2.0 = Research Mode (+12 weeks)
-- **Rationale:** Deliver value faster, reduce risk, validate architecture first
-
-**DECISION 2: Pricing Strategy** ✅
-- **Decision:** €1,500/year or €150/month (ex VAT) - single tier for V1.0
-- **Research tier:** TBD - will be upsell at later stage
-- **Revenue:** 30 subscribers × €150 = €4,500/month potential
-
-**DECISION 3: V1.0 MVP Scope** ✅
-- **Must-haves:**
-  - Global search bar with autocomplete
-  - Cross-module search ("Integraal") ✅
-  - All 7 module filters (based on current UI)
-  - Year range filter
-  - Amount range filter ✅
-  - CSV export (500 row limit)
-  - User accounts (email/password only)
-- **Not in V1.0:**
-  - Research Mode (V2.0)
-- **Never:**
-  - Social login (email/password only, always)
-  - Unlimited exports (500 row limit always)
-
-**DECISION 4: User Migration Strategy** ✅
-- **Decision:** 1:1 migration to new platform
-- **Same functionality:** All current features preserved
-- **Research Mode:** Will be offered as upsell later
-- **No pricing changes:** Existing subscribers keep current terms
+- **V1.0 Timeline:** 8 weeks (Tech port + new search)
+- **V2.0 Timeline:** +12 weeks (Research Mode)
+- **Pricing:** €150/month or €1,500/year
+- **Export limit:** 500 rows (always)
+- **Auth:** Magic Link only (no social login)
 
 ---
 
 ## Pending Decisions
 
 ### Important (Not Blocking)
-- **Wireframe approval** - Ready to start
-- **API specification review** - After wireframes
-- **Development environment setup** - Can start anytime
+- **Wireframe review** - Batch 1 ready for approval
+- **URL parameters** - Should filters be saved in URL for sharing?
 
 ---
 
 ## Blockers
 
-**None currently.** All questions documented for tomorrow's session.
+**None.** Batch 1 complete, ready for Batch 2.
 
 ---
 
 ## Quick Links
 
+### Wireframes ⭐ NEW
+- [01-Main Search Page](../05-design/wireframes/01-main-search-page.md)
+- [02-Header/Navigation](../05-design/wireframes/02-header-navigation.md)
+- [03-Search Bar](../05-design/wireframes/03-search-bar-autocomplete.md)
+- [04-Filter Panel](../05-design/wireframes/04-filter-panel.md)
+- [05-Results Table](../05-design/wireframes/05-results-table.md)
+- [06-Detail Page](../05-design/wireframes/06-detail-page.md)
+
 ### Design Documents
-- [V2.0 Research Mode Design](../docs/plans/2026-01-19-v2-research-mode-design.md) ⭐ NEW - Bloomberg Terminal vision
-- [Search Requirements](../02-requirements/search-requirements.md) - Comprehensive 57-page document
-- [Architecture Impact Analysis](../04-target-architecture/architecture-impact-analysis.md) - Stack validation
+- [V2.0 Research Mode Design](../docs/plans/2026-01-19-v2-research-mode-design.md)
+- [Search Requirements](../02-requirements/search-requirements.md)
+- [Architecture Impact Analysis](../04-target-architecture/architecture-impact-analysis.md)
 
 ### Architecture
-- [Recommended Tech Stack](../04-target-architecture/RECOMMENDED-TECH-STACK.md) - Original recommendation
-- [Architecture Overview](../04-target-architecture/architecture-overview.md) - System design
+- [Recommended Tech Stack](../04-target-architecture/RECOMMENDED-TECH-STACK.md)
+- [ADR-013: Search & Semantic Architecture](../08-decisions/ADR-013-search-semantic-architecture.md) ⭐ NEW
 
-### Current State Analysis
-- [Database Analysis](../03-current-state/database-analysis-summary.md) - 7 modules, 2.5M rows
-- [Current Technical Environment](../03-current-state/current-technical-environment.md)
-- [Current UI Screenshots](../assets/screenshots/current-ui/) - 7 filter screenshots analyzed
-
-### Project Foundation
-- [Development Methodology](../01-project-overview/development-methodology.md)
-- [Project Charter](../01-project-overview/project-charter.md)
+### Current State
+- [V1.0 Port Specification](../03-current-state/v1-port-specification.md) ⭐ NEW
+- [Current UI Overview](../03-current-state/current-ui-overview.md)
+- [Database Analysis](../03-current-state/database-analysis-summary.md)
+- [Web Archives](../03-current-state/web-archives/) - 18 HTML pages
 
 ---
 
 ## Next Steps (Priority Order)
 
-### This Session (2026-01-19) 🗓️
+### Completed This Session ✅
 
-**COMPLETED:**
-- ✅ All 4 critical decisions answered
-- ✅ V1.0 MVP scope defined
+1. ~~Receive web archives~~ - 18 HTML pages received
+2. ~~Document port requirements~~ - `v1-port-specification.md` created
+3. ~~Architecture decisions~~ - ADR-013, ADR-014 created
+4. ~~Project overview docs~~ - All 4 files updated
+5. ~~Sprint planning~~ - `09-timelines/v1-sprint-plan.md` created
+6. ~~Auth decision~~ - Magic Link (passwordless)
 
-**READY TO START:**
+### Ready to Start Development ✅
 
-1. **Create UI/UX Wireframes**
-   - Search bar with autocomplete/instant preview
-   - Advanced filters (collapsible panel)
-   - Results display (table view)
-   - Module navigation
-   - All 7 modules with filters
+**Pre-Sprint: Account Setup (Day 0)**
 
-2. **Estimate Development Effort**
-   - Break down V1.0 features into tasks
-   - Create sprint plan (8 weeks = 4 sprints)
+| Task | Action | Status |
+|------|--------|--------|
+| Create Supabase account | https://supabase.com → EU region | ⏳ Pending |
+| Create Railway account | https://railway.app | ⏳ Pending |
+| Share project URLs with Claude | For configuration | ⏳ Pending |
 
-3. **Create API Specifications** (06-technical-specs/api-specifications.md)
-   - RESTful endpoint design for 7 data modules
-   - Authentication/authorization endpoints
-   - Search API with Typesense integration
+**After accounts created → Week 1 begins**
 
-4. **Create Project Setup Guide** (07-migration-strategy/setup-guide.md)
-   - Railway account setup
-   - GitHub repository setup
-   - Local development environment
+See full sprint plan: `09-timelines/v1-sprint-plan.md`
 
 ---
 
 ## Notes
 
 ### User Preferences
-- Access: PhpMyAdmin only (no terminal access to current DB)
-- Experience: Beginner/Intermediate, some Railway experience
-- Team: 2-3 people, medium skill level
-- Budget: €50-200/month, currently €180
-- Timeline: ASAP (1-2 months to V1)
-- Biggest concern: Cost overruns
-- Critical requirement: MCP server support for AI
+- **Communication:** English
+- **Approach:** Stay factual, ask 3+ questions when unclear, don't invent
+- **Mobile:** Secondary priority for V1.0
 
-### Technical Constraints
-- Current platform: WordPress + MySQL (2GB, 30 paying subscribers)
-- Performance issues: 5s page load, 5s search
-- Data structure: 7 modules with 3-table pattern (source, pivot, consolidated)
-- Must support: Multi-language (English source, Dutch primary)
+### Working Rules (Added Today)
+- Mandatory documentation reading before tasks (in CLAUDE.md)
+- Each command has required reading list
 
-### Success Criteria
-- <1s page load (currently 5s)
-- <100ms search (currently 5s) - Updated target after requirements
-- AI natural language queries working (V2.0)
-- Within budget (€89-127/month for V2.0, €180 max)
-- Zero downtime for paying customers
-- V1.0: 8 weeks | V2.0: +12 weeks (total 20 weeks / ~5 months)
+### V1.0 Port Status
+| Module | SQL Tables | Status |
+|--------|------------|--------|
+| Financiële Instrumenten | `instrumenten_pivot`, `instrumenten_pivot_geconsolideerd` | ⏳ To document |
+| Apparaatsuitgaven | `apparaat_pivot`, `apparaat_pivot_geconsolideerd` | ⏳ To document |
+| Inkoopuitgaven | `inkoop_pivot`, `inkoop_pivot_geconsolideerd` | ⏳ To document |
+| Provinciale subsidies | `provincie_pivot`, `provincie_pivot_geconsolideerd` | ⏳ To document |
+| Gemeentelijke subsidies | `stad_pivot`, `stad_pivot_geconsolideerd` | ⏳ To document |
+| Publiek | `publiek_pivot`, `publiek_pivot_geconsolideerd` | ⏳ To document |
+| Integraal (cross-module) | `universal_search` | ⏳ To document |
 
-### Today's Accomplishments (2026-01-19)
-1. ✅ All 4 critical decisions answered
-2. ✅ V1.0 MVP scope finalized
-3. ✅ Pricing confirmed: €1,500/year or €150/month
-4. ✅ Timeline confirmed: V1.0 (8 weeks) + V2.0 (+12 weeks)
-5. ✅ Migration strategy: 1:1 migration, Research Mode as upsell
-6. ✅ V2.0 Research Mode brainstorm (Eerste Kamer user interview)
-7. ✅ V2.0 design document created (Bloomberg Terminal vision)
-8. ✅ 5 new ADRs documented (008-012)
-
-### V1.0 MVP Feature Summary
-| Feature | Status |
-|---------|--------|
-| Global search bar | ✅ Must-have |
-| Autocomplete | ✅ Must-have |
-| Cross-module search | ✅ Must-have |
-| All 7 module filters | ✅ Must-have |
-| Year range filter | ✅ Must-have |
-| Amount range filter | ✅ Must-have |
-| CSV export (500 rows) | ✅ Must-have |
-| Email/password auth | ✅ Must-have |
-| Social login | ❌ Never |
-| Research Mode | ❌ V2.0 |
-
-### V2.0 Research Mode Scope Summary
-| Feature | Status |
-|---------|--------|
-| Domain-first analysis (IBOS) | ✅ V2.0 |
-| "Where does tax euro go?" | ✅ V2.0 |
-| AI domain classification | ✅ V2.0 |
-| User focus domains | ✅ V2.0 |
-| Trend analysis (YoY) | ✅ V2.0 |
-| Top N / Groeiers / Dalers | ✅ V2.0 |
-| All comparison types | ✅ V2.0 |
-| Advanced charts (Sankey, Treemap, Heatmap) | ✅ V2.0 |
-| wetten.overheid.nl integration | ✅ V2.0 |
-| Save queries | ✅ V2.0 |
-| Export CSV/Excel/PDF | ✅ V2.0 |
-| Share read-only links | ✅ V2.0 |
-| PowerPoint export | 🅿️ V2.1 |
-| Share + comment | 🅿️ V2.1 |
-| Budget analysis (onderuitputting) | 🅿️ V3.0 (needs begroting data) |
+### Key Context
+- **V1.0 = Single-View Architecture + New Features** (not 1:1 port)
+- **NO two-view toggle** - single smart view with on-the-fly aggregation
+- **Source tables only** - no pivot tables (7 tables instead of 20+)
+- Year columns always visible for trend analysis
+- Expandable rows with user-selectable grouping
+- Export limit: 500 rows always
 
 ---
 
-**Last Session:** 2026-01-14 (Search requirements + architecture impact analysis)
-**This Session:** 2026-01-19 - V1.0 decisions + V2.0 Research Mode brainstorm
-**Next:** UI/UX wireframes (V1.0)
+**Last Session:** 2026-01-19 - V2.0 design + Batch 1 wireframes
+**This Session:** 2026-01-20 - V1.0 scope change to technology port

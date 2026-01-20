@@ -7,97 +7,157 @@ Based on your requirements: beginner-friendly, cost-effective (€50-200/month),
 
 ## Executive Summary
 
-**Recommended Stack:** Python + FastAPI + Next.js + Railway + Typesense
+**Recommended Stack:** Python + FastAPI + Next.js + Supabase + Typesense + Railway
+
+**Design Principle:** V2-ready from day 1. No platform migrations between V1 and V2.
 
 **Why:**
-- ✅ Within €180/month budget
-- ✅ Easy deployment (Railway - GUI-based)
-- ✅ Fast development (1-2 months feasible)
-- ✅ Future-proof and scalable
+- ✅ Within €180/month budget (estimated €102-150)
+- ✅ Easy deployment (Supabase + Railway - both GUI-based)
+- ✅ Fast development (8 weeks for V1.0)
+- ✅ **V2-ready architecture** - only feature enablement, no migrations
 - ✅ Excellent for AI/data work
 - ✅ MCP server support built-in
-- ✅ Keep existing MySQL initially
+- ✅ pgvector included in Supabase for V2.0 semantic search
 - ✅ Great documentation and community
 
-**Monthly Cost Estimate:** €150-180 (within your current budget!)
+**Monthly Cost Estimate:** €102-150 (well within €180 budget!)
+
+**Migration-Free Guarantee:**
+| Component | V1 | V2 | Migration |
+|-----------|----|----|-----------|
+| Next.js + Tremor | ✅ | ✅ | None |
+| FastAPI | ✅ | ✅ | None |
+| Supabase | ✅ | ✅ | None |
+| Typesense | ✅ | ✅ | None |
+| Railway | ✅ | ✅ | None |
+
+### Architecture Decisions (2026-01-20)
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Database | Supabase (PostgreSQL) | Easy setup, pgvector included, Auth built-in |
+| Search Engine | Typesense | Fast autocomplete <50ms, typo tolerance |
+| Vector Search | pgvector (Supabase) | Only ~2-5K vectors needed (not 500K) |
+| Semantic Approach | IBOS domain classification | Lookup table replaces most vector search |
+| Data Sync | Nightly rebuild | Simple, fits monthly government data updates |
 
 ---
 
-## Architecture Diagram
+## Architecture Diagram (V2-Ready)
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         USERS                                │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    FRONTEND (Next.js)                        │
-│                  Deployed on Railway                         │
-│  • Server-side rendering                                     │
-│  • React components                                          │
-│  • TypeScript                                                │
-│  • Tailwind CSS                                              │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│              API LAYER (Python FastAPI)                      │
-│                  Deployed on Railway                         │
-│  • REST API endpoints                                        │
-│  • MCP Server integration                                    │
-│  • Authentication/Authorization                              │
-│  • Business logic                                            │
-└─────────────────────────────────────────────────────────────┘
-         │                    │                    │
-         ▼                    ▼                    ▼
-┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│    MySQL     │    │  Typesense   │    │    Redis     │
-│   (Existing) │    │   (Search)   │    │   (Cache)    │
-│   Railway    │    │   Railway    │    │   Railway    │
-└──────────────┘    └──────────────┘    └──────────────┘
-         │                    │
-         └────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    AI SERVICES                               │
-│  • Claude Sonnet 4.5 (primary - Research Mode)               │
-│  • OpenAI GPT-4 (fallback only)                              │
-│  • LangChain (agent orchestration)                           │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                         NEXT.JS FRONTEND                            │   │
+│  │                                                                     │   │
+│  │  UI Components:    shadcn/ui (Tailwind-based)                       │   │
+│  │  Charts:           Tremor (built on Recharts)                       │   │
+│  │  Tables:           TanStack Table v8                                │   │
+│  │  Forms:            React Hook Form + Zod                            │   │
+│  │  State:            TanStack Query (server state)                    │   │
+│  │  Icons:            Lucide React                                     │   │
+│  │  Maps (V2):        react-map-gl (Mapbox)                            │   │
+│  │                                                                     │   │
+│  └───────────────────────────────┬─────────────────────────────────────┘   │
+│                                  │                                          │
+│  ┌───────────────────────────────▼─────────────────────────────────────┐   │
+│  │                         FASTAPI BACKEND                              │   │
+│  │                                                                     │   │
+│  │  /api/v1/*          V1 endpoints (active)                           │   │
+│  │  /api/v2/*          V2 endpoints (stubs, enabled later)             │   │
+│  │  Background Workers  Data sync, enrichment jobs                     │   │
+│  │                                                                     │   │
+│  └───────────────────────────────┬─────────────────────────────────────┘   │
+│                                  │                                          │
+│      ┌───────────┬───────────────┼───────────────┬───────────┐             │
+│      ▼           ▼               ▼               ▼           ▼             │
+│  ┌───────┐  ┌─────────┐  ┌─────────────┐  ┌─────────┐  ┌─────────┐        │
+│  │Redis  │  │Typesense│  │  Supabase   │  │ Worker  │  │Puppeteer│        │
+│  │Cache  │  │ Search  │  │ PostgreSQL  │  │  Jobs   │  │  (V2)   │        │
+│  │       │  │         │  │ + pgvector  │  │         │  │         │        │
+│  │       │  │         │  │ + Storage   │  │         │  │         │        │
+│  │       │  │         │  │ + Auth      │  │         │  │         │        │
+│  └───────┘  └─────────┘  └─────────────┘  └─────────┘  └─────────┘        │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    EXTERNAL SERVICES (V2)                           │   │
+│  │  Claude API │ KvK API │ Mapbox │ wetten.overheid.nl scraper         │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│                              RAILWAY (Hosting)                              │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Data Flow Summary
+
+| Flow | V1.0 | V2.0 |
+|------|------|------|
+| **Keyword search** | Typesense (<100ms) | Same |
+| **Autocomplete** | Typesense (<50ms) | Same |
+| **Semantic search** | - | IBOS lookup + pgvector |
+| **AI reasoning** | - | Claude (cached, sparingly) |
+| **Data sync** | Nightly Supabase → Typesense | Same |
 
 ---
 
 ## Technology Stack Details
 
-### Frontend: Next.js 14 (App Router)
+### Frontend: Next.js 14+ (App Router) - FINAL STACK
 
 **Why Next.js:**
 - ✅ Best-in-class React framework (industry standard)
 - ✅ Server-side rendering = Fast initial loads
 - ✅ TypeScript support out of the box
 - ✅ File-based routing (easy to understand)
-- ✅ Built-in API routes if needed
 - ✅ Excellent documentation
 - ✅ Huge community and job market
 - ✅ Deploy to Railway with one command
 - ✅ Future-proof (backed by Vercel, massive adoption)
 
-**Key Libraries:**
-- **Tailwind CSS** - Utility-first CSS (modern, fast)
-- **Shadcn/ui** - Beautiful, accessible components
-- **TanStack Query** - Data fetching and caching
-- **Zod** - TypeScript-first validation
-- **NextAuth.js** - Authentication
-- **Recharts** - Standard charts (bar, line, pie)
-- **nivo** - Advanced charts (Sankey diagrams, treemaps, heatmaps) ⭐ V2.0
+**Complete Frontend Stack (V1 + V2 Ready):**
+
+| Category | Library | Purpose |
+|----------|---------|---------|
+| **Framework** | Next.js 14+ | App Router, SSR |
+| **Language** | TypeScript | Type safety |
+| **Styling** | Tailwind CSS | Utility-first CSS |
+| **UI Components** | shadcn/ui | Accessible, customizable |
+| **Charts** | Tremor | Dashboards, trend charts, KPIs |
+| **Tables** | TanStack Table v8 | Sorting, filtering, pagination |
+| **Forms** | React Hook Form + Zod | Validation |
+| **State** | TanStack Query | Server state, caching |
+| **Icons** | Lucide React | Consistent iconography |
+| **Maps (V2)** | react-map-gl | Geographic visualization |
+| **Rich Text (V2)** | Tiptap | Dossier notes |
+| **PDF Export (V2)** | Puppeteer | Server-side rendering |
+
+**Why Tremor for Charts:**
+- Built for dashboards (matches "terminal" vision)
+- Tailwind-native (consistent with shadcn/ui)
+- Based on Recharts (proven, maintained)
+- Handles V1 needs (trends, bars, KPIs)
+- Handles V2 needs (interactive, tooltips, legends)
+
+```tsx
+// Example: One-click trend chart
+import { AreaChart } from "@tremor/react";
+
+<AreaChart
+  data={spendingByYear}
+  index="year"
+  categories={["amount"]}
+  colors={["blue"]}
+  valueFormatter={(v) => `€${v}M`}
+/>
+```
 
 **Why not alternatives:**
 - React alone: Too much configuration needed
-- Vue: Smaller ecosystem, less job market
-- Svelte: Too new, smaller community
+- Chart.js: Less React-friendly
+- D3 directly: Too complex for team
+- Nivo: Heavier bundle than needed
 
 ---
 
@@ -126,7 +186,54 @@ Based on your requirements: beginner-friendly, cost-effective (€50-200/month),
 - PHP Laravel: Outdated for modern APIs
 - Go: Too complex for small team, overkill for your needs
 
-**Key Libraries:**
+**V2-Ready Backend Structure:**
+
+```
+/backend
+├── app/
+│   ├── main.py
+│   ├── config.py
+│   ├── dependencies.py
+│   │
+│   ├── api/
+│   │   ├── v1/                    # V1 endpoints (active)
+│   │   │   ├── search.py
+│   │   │   ├── modules.py
+│   │   │   ├── export.py
+│   │   │   └── auth.py
+│   │   │
+│   │   └── v2/                    # V2 endpoints (stubs)
+│   │       ├── research.py        # AI assistant
+│   │       ├── dossiers.py        # Dossier management
+│   │       ├── companies.py       # Company profiles
+│   │       └── insights.py        # Auto-generated insights
+│   │
+│   ├── services/
+│   │   ├── search_service.py      # Typesense
+│   │   ├── aggregation_service.py # On-the-fly queries
+│   │   ├── export_service.py      # CSV
+│   │   │
+│   │   └── v2/                    # V2 services
+│   │       ├── ai_service.py      # Claude
+│   │       ├── kvk_service.py     # KvK API
+│   │       ├── pdf_service.py     # Puppeteer
+│   │       └── scraping_service.py
+│   │
+│   ├── workers/                   # Background jobs
+│   │   ├── sync_typesense.py      # V1: search index
+│   │   ├── compute_totals.py      # V1: module totals
+│   │   │
+│   │   └── v2/                    # V2 workers
+│   │       ├── enrich_kvk.py
+│   │       ├── generate_embeddings.py
+│   │       └── scrape_wetten.py
+│   │
+│   └── models/
+│       ├── database.py
+│       └── schemas.py
+```
+
+**Key Libraries:
 - **SQLAlchemy** - Database ORM
 - **Alembic** - Database migrations
 - **Pydantic** - Data validation
@@ -142,108 +249,249 @@ Based on your requirements: beginner-friendly, cost-effective (€50-200/month),
 
 ---
 
-### Database: MySQL → PostgreSQL (Phased)
+### Database: Supabase (PostgreSQL) ⭐ UPDATED 2026-01-20
 
-**Phase 1 (Launch): Keep MySQL**
-- ✅ Zero migration risk
-- ✅ Connect to existing database
-- ✅ Fastest to market
-- Railway MySQL: €7/month
+**Decision:** Migrate to Supabase immediately for V1.0
 
-**Phase 2 (Future): Migrate to PostgreSQL**
-- Better JSON support
-- Superior full-text search
-- Better for complex queries
-- Railway PostgreSQL: €7/month
+**Why Supabase:**
+- ✅ PostgreSQL with pgvector included (needed for V2.0)
+- ✅ Authentication built-in (Magic Link)
+- ✅ Easy GUI dashboard (copy/paste friendly)
+- ✅ Row Level Security for multi-tenant
+- ✅ Real-time subscriptions (future use)
+- ✅ Free tier for development
+- Pro plan: ~€25/month
 
-**Why this approach:**
-- Start fast, optimize later
-- Validate architecture with real data
-- No data migration blockers for launch
+**Migration from MySQL:**
+- Export current MySQL data
+- Import into Supabase PostgreSQL
+- Update schema for PostgreSQL compatibility
+- One-time effort during V1.0 development
 
-**V2.0 Database Additions:** ⭐ NEW
+**Why NOT keep MySQL:**
+- pgvector not available (needed for V2.0)
+- No built-in auth
+- Would need separate auth service
+- Two databases to manage later
+
+**V2-Ready Database Schema:** ⭐ UPDATED 2026-01-20
+
+Create V2 tables in V1 (empty) to avoid schema migrations later.
+
 ```sql
--- IBOS Domain Reference (30 rows, static)
+-- ============================================
+-- V1 TABLES (Active from day 1)
+-- ============================================
+
+-- Source data tables: instrumenten, apparaat, gemeente,
+-- provincie, publiek, inkoop (already defined)
+
+-- Module totals (for Overzicht page)
+CREATE TABLE module_totals (
+  id SERIAL PRIMARY KEY,
+  module VARCHAR NOT NULL,
+  sub_source VARCHAR,
+  sub_source_field VARCHAR,
+  year INT NOT NULL,
+  total BIGINT NOT NULL,
+  row_count INT,
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- User management
+CREATE TABLE user_profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id),
+  email TEXT,
+  subscription_tier TEXT DEFAULT 'professional',
+  created_at TIMESTAMP DEFAULT NOW(),
+  preferences JSONB DEFAULT '{}',
+  onboarding_completed BOOLEAN DEFAULT FALSE
+);
+
+-- ============================================
+-- V2 TABLES (Created empty, populated later)
+-- ============================================
+
+-- Entity resolution (recipient normalization)
+CREATE TABLE entities (
+  id SERIAL PRIMARY KEY,
+  canonical_name TEXT NOT NULL,
+  kvk_number TEXT,
+  entity_type TEXT, -- 'company', 'government', 'ngo'
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE entity_aliases (
+  id SERIAL PRIMARY KEY,
+  entity_id INT REFERENCES entities(id),
+  alias TEXT NOT NULL,
+  source_table TEXT,
+  UNIQUE(alias, source_table)
+);
+
+-- People and connections
+CREATE TABLE people (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  normalized_name TEXT,
+  metadata JSONB DEFAULT '{}'
+);
+
+CREATE TABLE entity_people (
+  id SERIAL PRIMARY KEY,
+  entity_id INT REFERENCES entities(id),
+  person_id INT REFERENCES people(id),
+  role TEXT,
+  start_date DATE,
+  end_date DATE,
+  source TEXT
+);
+
+-- Dossiers (user collections)
+CREATE TABLE dossiers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  title TEXT NOT NULL,
+  description TEXT,
+  is_public BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE dossier_items (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  dossier_id UUID REFERENCES dossiers(id) ON DELETE CASCADE,
+  item_type TEXT NOT NULL,
+  item_data JSONB NOT NULL,
+  position INT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Saved searches
+CREATE TABLE saved_searches (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  name TEXT,
+  query_params JSONB NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Vector embeddings
+CREATE EXTENSION IF NOT EXISTS vector;
+
+CREATE TABLE embeddings (
+  id SERIAL PRIMARY KEY,
+  source_table TEXT,
+  source_id INT,
+  content_type TEXT,
+  embedding vector(1536),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX ON embeddings USING ivfflat (embedding vector_cosine_ops);
+
+-- IBOS Domain Reference (30 rows)
 CREATE TABLE ibos_domains (
   code VARCHAR(2) PRIMARY KEY,
   name_nl VARCHAR(255),
   name_en VARCHAR(255)
 );
 
--- Recipient to Domain Mapping (AI + manual)
+-- Recipient to Domain Mapping
 CREATE TABLE recipient_domain_mappings (
-  id INT PRIMARY KEY AUTO_INCREMENT,
+  id SERIAL PRIMARY KEY,
   recipient VARCHAR(255),
-  ibos_code VARCHAR(2),
-  confidence DECIMAL(3,2),  -- 0.00 to 1.00
-  source ENUM('manual', 'ai', 'metadata'),
-  created_at TIMESTAMP,
-  FOREIGN KEY (ibos_code) REFERENCES ibos_domains(code)
-);
-
--- User Focus Domains (personalization)
-CREATE TABLE user_focus_domains (
-  user_id INT,
-  ibos_code VARCHAR(2),
-  PRIMARY KEY (user_id, ibos_code),
-  FOREIGN KEY (ibos_code) REFERENCES ibos_domains(code)
-);
-
--- Pre-computed Domain Analytics
-CREATE TABLE analytics_domain_yearly (
-  ibos_code VARCHAR(2),
-  year INT,
-  total_amount BIGINT,
-  recipient_count INT,
-  percentage_of_total DECIMAL(5,2),
-  PRIMARY KEY (ibos_code, year)
+  ibos_code VARCHAR(2) REFERENCES ibos_domains(code),
+  confidence DECIMAL(3,2),
+  source TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 ```
 
+**Why create V2 tables in V1:**
+- Schema migrations cause downtime
+- Adding tables later requires coordinated deploys
+- Empty tables have zero performance impact
+- Feature flags control what's active
+
 ---
 
-### Search Engine: Typesense ⭐ RECOMMENDED
+### Search Engine: Typesense ⭐ CONFIRMED
 
-**Why Typesense over Elasticsearch:**
+**Role:** V1.0 keyword search, autocomplete, filters (NOT semantic search)
 
-✅ **Simpler to manage**
-- Single binary, no Java
-- Easy Railway deployment
-- GUI-based configuration
+**Why Typesense:**
+- ✅ Autocomplete <50ms (required)
+- ✅ Typo tolerance up to 2 edits (required)
+- ✅ Boolean operators (AND, OR, NOT)
+- ✅ Faceted filtering
+- ✅ 500K+ records, still fast
+- ✅ Railway deployment: ~€15-25/month
 
-✅ **Faster for your use case**
-- Built for instant search
-- Typo tolerance built-in
-- Optimized for < 1TB data (your 2GB is perfect)
+**What Typesense handles (V1.0):**
+- Keyword search <100ms
+- Autocomplete suggestions
+- Fuzzy matching ("prorai" → "prorail")
+- Boolean queries
+- Filter by year, amount, module
+- Cross-module search
 
-✅ **More cost-effective**
-- Railway Typesense: ~€15-25/month
-- Elasticsearch would need: €50-100/month
+**What Typesense does NOT handle (V2.0):**
+- Semantic search ("defense spending") → Use IBOS lookup
+- Vector similarity → Use pgvector in Supabase
+- AI reasoning → Use Claude
 
-✅ **Better for small teams**
-- Easier debugging
-- Better documentation
-- Less operational overhead
+**Data Sync:**
+- Nightly rebuild from Supabase → Typesense
+- Triggered by cron job after data imports
+- Simple, fits monthly government data updates
 
-✅ **Excellent features**
-- ✓ Natural language search
-- ✓ Boolean operators (AND, OR, NOT)
-- ✓ Faceted filtering
-- ✓ Vector search support (for AI!)
-- ✓ Relevance tuning
-- ✓ Typo tolerance
-- ✓ Synonyms
+---
 
-**Elasticsearch Alternative:**
-- Use if you need ultra-complex analytics
-- Overkill for your current needs
-- 3-4x more expensive
-- Harder to maintain
+### Semantic Search Strategy: IBOS Domain Classification ⭐ NEW
 
-**Algolia Alternative:**
-- SaaS (easiest)
-- But €80-300/month ongoing cost
-- Vendor lock-in
+**Problem:** 500K+ recipients need semantic search. Embedding all = expensive + slow.
+
+**Solution:** IBOS domain classification (30 policy domains) + selective vector search.
+
+**How it works:**
+
+```
+User: "Show me defense-related spending"
+         │
+         ▼
+Step 1: Synonym lookup
+        "defense" → ["Defensie", "Krijgsmacht", "Militair"]
+         │
+         ▼
+Step 2: IBOS domain lookup
+        → IBOS code "03 - Defensie"
+         │
+         ▼
+Step 3: Database query
+        SELECT * FROM recipients WHERE ibos_code = '03'
+         │
+         ▼
+Result: All defense-related recipients (FREE, <100ms)
+```
+
+**Vector search only for (V2.0):**
+- Regeling → Wet matching (~2,000 vectors)
+- "Find similar recipients" feature (~2,000 top recipients)
+- Ambiguous queries that IBOS can't classify
+
+**IBOS Classification Task (V2.0 development):**
+- Classify 500K recipients into 30 IBOS domains
+- Method: Claude batch API (~€30-50) + manual review
+- Store: `recipient_domain_mappings` table in Supabase
+
+**Cost comparison:**
+
+| Approach | Vectors | Monthly Cost |
+|----------|---------|--------------|
+| Embed all 500K recipients | 500,000 | €50-100+ |
+| IBOS lookup + selective vectors | 2,000-5,000 | €0-5 |
 
 ---
 
@@ -380,26 +628,48 @@ def get_fastest_growers(ibos_code: str, start_year: int, end_year: int):
 - ✅ **€5 credit free, then pay-as-you-go**
 - ✅ Team already has some experience
 
-**Cost Breakdown (Monthly):**
+**Cost Breakdown (Monthly):** ⭐ UPDATED 2026-01-20
+
+**V1 (V2-Ready Setup):**
 ```
-Frontend (Next.js):        €15-25
-Backend (FastAPI):         €15-25
-MySQL:                     €7
-Typesense:                 €15-25
-Redis:                     €7-10
-──────────────────────────────
-Infrastructure:            €59-92
+Supabase (Pro):            €25
+  - PostgreSQL + pgvector
+  - Storage (included)
+  - Auth (included)
 
-AI Services (Claude primary):
-- Claude Sonnet 4.5:       €25-35
-- OpenAI fallback:         €5-10
+Railway:
+  - Frontend (Next.js):    €15-25
+  - Backend (FastAPI):     €15-25
+  - Worker (background):   €10-12  ← V2-ready addition
+  - Typesense:             €15-25
+  - Redis:                 €7-10
 ──────────────────────────────
-AI Total:                  €30-45
-
-Grand Total:               €89-137
+V1 Infrastructure:         €87-122
 ```
 
-**Well within your €180 budget! €43-91 buffer for growth.**
+**V2 Additions (when enabled):**
+```
+AI Services:
+  - Claude (cached):       €20-40
+External APIs:
+  - KvK API:               €0-50 (usage based)
+  - Mapbox:                €0 (free tier)
+Puppeteer service:         €5-10
+──────────────────────────────
+V2 Additions:              €25-100
+```
+
+**Total:**
+```
+V1 Phase:                  €87-122/month
+V2 Phase:                  €112-222/month
+Budget:                    €180/month
+
+V1 Buffer:                 €58-93
+V2 Buffer:                 €0-68 (may need budget increase)
+```
+
+**Note:** V2 AI costs depend heavily on usage. Caching reduces costs 60-80%.
 
 **Why not alternatives:**
 - **AWS/Google Cloud:** Too complex, need IaC knowledge, harder to debug
@@ -664,6 +934,61 @@ Ready to proceed? Let me know and I'll create:
 
 ---
 
+---
+
+## V2-Ready Checklist ⭐ NEW
+
+### What V1 Sets Up for V2 (No Migration Needed)
+
+| Component | V1 Setup | V2 Enablement |
+|-----------|----------|---------------|
+| **Frontend** | Next.js + shadcn/ui + Tremor + TanStack Table | Add Mapbox, Tiptap, Puppeteer routes |
+| **Backend** | FastAPI with /api/v1/* endpoints | Enable /api/v2/* endpoints |
+| **Database** | All V2 tables created (empty) | Populate with data |
+| **pgvector** | Extension enabled, embeddings table ready | Generate embeddings |
+| **Storage** | Supabase Storage configured | Store PDFs, exports |
+| **Workers** | Background job infrastructure | Add enrichment jobs |
+| **Feature Flags** | All V2 flags = false | Flip to true |
+
+### Feature Flags (Environment Variables)
+
+```env
+# V1 Configuration (Active)
+DATABASE_URL=postgresql://...
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_ANON_KEY=xxx
+TYPESENSE_HOST=xxx
+REDIS_URL=redis://...
+
+# V2 Configuration (Prepared, not active)
+ANTHROPIC_API_KEY=           # Add when V2 starts
+KVK_API_KEY=                 # Add when V2 starts
+MAPBOX_TOKEN=                # Add when V2 starts
+
+# Feature Flags
+FEATURE_AI_ASSISTANT=false   # Enable in V2
+FEATURE_DOSSIERS=false       # Enable in V2
+FEATURE_COMPANY_PROFILES=false
+FEATURE_RESEARCH_MODE=false
+```
+
+### V1 → V2 Upgrade Path
+
+```
+V1 COMPLETE                    V2 DEVELOPMENT
+─────────────                  ─────────────────
+     │                              │
+     │  1. Add API keys             │
+     │  2. Flip feature flags       │
+     │  3. Run data enrichment      │
+     │  4. Deploy (same infra)      │
+     │                              │
+     └──────────────────────────────┘
+              NO MIGRATION
+```
+
+---
+
 ## Questions or Concerns?
 
 Let me know if you want to:
@@ -674,4 +999,4 @@ Let me know if you want to:
 - Review cost projections
 - See proof-of-concept
 
-**I'm ready to start building when you are!** 🚀
+**I'm ready to start building when you are!**

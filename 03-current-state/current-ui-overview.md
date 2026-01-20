@@ -308,10 +308,133 @@ Rijksuitgaven.nl is a financial data analysis platform providing insights into D
 
 ---
 
+## Two-View Toggle Pattern (Critical for Port)
+
+The core UI pattern across all modules is a toggle between two views, each backed by different SQL tables.
+
+### Toggle States
+
+| Toggle State | Dutch Label | SQL Table Pattern |
+|--------------|-------------|-------------------|
+| **Consolidated** | "Geconsolideerd op ontvanger" | `*_pivot_geconsolideerd` |
+| **Extended/Filtered** | "Uitgebreid zoeken met filters" | `*_pivot` |
+
+### SQL Table Mappings Per Module
+
+| Module | Consolidated Table | Detail Table |
+|--------|-------------------|--------------|
+| Financiële Instrumenten | `instrumenten_pivot_geconsolideerd` | `instrumenten_pivot` |
+| Apparaatsuitgaven | `apparaat_pivot_geconsolideerd` | `apparaat_pivot` |
+| Inkoopuitgaven | `inkoop_pivot_geconsolideerd` | `inkoop_pivot` |
+| Provinciale subsidieregisters | `provincie_pivot_geconsolideerd` | `provincie_pivot` |
+| Gemeentelijke subsidieregisters | `stad_pivot_geconsolideerd` | `stad_pivot` |
+| Publiek | `publiek_pivot_geconsolideerd` | `publiek_pivot` |
+| Integraal | `universal_search` | `universal_search_source` |
+
+### Data Structure Differences
+
+#### Consolidated Tables (`*_pivot_geconsolideerd`)
+
+**Purpose:** Aggregated view grouped by recipient (Kostensoort/Ontvanger)
+
+**Key characteristics:**
+- Multiple related records combined into single rows
+- Values from different sources joined with `<br>` HTML for display
+- Includes `row_count` column (number of underlying records)
+- Includes computed `year_count` column (years with non-zero values)
+- Example: One row might show "IIIA<br>IIIB" in Begrotingshoofdstuk
+
+**Example columns:**
+```sql
+CREATE TABLE `apparaat_pivot_geconsolideerd` (
+  `Kostensoort` varchar(255),
+  `Begrotingshoofdstuk` longtext,  -- Multiple values with <br>
+  `Begrotingsnaam` longtext,        -- Multiple values with <br>
+  `RIS_IBOS_nummer` longtext,       -- Multiple values with <br>
+  `Artikel` longtext,
+  `Artikelonderdeel` longtext,
+  `Instrument` longtext,
+  `Detail` longtext,
+  `2016` int(18),
+  `2017` int(18),
+  -- ... years 2018-2024 ...
+  `Totaal` int(32),
+  `id` int(11),
+  `row_count` int(11),
+  `year_count` tinyint(3) GENERATED ALWAYS AS (...)  -- Computed
+);
+```
+
+#### Detail Tables (`*_pivot`)
+
+**Purpose:** Individual line items, filterable
+
+**Key characteristics:**
+- One row per record
+- All fields contain single values (not concatenated)
+- Includes `Jaar` column for the source year
+- Directly filterable by all columns
+
+**Example columns:**
+```sql
+CREATE TABLE `apparaat_pivot` (
+  `id` int(11),
+  `Begrotingshoofdstuk` varchar(255),
+  `Begrotingsnaam` varchar(255),
+  `RIS_IBOS_nummer` varchar(255),
+  `Artikel` varchar(255),
+  `Artikelonderdeel` varchar(255),
+  `Instrument` varchar(255),
+  `Detail` varchar(255),
+  `Kostensoort` varchar(255),
+  `Jaar` int(11),  -- Source year indicator
+  `2016` int(18),
+  `2017` int(18),
+  -- ... years 2018-2024 ...
+  `Totaal` int(32)
+);
+```
+
+### UI Behavior to Port
+
+1. **Default state:** Consolidated view (grouped by recipient)
+2. **Toggle click:** Switches to extended view with filters
+3. **Filter panel:** Only visible/active in extended view
+4. **Table columns:** May differ between views
+5. **Row expansion:** Available in both views (shows line items)
+
+### V1.0 Port Requirement
+
+Both toggle states must be replicated exactly, including:
+- The toggle UI element
+- Switching between the two underlying data sources
+- Rendering `<br>`-joined values correctly in consolidated view
+- Filter functionality in extended view
+- Consistent year columns (2016-2024)
+- Totaal calculations
+
+---
+
+## Web Archives Reference
+
+Web archives of the current UI will be stored in:
+```
+rijksuitgaven-saas-docs/03-current-state/web-archives/
+```
+
+These will provide additional reference for:
+- Exact visual rendering of `<br>` concatenated values
+- Filter panel interactions
+- Table sorting and pagination
+- Detail page layouts
+- Error states and loading states
+
+---
+
 ## Next Steps for Documentation
 
-1. **Create user flow diagrams** based on these screenshots
-2. **Document detailed feature requirements** for each component
-3. **Identify pain points** from current UI
-4. **Design improvements** for new platform
-5. **Map data structure** visible in the UI
+1. ~~Create user flow diagrams based on these screenshots~~
+2. **Document exact port requirements** per module
+3. **Map filter configurations** per module
+4. **Document column differences** between consolidated and extended views
+5. **Create port checklist** for V1.0

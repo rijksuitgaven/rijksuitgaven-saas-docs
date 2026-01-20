@@ -17,6 +17,15 @@ Use `/adr` when:
 - Defining patterns (e.g., how auth works)
 - Setting constraints (e.g., export limits)
 
+## MANDATORY: Read First (Do Not Skip)
+
+Before creating any ADR, read these files:
+
+1. `rijksuitgaven-saas-docs/logs/SESSION-CONTEXT.md` - Existing decisions, context
+2. `rijksuitgaven-saas-docs/04-target-architecture/architecture-impact-analysis.md` - Tech evaluation
+3. `rijksuitgaven-saas-docs/04-target-architecture/RECOMMENDED-TECH-STACK.md` - Current stack
+4. `rijksuitgaven-saas-docs/08-decisions/` - All existing ADRs (check for conflicts/overlaps)
+
 ## The Process
 
 **1. Gather Context**

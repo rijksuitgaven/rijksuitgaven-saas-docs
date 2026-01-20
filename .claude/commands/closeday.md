@@ -1,42 +1,82 @@
 Create a comprehensive daily log for today and update session context. Follow this process:
 
-1. **Create Daily Log** (`logs/daily/YYYY-MM-DD.md`):
-   - Summary of day's work
-   - All tasks completed with checkmarks
-   - Files created/modified with links
-   - Key decisions made (reference ADRs if applicable)
-   - Problems encountered and solutions
-   - Discussions and clarifications with user
-   - Metrics (files created, lines written, etc.)
-   - Current blockers (if any)
-   - Next steps (priority order)
-   - Notes for next session
-   - Commits made today
+## 0. Documentation Audit (REQUIRED)
 
-2. **Update Session Context** (`logs/SESSION-CONTEXT.md`):
-   - Update "Last Updated" date
-   - Update "Current Status" section
-   - Update "Active Tasks" table
-   - Add any new files to "Recent Work" (keep only last 3)
-   - Add any new decisions to "Key Decisions Made"
-   - Update "Pending Decisions" (remove resolved, add new)
-   - Update "Blockers" section
-   - Update "Next Steps" with priority order
-   - Update "Last Session" note at bottom
+**Documentation must always be up to date.** Before creating logs, verify all documentation reflects current decisions:
 
-3. **Commit to GitHub**:
-   - Add both files: `git add logs/`
-   - Commit with message: "Daily log YYYY-MM-DD: [brief summary]"
-   - Push to GitHub: `git push`
+1. **Audit all folders** - Go through every project folder and check for:
+   - Outdated information
+   - Inconsistencies with today's decisions
+   - Duplicate or conflicting content
 
-4. **Output Summary**:
-   Display a concise summary showing:
-   - Date of log created
-   - Number of tasks completed today
-   - Number of files created/modified
-   - Key decisions made
-   - Current blockers (if any)
-   - Top 3 next steps
-   - Commit hash and link to GitHub
+2. **Change perspectives** - If unsure about something, switch roles and verify:
+   - Project Manager → check scope, timeline, deliverables
+   - Architect → check technical decisions, ADRs, tech stack
+   - UX Designer → check wireframes, requirements, user flows
+   - Developer → check specs match implementation plans
+
+3. **Ask before updating** - Never just update something. If unclear, ask first.
+
+4. **Single source of truth** - Ensure no duplicate or conflicting information exists.
+
+**Rule:** Be certain before making changes. When in doubt, ask.
+
+---
+
+## 1. Create Daily Log (`logs/daily/YYYY-MM-DD.md`)
+
+Include:
+- Summary of day's work
+- All tasks completed with checkmarks
+- Files created/modified with links
+- Key decisions made (reference ADRs if applicable)
+- Problems encountered and solutions
+- Discussions and clarifications with user
+- Metrics (files created, lines written, etc.)
+- Current blockers (if any)
+- Next steps (priority order)
+- Notes for next session
+- Commits made today
+
+---
+
+## 2. Update Session Context (`logs/SESSION-CONTEXT.md`)
+
+Update:
+- "Last Updated" date
+- "Current Status" section
+- "Active Tasks" table
+- "Recent Work" (keep only last 3 files)
+- "Key Decisions Made" (add any new decisions)
+- "Pending Decisions" (remove resolved, add new)
+- "Blockers" section
+- "Next Steps" with priority order
+- "Last Session" note at bottom
+
+---
+
+## 3. Commit to GitHub
+
+```bash
+git add logs/
+git commit -m "Daily log YYYY-MM-DD: [brief summary]"
+git push
+```
+
+---
+
+## 4. Output Summary
+
+Display a concise summary showing:
+- Date of log created
+- Documentation audit results (files checked, issues found/fixed)
+- Number of tasks completed today
+- Number of files created/modified
+- Key decisions made
+- Current blockers (if any)
+- Top 3 next steps
+- Commit hash and link to GitHub
+
+---
 
 Use the daily log template format from `logs/daily/2026-01-14.md` as reference for structure and detail level.

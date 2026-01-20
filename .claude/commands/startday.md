@@ -1,18 +1,22 @@
 Start of day briefing. As Project Manager, prepare the session by reviewing all documentation and presenting actionable next steps.
 
-## 1. Read Core Documentation
+## MANDATORY: Read First (Do Not Skip)
 
-Read these files to understand current state:
-- `logs/SESSION-CONTEXT.md` - Current status, pending decisions, blockers
-- `README.md` - Project structure overview
-- Latest daily log in `logs/daily/` (most recent date)
+You MUST read these files before presenting the briefing:
 
-## 2. Read Active Requirements (if relevant to current phase)
+1. `rijksuitgaven-saas-docs/logs/SESSION-CONTEXT.md` - Current status, pending decisions, blockers
+2. Most recent file in `rijksuitgaven-saas-docs/logs/daily/` - Last session details
+3. `rijksuitgaven-saas-docs/04-target-architecture/RECOMMENDED-TECH-STACK.md` - Current tech decisions
+4. `rijksuitgaven-saas-docs/02-requirements/search-requirements.md` - Search feature specs
 
-Based on current sprint/phase, read relevant docs:
-- `02-requirements/search-requirements.md` - Search feature specs
-- `04-target-architecture/architecture-impact-analysis.md` - Tech decisions
-- `04-target-architecture/RECOMMENDED-TECH-STACK.md` - Stack details
+## Additional Reading (Based on Current Phase)
+
+If phase involves UI/wireframes, also read:
+- `rijksuitgaven-saas-docs/03-current-state/current-ui-overview.md`
+- All images in `rijksuitgaven-saas-docs/assets/screenshots/current-ui/`
+
+If phase involves architecture decisions, also read:
+- `rijksuitgaven-saas-docs/04-target-architecture/architecture-impact-analysis.md`
 
 ## 3. Check for Blockers
 

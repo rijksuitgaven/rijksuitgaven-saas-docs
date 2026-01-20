@@ -11,6 +11,18 @@ Help turn ideas into fully formed designs and specs through natural collaborativ
 
 Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design in small sections (200-300 words), checking after each section whether it looks right so far.
 
+## MANDATORY: Read First (Do Not Skip)
+
+Before any brainstorming, read these files:
+
+1. `rijksuitgaven-saas-docs/logs/SESSION-CONTEXT.md` - Current status, existing decisions
+2. `rijksuitgaven-saas-docs/02-requirements/search-requirements.md` - Requirements context
+3. `rijksuitgaven-saas-docs/04-target-architecture/RECOMMENDED-TECH-STACK.md` - Tech constraints
+
+If brainstorming UI/UX, also read:
+- `rijksuitgaven-saas-docs/03-current-state/current-ui-overview.md`
+- All images in `rijksuitgaven-saas-docs/assets/screenshots/current-ui/`
+
 ## The Process
 
 **Understanding the idea:**

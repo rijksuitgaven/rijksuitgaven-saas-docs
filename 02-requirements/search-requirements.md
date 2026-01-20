@@ -2,8 +2,10 @@
 
 **Project:** Rijksuitgaven.nl SaaS Platform
 **Version:** 1.0
-**Date:** 2026-01-14
-**Status:** Draft (Requirements Gathering)
+**Date:** 2026-01-20
+**Status:** Updated (Export limits corrected, auth moved to system requirements)
+
+> **Note:** Authentication (Magic Link via Supabase) is a **system requirement**, not a search requirement. See `04-target-architecture/RECOMMENDED-TECH-STACK.md` for auth details.
 
 ---
 
@@ -687,9 +689,8 @@ AI: "De regeling 'Bijdrage aan medeoverheden' valt onder:
 - **PowerPoint** (auto-generated presentation)
 
 **Export Limits:**
-- **Pro Account:** Up to 10,000 rows per export
-- **Research Account:** Up to 100,000 rows per export
-- Rate limit: 10 exports per day (Research), 3 per day (Pro)
+- **All accounts:** 500 rows per export (business constraint, never unlimited)
+- Rate limit: Reasonable use (no hard limit for V1.0)
 
 **Trigger Phrases:**
 - "Exporteer dit als CSV"
@@ -1109,7 +1110,36 @@ When expanded:
 
 ---
 
-### UX-002: Mobile Responsiveness
+### UX-002: Default View (Before Search)
+
+**Requirement:** Show meaningful data immediately when user lands on search page
+
+**Behavior:**
+- Display a random selection of recipients
+- Only include recipients with amounts in at least 4 different years
+- Truly random order (not sorted by amount or name)
+- Refreshes on each page load
+
+**Rationale:**
+- Users immediately see the type of data available
+- Demonstrates multi-year coverage
+- Encourages exploration
+- No empty state on first visit
+
+**Example:**
+```
+User lands on search page (no query entered):
+→ Shows 25 random recipients with data in 4+ years
+→ Table displays all year columns with amounts
+→ User can search, filter, or click any row to explore
+```
+
+**Priority:** P0 (Critical)
+**Version:** V1.0
+
+---
+
+### UX-003: Mobile Responsiveness
 
 **Requirement:** Optimize for mobile, but desktop-first for data work
 
@@ -1135,7 +1165,7 @@ When expanded:
 
 ---
 
-### UX-003: Multi-Language Support
+### UX-004: Multi-Language Support
 
 **Requirement:** Dutch-first, with internationalization framework for future expansion
 
@@ -1153,6 +1183,42 @@ When expanded:
 
 **Priority:** P2 (Medium - framework), P3 (Low - actual translation)
 **Version:** V1.0 (Dutch only), V2.0 (English UI option)
+
+---
+
+### UX-005: Column Customization
+
+**Requirement:** Users can customize which columns appear in expanded line item rows
+
+**Behavior:**
+- Click "Kolommen" button to open column selector modal
+- Choose which detail columns to display (module-specific options)
+- Preferences saved per user (persist across sessions)
+- Each module shows only its available columns
+
+**Always visible (not customizable):**
+- Ontvanger
+- Year columns (2016-2024)
+- Totaal
+
+**Customizable columns by module:**
+
+| Module | Available Columns |
+|--------|-------------------|
+| Financiële Instrumenten | Regeling, Artikel, Artikelonderdeel, Instrument, Begrotingsnaam, Detail |
+| Apparaatsuitgaven | Kostensoort, Artikel, Begrotingsnaam, Detail |
+| Inkoopuitgaven | Ministerie, Categorie, Staffel |
+| Provinciale subsidieregisters | Provincie, Omschrijving |
+| Gemeentelijke subsidieregisters | Gemeente, Beleidsterrein, Regeling, Omschrijving |
+| Publiek | Bron, Regeling, Trefwoorden, Sectoren, Regio |
+| Integraal | Modules (which modules recipient appears in) |
+
+**Default columns (per module):**
+- Show Regeling + Artikel by default (where available)
+- User can modify and save preferences
+
+**Priority:** P1 (High)
+**Version:** V1.0
 
 ---
 
@@ -1407,7 +1473,7 @@ When expanded:
 - ✅ Advanced filters per module (collapsible)
 - ✅ Results in <100ms (P50)
 - ✅ Cross-module search with module filtering
-- ✅ Export to CSV (up to 10K rows)
+- ✅ Export to CSV (500 rows limit)
 
 **Should Have:**
 - ✅ "Did you mean" suggestions for no results

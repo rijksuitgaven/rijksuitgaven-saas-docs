@@ -3,129 +3,235 @@
 ## Overview
 This document defines measurable criteria for determining whether the migration project is successful.
 
+---
+
 ## Technical Success Metrics
 
 ### Performance
-- [ ] Page load time < X seconds (95th percentile)
-- [ ] API response time < X milliseconds (95th percentile)
-- [ ] System uptime > X%
-- [ ] Database query performance improved by X%
+
+| Metric | Target | Priority |
+|--------|--------|----------|
+| Search response time | < 100ms (95th percentile) | **Critical** |
+| Autocomplete response | < 50ms | **Critical** |
+| Page load time | < 1 second | **Critical** |
+| API response time | < 200ms (95th percentile) | High |
+| System uptime | > 99.5% | High |
 
 ### Scalability
-- [ ] System can handle X concurrent users
-- [ ] Database can scale to X records
-- [ ] Infrastructure can auto-scale based on demand
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| Concurrent users | 50+ | V1.0 target |
+| Total records | 500K+ | Current scale |
+| Database query time | < 500ms for aggregations | On-the-fly grouping |
+| Search index size | Full dataset indexed | All modules |
 
 ### Security
-- [ ] Pass security audit
+
+- [ ] Supabase Auth properly implemented (Magic Link)
 - [ ] All data encrypted at rest and in transit
-- [ ] Authentication/authorization properly implemented
-- [ ] GDPR/privacy compliance verified
+- [ ] Row-level security on Supabase tables
+- [ ] No sensitive data exposed in API responses
+- [ ] GDPR compliance for EU users
 
 ### Quality
-- [ ] Code coverage > X%
-- [ ] Zero critical bugs in production
-- [ ] All automated tests passing
-- [ ] Documentation complete and up-to-date
+
+| Metric | Target |
+|--------|--------|
+| Code test coverage | > 70% |
+| Critical bugs in production | Zero |
+| Lighthouse score | > 90 |
+| TypeScript strict mode | Enabled |
+
+---
 
 ## Business Success Metrics
 
-### Customer Satisfaction
-- [ ] Customer retention rate > X%
-- [ ] Customer satisfaction score > X
+### Infrastructure Budget
+
+| Metric | Target | **Critical** |
+|--------|--------|--------------|
+| Monthly infrastructure cost | < €180 | **Yes** |
+| V1.0 estimated cost | €87-120/month | - |
+| Budget buffer | > €30/month | - |
+
+### Customer Continuity
+
 - [ ] Zero customer data loss during migration
-- [ ] < X customer complaints related to migration
+- [ ] All existing features available (or improved)
+- [ ] < 2 hours planned downtime for migration
+- [ ] Customer notification sent 2 weeks before migration
 
-### Operational Efficiency
-- [ ] Reduced operational costs by X%
-- [ ] Deployment time reduced by X%
-- [ ] Time to resolve issues reduced by X%
-- [ ] Support ticket volume reduced by X%
+### Feature Delivery (V1.0)
 
-### Feature Delivery
-- [ ] All critical features from current platform migrated
-- [ ] X new features delivered
-- [ ] Feature parity achieved or exceeded
+| Feature | Status |
+|---------|--------|
+| All 7 modules with filters | Required |
+| Global search bar | Required |
+| Autocomplete | Required |
+| Cross-module search ("Integraal") | Required |
+| CSV export (500 rows) | Required |
+| Magic Link auth | Required |
+| Single-view architecture | Required |
+| Expandable rows | Required |
+| Year column visibility | Required |
+| Overzicht page | Required |
+| Marketing pages | Required |
+
+---
 
 ## Migration Success Criteria
 
 ### Data Migration
-- [ ] 100% of customer data migrated successfully
-- [ ] Data integrity verified
-- [ ] No data loss
-- [ ] Historical data preserved
 
-### Customer Migration
-- [ ] X% of customers migrated without issues
-- [ ] Clear communication sent to all customers
-- [ ] Support resources available during migration
-- [ ] Rollback plan tested and ready
+- [ ] 100% of source data migrated to Supabase
+- [ ] Data integrity verified (row counts, totals)
+- [ ] All 7 modules data accessible
+- [ ] Year columns (2016-2024+) preserved
+- [ ] Typesense index built and validated
+
+### Technical Migration
+
+- [ ] MySQL → PostgreSQL (Supabase) complete
+- [ ] Pivot tables eliminated (7 source tables only)
+- [ ] WordPress decommissioned
+- [ ] New domain routing configured
+- [ ] SSL certificates active
 
 ### Timeline
-- [ ] Migration completed by target date
-- [ ] Minimal downtime (< X hours)
-- [ ] All phases completed on schedule
 
-## Post-Migration Success Criteria
+| Milestone | Target |
+|-----------|--------|
+| V1.0 complete | 8 weeks from start |
+| V2.0 complete | +12 weeks after V1.0 |
+| No scope creep | V1.0 features only |
 
-### First 30 Days
-- [ ] System stability maintained
-- [ ] No major incidents
-- [ ] Customer support volume normal
-- [ ] All critical monitoring in place
+---
 
-### First 90 Days
-- [ ] Customer churn rate normal or improved
-- [ ] New feature adoption > X%
-- [ ] Performance metrics meeting targets
-- [ ] Team fully trained on new system
+## User Experience Success Criteria
 
-### Long-term (6-12 months)
-- [ ] ROI targets achieved
-- [ ] Operational cost savings realized
-- [ ] Development velocity increased
-- [ ] Customer growth enabled
+### Core Functionality
+
+- [ ] Users can search across all modules
+- [ ] Autocomplete suggests relevant recipients
+- [ ] Filters apply in real-time
+- [ ] Results show year columns for trend analysis
+- [ ] Rows expand to show grouped details
+- [ ] User can change grouping (Regeling, Artikel, etc.)
+- [ ] CSV export works (500 rows)
+- [ ] Cross-module shows module breakdown
+
+### Navigation
+
+- [ ] Overzicht page shows module totals
+- [ ] Click module → navigate to module page
+- [ ] Click cross-module grouping → navigate with filter
+- [ ] Login/logout works
+- [ ] Marketing pages accessible
+
+---
 
 ## Go/No-Go Criteria
 
-### Pre-Launch Checklist
-- [ ] All critical functionality tested and working
-- [ ] Performance benchmarks met
-- [ ] Security audit passed
-- [ ] Disaster recovery plan in place
-- [ ] Monitoring and alerting configured
-- [ ] Documentation complete
-- [ ] Team trained
-- [ ] Customers notified
-- [ ] Support team ready
+### Pre-Launch Checklist (V1.0)
 
-### Launch Decision Factors
-<!-- Criteria that must be met before launching -->
-
-**Must Have:**
--
+**Must Have (Blocking):**
+- [ ] All 7 modules functional
+- [ ] Search < 100ms response
+- [ ] Autocomplete < 50ms response
+- [ ] CSV export working (500 rows)
+- [ ] Auth working (login/logout)
+- [ ] Data integrity verified
+- [ ] Infrastructure < €180/month
+- [ ] No critical bugs
 
 **Should Have:**
--
+- [ ] All marketing pages live
+- [ ] Support documentation ready
+- [ ] Monitoring configured
+- [ ] Error tracking active
 
 **Nice to Have:**
--
+- [ ] Performance optimizations complete
+- [ ] Analytics integrated
+- [ ] Automated backups verified
+
+---
+
+## Post-Migration Success Criteria
+
+### First 7 Days
+- [ ] System stable, no major incidents
+- [ ] Customer complaints < 3
+- [ ] All critical monitoring in place
+- [ ] Performance metrics meeting targets
+
+### First 30 Days
+- [ ] No customer churn due to migration
+- [ ] Support ticket volume normal
+- [ ] Performance sustained
+- [ ] No data issues discovered
+
+### First 90 Days
+- [ ] Customer satisfaction maintained
+- [ ] New features can be added easily
+- [ ] V2.0 development can begin
+- [ ] Infrastructure costs as projected
+
+---
+
+## V2.0 Readiness Criteria
+
+These are **not blocking for V1.0 launch** but verify architecture is V2.0-ready:
+
+- [ ] V2 database tables created (empty)
+- [ ] pgvector extension enabled
+- [ ] Feature flags infrastructure ready
+- [ ] API versioning in place (/v1/, /v2/ stubs)
+- [ ] No platform migrations needed for V2.0
+
+---
 
 ## Measurement and Reporting
 
 ### Metrics Dashboard
-<!-- Link to dashboard or describe reporting mechanism -->
+
+| Metric | Tool | Frequency |
+|--------|------|-----------|
+| Search performance | Typesense dashboard | Real-time |
+| API performance | Railway metrics | Real-time |
+| Infrastructure cost | Railway + Supabase billing | Monthly |
+| Error rates | Sentry or similar | Real-time |
+| User analytics | Plausible or similar | Daily |
 
 ### Review Schedule
-- **Daily:** During migration period
-- **Weekly:** First month post-migration
-- **Monthly:** Ongoing
 
-### Responsible Parties
-<!-- Who tracks and reports on these metrics -->
+| Phase | Frequency |
+|-------|-----------|
+| During migration | Daily check |
+| First week post-launch | Daily review |
+| First month | Weekly review |
+| Ongoing | Monthly review |
 
-| Metric Category | Owner | Reporting Frequency |
-|----------------|-------|---------------------|
-| Technical Performance | | |
-| Customer Satisfaction | | |
-| Business Impact | | |
+### Responsible Party
+
+**Solo founder** owns all metrics and reporting.
+
+---
+
+## Summary: Critical Success Factors
+
+| Factor | Target | Non-Negotiable |
+|--------|--------|----------------|
+| Search speed | < 100ms | Yes |
+| Autocomplete | < 50ms | Yes |
+| Page load | < 1s | Yes |
+| Budget | < €180/month | Yes |
+| Export limit | 500 rows | Yes (business) |
+| All modules | 7 modules | Yes |
+| Data integrity | 100% | Yes |
+
+---
+
+**Document Version:** 1.0
+**Last Updated:** 2026-01-20
