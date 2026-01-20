@@ -57,10 +57,10 @@ Update:
 
 ## 3. Commit EVERYTHING to GitHub
 
-**IMPORTANT:** All project files live in ONE repository: `rijksuitgaven-saas-docs/`
+**IMPORTANT:** All project files live in ONE repository: `rijksuitgaven/`
 
 ```bash
-cd /Users/michielmaandag/SynologyDrive/code/watchtower/rijksuitgaven-saas-docs
+cd /Users/michielmaandag/SynologyDrive/code/watchtower/rijksuitgaven
 git add -A
 git status  # Verify what will be committed
 git commit -m "Daily log YYYY-MM-DD: [brief summary]"

@@ -34,7 +34,7 @@ Rijksuitgaven.nl SaaS Platform Migration - Documentation and planning repository
 | Daily commitment | 2-4 hours |
 | Blockers | Resolve same session or note for next |
 
-**Sprint Plan:** See `rijksuitgaven-saas-docs/09-timelines/v1-sprint-plan.md`
+**Sprint Plan:** See `09-timelines/v1-sprint-plan.md`
 
 **Current Phase:** Pre-development (account setup next)
 
@@ -113,20 +113,20 @@ Rijksuitgaven.nl SaaS Platform Migration - Documentation and planning repository
 **Rule:** Before starting any task, read the relevant documentation listed below. Do not skip this step.
 
 ### Before ANY wireframe/UI work:
-- `rijksuitgaven-saas-docs/03-current-state/current-ui-overview.md`
-- `rijksuitgaven-saas-docs/assets/screenshots/current-ui/` (all images)
+- `03-current-state/current-ui-overview.md`
+- `assets/screenshots/current-ui/` (all images)
 
 ### Before ANY API work:
-- `rijksuitgaven-saas-docs/06-technical-specs/api-specifications.md`
-- `rijksuitgaven-saas-docs/04-target-architecture/RECOMMENDED-TECH-STACK.md`
+- `06-technical-specs/api-specifications.md`
+- `04-target-architecture/RECOMMENDED-TECH-STACK.md`
 
 ### Before ANY architecture decisions:
-- `rijksuitgaven-saas-docs/04-target-architecture/architecture-impact-analysis.md`
-- `rijksuitgaven-saas-docs/02-requirements/search-requirements.md`
+- `04-target-architecture/architecture-impact-analysis.md`
+- `02-requirements/search-requirements.md`
 
 ### At session start (/startday):
-- `rijksuitgaven-saas-docs/logs/SESSION-CONTEXT.md`
-- Most recent file in `rijksuitgaven-saas-docs/logs/daily/`
+- `logs/SESSION-CONTEXT.md`
+- Most recent file in `logs/daily/`
 
 ## Model Selection Policy
 
@@ -209,7 +209,7 @@ Rijksuitgaven.nl SaaS Platform Migration - Documentation and planning repository
 
 ## Documentation Structure
 
-See `rijksuitgaven-saas-docs/README.md` for full documentation structure.
+See `README.md` for full documentation structure.
 
 ### Key Files
 - `logs/SESSION-CONTEXT.md` - Current session state and pending decisions
@@ -230,7 +230,7 @@ See `rijksuitgaven-saas-docs/README.md` for full documentation structure.
 
 ### /closeday Procedure
 
-**Full procedure:** See `rijksuitgaven-saas-docs/.claude/commands/closeday.md`
+**Full procedure:** See `.claude/commands/closeday.md`
 
 **Summary:**
 1. **Documentation Audit** (REQUIRED) - Verify all docs reflect current decisions

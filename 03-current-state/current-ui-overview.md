@@ -419,7 +419,7 @@ Both toggle states must be replicated exactly, including:
 
 Web archives of the current UI will be stored in:
 ```
-rijksuitgaven-saas-docs/03-current-state/web-archives/
+03-current-state/web-archives/
 ```
 
 These will provide additional reference for:

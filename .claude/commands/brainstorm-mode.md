@@ -15,13 +15,13 @@ Start by understanding the current project context, then ask questions one at a 
 
 Before any brainstorming, read these files:
 
-1. `rijksuitgaven-saas-docs/logs/SESSION-CONTEXT.md` - Current status, existing decisions
-2. `rijksuitgaven-saas-docs/02-requirements/search-requirements.md` - Requirements context
-3. `rijksuitgaven-saas-docs/04-target-architecture/RECOMMENDED-TECH-STACK.md` - Tech constraints
+1. `logs/SESSION-CONTEXT.md` - Current status, existing decisions
+2. `02-requirements/search-requirements.md` - Requirements context
+3. `04-target-architecture/RECOMMENDED-TECH-STACK.md` - Tech constraints
 
 If brainstorming UI/UX, also read:
-- `rijksuitgaven-saas-docs/03-current-state/current-ui-overview.md`
-- All images in `rijksuitgaven-saas-docs/assets/screenshots/current-ui/`
+- `03-current-state/current-ui-overview.md`
+- All images in `assets/screenshots/current-ui/`
 
 ## The Process
 

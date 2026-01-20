@@ -12,8 +12,8 @@ Create detailed text-based wireframe descriptions for UI screens. Since we can't
 ## MANDATORY: Read First (Do Not Skip)
 
 Before ANY wireframe work, read these files:
-1. `rijksuitgaven-saas-docs/03-current-state/current-ui-overview.md`
-2. All images in `rijksuitgaven-saas-docs/assets/screenshots/current-ui/`
+1. `03-current-state/current-ui-overview.md`
+2. All images in `assets/screenshots/current-ui/`
 
 ## The Process
 

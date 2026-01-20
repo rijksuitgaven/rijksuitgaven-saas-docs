@@ -21,10 +21,10 @@ Use `/adr` when:
 
 Before creating any ADR, read these files:
 
-1. `rijksuitgaven-saas-docs/logs/SESSION-CONTEXT.md` - Existing decisions, context
-2. `rijksuitgaven-saas-docs/04-target-architecture/architecture-impact-analysis.md` - Tech evaluation
-3. `rijksuitgaven-saas-docs/04-target-architecture/RECOMMENDED-TECH-STACK.md` - Current stack
-4. `rijksuitgaven-saas-docs/08-decisions/` - All existing ADRs (check for conflicts/overlaps)
+1. `logs/SESSION-CONTEXT.md` - Existing decisions, context
+2. `04-target-architecture/architecture-impact-analysis.md` - Tech evaluation
+3. `04-target-architecture/RECOMMENDED-TECH-STACK.md` - Current stack
+4. `08-decisions/` - All existing ADRs (check for conflicts/overlaps)
 
 ## The Process
 

@@ -4,19 +4,19 @@ Start of day briefing. As Project Manager, prepare the session by reviewing all 
 
 You MUST read these files before presenting the briefing:
 
-1. `rijksuitgaven-saas-docs/logs/SESSION-CONTEXT.md` - Current status, pending decisions, blockers
-2. Most recent file in `rijksuitgaven-saas-docs/logs/daily/` - Last session details
-3. `rijksuitgaven-saas-docs/04-target-architecture/RECOMMENDED-TECH-STACK.md` - Current tech decisions
-4. `rijksuitgaven-saas-docs/02-requirements/search-requirements.md` - Search feature specs
+1. `logs/SESSION-CONTEXT.md` - Current status, pending decisions, blockers
+2. Most recent file in `logs/daily/` - Last session details
+3. `04-target-architecture/RECOMMENDED-TECH-STACK.md` - Current tech decisions
+4. `02-requirements/search-requirements.md` - Search feature specs
 
 ## Additional Reading (Based on Current Phase)
 
 If phase involves UI/wireframes, also read:
-- `rijksuitgaven-saas-docs/03-current-state/current-ui-overview.md`
-- All images in `rijksuitgaven-saas-docs/assets/screenshots/current-ui/`
+- `03-current-state/current-ui-overview.md`
+- All images in `assets/screenshots/current-ui/`
 
 If phase involves architecture decisions, also read:
-- `rijksuitgaven-saas-docs/04-target-architecture/architecture-impact-analysis.md`
+- `04-target-architecture/architecture-impact-analysis.md`
 
 ## 3. Check for Blockers
 
