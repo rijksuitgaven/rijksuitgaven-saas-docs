@@ -3,7 +3,7 @@
 **Created:** 2026-01-20
 **Duration:** 8 weeks
 **Working Mode:** Solo founder + AI (few hours daily)
-**Start Date:** TBD (after account setup)
+**Start Date:** 2026-01-21
 
 ---
 

@@ -74,13 +74,32 @@
 
 | Property | Value |
 |----------|-------|
-| Account | ⏳ Not created yet |
+| Project | rijksuitgaven |
+| Created | 2026-01-21 |
+| Billing | Active (credit card added) |
+
+### Typesense (Search Engine)
+
+| Property | Value |
+|----------|-------|
+| Platform | Railway (rijksuitgaven project) |
+| Image | `typesense/typesense:27.1` |
+| API Key | `rua-ts-k8x2m9p4q7w3` |
+| Data Dir | `/data` |
+| Status | Running |
+| Config | `config/typesense-railway.md` |
 
 ### Executed Scripts
 
 | Script | Executed | Environment |
 |--------|----------|-------------|
 | `scripts/sql/001-initial-schema.sql` | 2026-01-21 | Supabase |
+
+### Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `config/typesense-railway.md` | Typesense setup documentation |
 
 ---
 
