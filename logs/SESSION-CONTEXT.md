@@ -25,7 +25,9 @@
 - ✅ UX brainstorm completed (7 enhancements decided)
 - ✅ Folder restructure completed (version-explicit names)
 - ✅ Supabase project created and schema deployed
-- ⏳ **NEXT:** Create Railway account → Deploy Typesense → Data migration
+- ✅ Railway account created, project configured
+- ✅ Typesense deployed with persistent volume
+- ⏳ **NEXT:** Data migration (MySQL → Supabase)
 
 ### Active Tasks
 | Task | Status | Notes |
@@ -48,14 +50,14 @@
 
 ## Recent Work (Last 3 Files)
 
-1. **docs/plans/2026-01-21-v1-search-ux-enhancement.md** ⭐ UPDATED
-   UX brainstorm findings: 7 enhancements including trend indicator, Integraal landing
+1. **scripts/sql/001-initial-schema.sql** ⭐ CREATED
+   Full database schema with 8 tables, indexes, RLS policies, PostGIS + pgvector extensions
 
-2. **09-timelines/v1-sprint-plan.md** ⭐ UPDATED
-   Added UX enhancements to Weeks 3-5, effort summary
+2. **config/typesense-railway.md** ⭐ CREATED
+   Complete Typesense configuration: env vars, start command, networking, API endpoints
 
-3. **05-v1-design/wireframes/01-main-search-page.md** ⭐ UPDATED
-   Integraal as first tab, cross-module results, trend indicator decisions
+3. **CLAUDE.md** ⭐ UPDATED
+   Added Code Documentation Rules section with folder structure and naming conventions
 
 ---
 
@@ -430,17 +432,33 @@ Dedicated overview page showing module-level totals with year columns.
 5. ~~Sprint planning~~ - `09-timelines/v1-sprint-plan.md` created
 6. ~~Auth decision~~ - Magic Link (passwordless)
 
-### Ready to Start Development ✅
+### Week 1 In Progress ✅
 
-**Pre-Sprint: Account Setup (Day 0)**
+**Pre-Sprint: Account Setup (Day 0)** - COMPLETED
 
 | Task | Action | Status |
 |------|--------|--------|
-| Create Supabase account | https://supabase.com → EU region | ⏳ Pending |
-| Create Railway account | https://railway.app | ⏳ Pending |
-| Share project URLs with Claude | For configuration | ⏳ Pending |
+| Create Supabase account | https://supabase.com → EU region | ✅ Completed |
+| Create Railway account | https://railway.app | ✅ Completed |
+| Deploy Typesense | Docker on Railway | ✅ Completed |
+| Execute database schema | 8 tables, indexes, RLS | ✅ Completed |
 
-**After accounts created → Week 1 begins**
+**Week 1 Progress (Day 1-2: Supabase Setup) - COMPLETED**
+
+| Task | Status |
+|------|--------|
+| Create database schema | ✅ `001-initial-schema.sql` executed |
+| Enable PostGIS extension | ✅ For geometry types |
+| Enable pgvector extension | ✅ For V2.0 readiness |
+| Set up Row Level Security | ✅ All tables protected |
+
+**Week 1 Next (Day 3-4: Data Migration)**
+
+| Task | Details |
+|------|---------|
+| Export MySQL data | CSV export of source tables |
+| Import to Supabase | Use Supabase CSV import or SQL INSERT |
+| Verify row counts | Compare MySQL vs Supabase |
 
 See full sprint plan: `09-timelines/v1-sprint-plan.md`
 
@@ -482,4 +500,4 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-19 - V2.0 design + Batch 1 wireframes
 - 2026-01-20 - V1.0 scope change, sprint planning
 
-**This Session:** 2026-01-21 - PM audit, deployment strategy, UX brainstorm (7 enhancements), folder restructure
+**This Session:** 2026-01-21 - PM audit, UX brainstorm, folder restructure, **Supabase setup** (schema deployed), **Railway setup** (Typesense deployed with persistent volume)
