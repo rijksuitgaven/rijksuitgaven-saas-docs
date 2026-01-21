@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-01-21
 **Project Phase:** Phase 1 - V1.0 Development
-**Current Sprint:** Pre-Sprint (Account Setup)
+**Current Sprint:** Week 1 - Infrastructure + Data Migration
 
 ---
 
@@ -24,7 +24,8 @@
 - ✅ Deployment strategy documented
 - ✅ UX brainstorm completed (7 enhancements decided)
 - ✅ Folder restructure completed (version-explicit names)
-- ⏳ **NEXT:** Create Supabase and Railway accounts → Start Week 1
+- ✅ Supabase project created and schema deployed
+- ⏳ **NEXT:** Create Railway account → Deploy Typesense → Data migration
 
 ### Active Tasks
 | Task | Status | Notes |
@@ -55,6 +56,31 @@
 
 3. **05-v1-design/wireframes/01-main-search-page.md** ⭐ UPDATED
    Integraal as first tab, cross-module results, trend indicator decisions
+
+---
+
+## Infrastructure
+
+### Supabase (Database + Auth)
+
+| Property | Value |
+|----------|-------|
+| Project URL | `https://kmdelrgtgglcrupprkqf.supabase.co` |
+| Region | Europe (Frankfurt) |
+| Created | 2026-01-21 |
+| Extensions | postgis, vector (pgvector) |
+
+### Railway (Hosting)
+
+| Property | Value |
+|----------|-------|
+| Account | ⏳ Not created yet |
+
+### Executed Scripts
+
+| Script | Executed | Environment |
+|--------|----------|-------------|
+| `scripts/sql/001-initial-schema.sql` | 2026-01-21 | Supabase |
 
 ---
 

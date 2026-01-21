@@ -106,6 +106,77 @@ Before starting any significant task, verify:
 
 ---
 
+## Code Documentation Rules (MANDATORY)
+
+**Every piece of code provided must be saved to the repository.** No exceptions.
+
+### Folder Structure
+
+```
+scripts/
+├── sql/           # Database schemas, migrations, queries
+│   ├── 001-initial-schema.sql
+│   ├── 002-add-indexes.sql
+│   └── ...
+├── data/          # Data migration scripts, transforms
+│   ├── export-mysql.sh
+│   ├── import-supabase.py
+│   └── ...
+└── setup/         # Setup and configuration scripts
+    ├── railway-setup.sh
+    └── ...
+
+config/            # Configuration files
+├── railway.json
+├── typesense.json
+└── ...
+
+src/               # Application source code (when created)
+└── ...
+```
+
+### Naming Convention
+
+| Type | Pattern | Example |
+|------|---------|---------|
+| SQL migrations | `NNN-description.sql` | `001-initial-schema.sql` |
+| Data scripts | `descriptive-name.ext` | `export-mysql.sh` |
+| Config files | `service-name.json` | `typesense.json` |
+
+### Documentation Requirements
+
+Every script file must include a header:
+
+```sql
+-- =====================================================
+-- Description: [What this script does]
+-- Created: [Date]
+-- Executed: [Date] on [Environment]
+-- =====================================================
+```
+
+### Tracking Executed Scripts
+
+When code is executed by the founder:
+1. **Update the script header** with execution date and environment
+2. **Log in SESSION-CONTEXT.md** under "Executed Scripts" section
+3. **Commit to git** with clear message
+
+### PM Responsibility
+
+**Before providing any code to execute:**
+1. Write it to the appropriate file in `scripts/` or `config/`
+2. Include proper header documentation
+3. Commit to git
+4. Then provide instructions to founder
+
+**After founder confirms execution:**
+1. Update script header with execution date
+2. Update SESSION-CONTEXT.md
+3. Commit the update
+
+---
+
 ## Project Rules (Always Apply)
 
 ### Constraints
