@@ -181,3 +181,48 @@ Content marketing idea: Monitor Dutch media for trending topics, connect to spen
 **Decision:** Evaluate post-V1.0 as marketing initiative.
 
 ---
+
+### AI Integration: MCP Server + OpenAI GPT
+
+**Priority:** Medium (Marketing/Lead Generation)
+**Added:** 2026-01-21
+**Source:** Brainstorm Session
+
+Enable AI assistants (Claude, ChatGPT) to query recipient spending data as a lead generation tool.
+
+**Strategy:** Citation without extraction
+- AI queries live data from Rijksuitgaven servers (not trained into models)
+- Returns teaser data with CTA to platform
+- Full details remain behind paywall
+
+**Example interaction:**
+```
+User: "How much did ProRail receive from the Dutch government?"
+
+AI: "ProRail B.V. received €461M in 2024.
+     Sources: Financiële Instrumenten (€412M), Publiek (€49M)
+
+     📊 For trends, breakdowns, and exports: rijksuitgaven.nl"
+```
+
+**What to expose (teaser):**
+- Recipient name + total amount (latest year)
+- Which modules they appear in
+- Record count
+
+**What stays behind paywall:**
+- Year-over-year breakdown
+- Drill-down by Regeling, Artikel, etc.
+- Export functionality
+
+**Technical components:**
+1. Public API endpoint: `/api/public/recipient?name=X`
+2. MCP server wrapper (for Claude)
+3. OpenAI GPT Action (for ChatGPT)
+4. robots.txt: Block training crawlers, allow search crawlers
+
+**Effort:** 8-12 hours total
+
+**Decision:** Post-V1.0. Implement after platform stable.
+
+---
