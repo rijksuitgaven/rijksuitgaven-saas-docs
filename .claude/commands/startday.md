@@ -12,7 +12,7 @@ You MUST read these files before presenting the briefing:
 ## Additional Reading (Based on Current Phase)
 
 If phase involves UI/wireframes, also read:
-- `03-current-state/current-ui-overview.md`
+- `03-wordpress-baseline/current-ui-overview.md`
 - All images in `assets/screenshots/current-ui/`
 
 If phase involves architecture decisions, also read:

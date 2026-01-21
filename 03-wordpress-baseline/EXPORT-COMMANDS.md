@@ -277,7 +277,7 @@ Here's a checklist of what we need:
 ### Option 1: Add to GitHub Repository (Recommended)
 Create a folder and upload there:
 ```
-03-current-state/exports/
+03-wordpress-baseline/exports/
   ├── rijksuitgaven_schema.sql
   ├── table_list.txt (or screenshot)
   ├── sample_financiele_instrumenten.sql
@@ -409,7 +409,7 @@ We can get sample data later if needed. The schema alone will tell me 80% of wha
 
 Once you've exported the files:
 
-1. Upload them to the GitHub repo in `03-current-state/exports/`
+1. Upload them to the GitHub repo in `03-wordpress-baseline/exports/`
 2. Or share via file transfer
 3. Let me know they're ready
 

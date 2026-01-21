@@ -246,5 +246,5 @@ All content in Dutch. Same text as current WordPress site.
 
 ## Related Documents
 
-- [Current Homepage Archive](../03-current-state/web-archives/01-Home-not logged in.html)
+- [Current Homepage Archive](../03-wordpress-baseline/web-archives/01-Home-not logged in.html)
 - [Overzicht Page Requirements](./overzicht-page-requirements.md)

@@ -20,7 +20,7 @@ Before any brainstorming, read these files:
 3. `04-target-architecture/RECOMMENDED-TECH-STACK.md` - Tech constraints
 
 If brainstorming UI/UX, also read:
-- `03-current-state/current-ui-overview.md`
+- `03-wordpress-baseline/current-ui-overview.md`
 - All images in `assets/screenshots/current-ui/`
 
 ## The Process

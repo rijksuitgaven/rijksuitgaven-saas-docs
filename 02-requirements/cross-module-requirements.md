@@ -195,5 +195,5 @@ When source data updates (monthly):
 ## Related Documents
 
 - [ADR-014: Single-View Architecture](../08-decisions/ADR-014-single-view-architecture.md)
-- [Source Data Analysis](../03-current-state/source-data-analysis.md)
+- [Source Data Analysis](../03-wordpress-baseline/source-data-analysis.md)
 - [Backlog - Entity Resolution](./backlog.md)

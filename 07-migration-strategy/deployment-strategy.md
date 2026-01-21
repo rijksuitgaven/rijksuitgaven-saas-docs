@@ -1,0 +1,227 @@
+# Deployment Strategy
+
+**Created:** 2026-01-21
+**Status:** Confirmed
+
+---
+
+## Overview
+
+| Aspect | Decision |
+|--------|----------|
+| Production domain | rijksuitgaven.nl |
+| Staging domain | beta.rijksuitgaven.nl |
+| Staging protection | Magic Link (Supabase Auth) |
+| Beta testers | 5 people total |
+| Cutover approach | Hard switch (DNS) |
+| Rollback plan | None - thorough testing before switch |
+
+---
+
+## Infrastructure
+
+### Current State
+```
+rijksuitgaven.nl
+    │
+    └── WordPress on private server (contracted hosting)
+        └── Can be terminated anytime after switch
+```
+
+### Target State
+```
+rijksuitgaven.nl
+    │
+    └── Next.js on Railway
+        ├── Supabase (database + auth)
+        └── Typesense (search)
+```
+
+### DNS Control
+- **Registrar/DNS:** Controlled by founder
+- **Action needed:** Create CNAME for beta subdomain, later update A/CNAME for main domain
+
+---
+
+## Development Phase (Weeks 1-7)
+
+### Two Sites Running Parallel
+
+| Site | URL | Purpose | Access |
+|------|-----|---------|--------|
+| Production | rijksuitgaven.nl | Live service for 50 paying users | Public (with login) |
+| Staging | beta.rijksuitgaven.nl | Development and testing | Magic Link only |
+
+### Staging Setup (Week 1)
+
+1. **DNS:** Add CNAME record `beta.rijksuitgaven.nl` → Railway app URL
+2. **Auth:** Supabase Magic Link required to access any page
+3. **Data:** Copy of production data (refreshed as needed)
+4. **Users:** Only founder + invited beta testers
+
+### Staging Access Control (Decided 2026-01-21)
+
+```
+beta.rijksuitgaven.nl/*
+    │
+    ├── Not logged in → Redirect to login page
+    │                   "This is a beta preview."
+    │
+    └── Logged in (Magic Link) → Full access
+        └── Only manually created accounts can log in
+```
+
+**Method:** Disable public signup in Supabase Auth settings. Manually create accounts for:
+- Founder (you)
+- 5 beta testers (add their emails in Supabase dashboard)
+
+**Supabase setup:**
+1. Auth → Settings → Disable "Enable email signup"
+2. Auth → Users → "Create user" for each tester
+3. Users receive Magic Link when they request login
+
+---
+
+## Beta Testing Phase (Week 8, Days 1-5)
+
+### Beta Testers
+- **Total:** 5 people
+- **Recruitment:** Founder selects from existing customers or contacts
+- **Access:** Magic Link to beta.rijksuitgaven.nl
+
+### Beta Testing Checklist
+
+| Area | Test |
+|------|------|
+| Auth | Magic Link flow works |
+| Search | <100ms response, autocomplete works |
+| All 7 modules | Data displays correctly |
+| Filters | All filters work per module |
+| Export | CSV download (500 rows) |
+| Mobile | Tables usable on phone |
+| Overzicht | Module totals correct |
+| Navigation | All links work |
+
+### Issue Tracking
+- Beta testers report issues directly (email/chat)
+- Fix critical issues before switch
+- Non-critical issues go to backlog
+
+---
+
+## Cutover (Week 8, Days 6-7)
+
+### Pre-Switch Checklist
+
+- [ ] All beta tester issues resolved
+- [ ] Performance verified (<100ms search, <1s page load)
+- [ ] All 50 user emails imported to Supabase Auth
+- [ ] "Welcome to new platform" email drafted
+- [ ] DNS TTL lowered (if not already low)
+
+### Switch Procedure
+
+**Step 1: DNS Update**
+```
+Current:  rijksuitgaven.nl → Private server (WordPress)
+New:      rijksuitgaven.nl → Railway (Next.js)
+```
+
+**Step 2: Verify**
+- [ ] HTTPS working
+- [ ] Homepage loads
+- [ ] Login works
+- [ ] One module test (search + filter + export)
+
+**Step 3: User Communication**
+- Send announcement email to 50 users
+- Include: What changed, how to log in (Magic Link), support contact
+
+**Step 4: Shutdown Old Server**
+- After 1-2 weeks of stable operation
+- Terminate WordPress hosting contract
+
+---
+
+## Post-Launch
+
+### Monitoring (Week 9+)
+- Watch for user-reported issues
+- Monitor Railway/Supabase dashboards
+- Check error logs (Sentry if configured)
+
+### Old Server
+- Keep WordPress data backup (just in case)
+- Terminate hosting after 2 weeks stable operation
+
+---
+
+## DNS Records Reference
+
+### During Development
+```
+beta.rijksuitgaven.nl    CNAME    [railway-app-url].up.railway.app
+nieuws.rijksuitgaven.nl  A        [current-server-ip]
+```
+
+### After Switch
+```
+rijksuitgaven.nl         A/CNAME  [railway-app-url] or Railway IP
+www.rijksuitgaven.nl     CNAME    rijksuitgaven.nl
+nieuws.rijksuitgaven.nl  A        [current-server-ip]  (keep for email)
+beta.rijksuitgaven.nl    (remove or keep for future testing)
+```
+
+---
+
+## Marketing Email Strategy (2026-01-21)
+
+**Decision:** Keep Mailster + Mailgun on subdomain
+
+### Current Setup
+- WordPress + Mailster plugin + Mailgun
+- Tracks open rates, campaigns, subscriber management
+
+### V1.0 Approach
+```
+nieuws.rijksuitgaven.nl  → WordPress (Mailster only)
+rijksuitgaven.nl         → New platform (Next.js on Railway)
+```
+
+### Why This Approach
+- No migration of working email system
+- Preserves subscriber data, templates, history
+- Reduces V1.0 risk and scope
+- Can migrate to dedicated platform post-V1.0
+
+### Setup Tasks (Week 1)
+1. DNS: Add `nieuws.rijksuitgaven.nl` pointing to current server
+2. Strip WordPress to essentials (Mailster + Mailgun only)
+3. Update Mailster settings if needed for new subdomain
+
+### Post-Switch Tasks (Week 8)
+- Update email template links to point to new rijksuitgaven.nl
+- Test email delivery from nieuws subdomain
+
+### Future (Post-V1.0)
+Evaluate migration to dedicated email platform:
+- Mailchimp, ConvertKit, Buttondown, or Loops
+- Decision based on feature needs and cost
+
+---
+
+## Summary
+
+```
+Week 1-7:  Build on beta.rijksuitgaven.nl (Magic Link protected)
+           WordPress stays live on rijksuitgaven.nl
+
+Week 8:    Beta test with 5 users
+           Fix issues
+
+Day X:     DNS switch: rijksuitgaven.nl → Railway
+           Email 50 users
+           WordPress → archive/shutdown
+```
+
+**No rollback plan needed** - site is straightforward, testing will be thorough.

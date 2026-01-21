@@ -37,7 +37,19 @@
 
 ## Week 1: Infrastructure + Data Migration
 
-**Goal:** Data in Supabase, searchable in Typesense
+**Goal:** Data in Supabase, searchable in Typesense, staging site accessible
+
+### Day 0: DNS Setup (Before Starting)
+
+| Task | Details |
+|------|---------|
+| Add CNAME record | `beta.rijksuitgaven.nl` → Railway app URL |
+| Add A record | `nieuws.rijksuitgaven.nl` → current server IP |
+| Verify propagation | `dig beta.rijksuitgaven.nl` or online DNS checker |
+
+**Note:** Railway URL will be known after deploying Next.js app. Can set DNS after Day 7.
+
+**nieuws subdomain:** For Mailster/Mailgun email system. Keep WordPress running on current server for marketing emails only.
 
 ### Day 1-2: Supabase Setup
 
@@ -91,7 +103,7 @@
 
 | Task | Details |
 |------|---------|
-| FastAPI setup | Or Next.js API routes (decide based on preference) |
+| FastAPI setup | Python backend (decided 2026-01-21) |
 | Base endpoints | `/api/v1/modules/{module}` |
 | Query parameters | filters, sort, pagination, grouping |
 
@@ -135,15 +147,23 @@
 | Totaal column | Row sum |
 | Sorting | Click column headers |
 | Pagination | 25/50/100 rows per page |
+| **Trend anomaly indicator** | Red highlight for 10%+ year-over-year changes (UX enhancement) |
+| **Hover tooltip** | Shows exact % change vs previous year |
+
+**UX Reference:** See `docs/plans/2026-01-21-v1-search-ux-enhancement.md` (Enhancement 5)
 
 ### Day 3-4: Expandable Rows
 
 | Feature | Details |
 |---------|---------|
 | Expand icon | ▶ / ▼ toggle |
+| **Prominent context** | Regeling as headline, breadcrumb hierarchy (UX enhancement) |
+| **Cross-module indicator** | "Ook in: Instrumenten, Publiek" when recipient appears elsewhere |
 | Sub-rows | Grouped by user-selected field |
 | Grouping selector | Dropdown: Regeling, Artikel, Instrument, etc. |
 | Lazy loading | Fetch detail data on expand |
+
+**UX Reference:** See `docs/plans/2026-01-21-v1-search-ux-enhancement.md`
 
 ### Day 5-7: Filter Panel
 
@@ -178,14 +198,18 @@
 | Stad (Gemeente) | `/gemeente` | Stad filter |
 | Publiek | `/publiek` | Source (RVO/COA/NWO), Regeling |
 
-### Day 4-5: Cross-Module (Integraal)
+### Day 4-5: Cross-Module (Integraal) - Landing Page
 
 | Feature | Details |
 |---------|---------|
-| Route | `/integraal` |
+| Route | `/integraal` (also `/` for logged-in users) |
+| **Tab position** | First tab (UX enhancement - users land here) |
+| Default view | Random recipients with 4+ years of data |
 | Results | Recipient → Module breakdown |
 | Click behavior | Navigate to module with filter |
 | Totals row | Grand total footer |
+
+**UX Reference:** See `docs/plans/2026-01-21-v1-search-ux-enhancement.md` (Enhancement 7)
 
 ### Day 6-7: Styling & Responsive
 
@@ -208,14 +232,21 @@
 
 **Goal:** Global search bar, autocomplete, navigation
 
-### Day 1-2: Global Search Bar
+### Day 1-2: Global Search Bar (Enhanced - UX Decision)
 
 | Feature | Details |
 |---------|---------|
 | Position | Header, always visible |
 | Autocomplete | <50ms suggestions from Typesense |
-| Results | Recipients across all modules |
-| Click result | Navigate to relevant module with filter |
+| **Indexed fields** | Ontvanger + Omschrijving, Regeling, Beleidsterrein (UX enhancement) |
+| **Grouped results** | Keywords section + Recipients section |
+| Click keyword | Navigate to module with search filter applied |
+| Click recipient | Navigate to recipient detail/filtered results |
+| **Cross-module results** | Always show "Ook in:" with counts above table (UX enhancement) |
+
+**UX Reference:** See `docs/plans/2026-01-21-v1-search-ux-enhancement.md` (Enhancements 1 & 6)
+
+**Why:** Users think theme-first ("wolf protection") but system was recipient-first. Now keywords like "wolfwerend" appear in autocomplete. Cross-module counts help users discover data across all sources.
 
 ### Day 3-4: Header Navigation
 
@@ -354,26 +385,36 @@
 |------|---------|
 | Lighthouse audit | Score >90 |
 | Security review | RLS policies, no data leaks |
-| Error tracking | Set up Sentry or similar |
-| Analytics | Set up Plausible |
+| Error logging | Railway built-in logs (Sentry = backlog) |
+| Analytics | Skip for launch (backlog item) |
 
-### Day 5-6: Customer Migration
-
-| Task | Details |
-|------|---------|
-| Send announcement | Email to 50 users |
-| Provide Magic Link | Login instructions |
-| Support availability | Monitor for issues |
-| Old site redirect | Plan for WordPress shutdown |
-
-### Day 7: Go Live
+### Day 5-6: Beta Testing + Cutover Prep
 
 | Task | Details |
 |------|---------|
-| DNS switch | Point domain to Railway |
-| SSL verify | HTTPS working |
-| Final smoke test | All critical paths |
-| Celebrate | V1.0 shipped! |
+| Beta testing | 5 testers on beta.rijksuitgaven.nl |
+| Fix critical issues | Resolve any blockers |
+| Import 50 users | All user emails in Supabase Auth |
+| Draft announcement | "Welcome to new platform" email |
+| Lower DNS TTL | If not already low (speeds up switch) |
+
+### Day 6-7: Go Live
+
+| Task | Details |
+|------|---------|
+| DNS switch | `rijksuitgaven.nl` A/CNAME → Railway |
+| Verify HTTPS | SSL certificate working |
+| Smoke test | Login, search, one module end-to-end |
+| Send announcement | Email 50 users with Magic Link instructions |
+| Monitor | Watch for issues first 24-48 hours |
+
+### Post-Launch (Week 9+)
+
+| Task | Details |
+|------|---------|
+| Monitor | 1-2 weeks stability check |
+| WordPress | Shut down after stable period |
+| Cleanup | Remove beta subdomain or keep for future testing |
 
 **Week 8 Deliverables:**
 - [ ] All tests passing
@@ -435,5 +476,22 @@ After V1.0 is stable:
 
 ---
 
-**Document Version:** 1.0
-**Last Updated:** 2026-01-20
+**Document Version:** 1.1
+**Last Updated:** 2026-01-21
+
+---
+
+## UX Enhancements Summary
+
+Additional effort from UX brainstorm session (14-23 hours total, spread across Weeks 3-5):
+
+| Enhancement | Week | Hours |
+|-------------|------|-------|
+| Enhanced autocomplete | Week 5 | 4-8 |
+| Cross-module indicator (rows) | Week 3 | 3-5 |
+| Prominent expanded context | Week 3 | Design only |
+| Trend anomaly indicator | Week 3 | 3-4 |
+| Cross-module search results | Week 5 | 4-6 |
+| Integraal as landing | Week 4 | Config only |
+
+**Reference:** `docs/plans/2026-01-21-v1-search-ux-enhancement.md`

@@ -1,8 +1,8 @@
 # Wireframe: Main Search Page
 
-**Date:** 2026-01-19
-**Status:** Draft
-**Related:** [Search Requirements](../../02-requirements/search-requirements.md), [Current UI Overview](../../03-current-state/current-ui-overview.md)
+**Date:** 2026-01-21
+**Status:** Updated (UX Enhancements)
+**Related:** [Search Requirements](../../02-requirements/search-requirements.md), [Current UI Overview](../../03-wordpress-baseline/current-ui-overview.md)
 
 ---
 
@@ -27,8 +27,8 @@ The main search page is the primary interface for users to search government fin
 │                                                     [Contact] [Profiel ▾]    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ MODULE TABS                                                                  │
-│ [Financiële Instrumenten] [Apparaatsuitgaven] [Provinciale] [Gemeentelijke] │
-│ [Inkoopuitgaven] [Publiek] [Integraal]                                      │
+│ [Integraal] [Financiële Instrumenten] [Apparaatsuitgaven] [Provinciale]     │
+│ [Gemeentelijke] [Inkoopuitgaven] [Publiek]                                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌───────────────────────────────────────────────────────────────────────┐  │
@@ -278,17 +278,24 @@ The main search page is the primary interface for users to search government fin
 ### 6. Results Summary
 
 **Content:**
-- Total result count
-- Module breakdown (when searching across modules)
+- Total result count in current module
+- Cross-module results ("Ook in:") - always shown when results exist elsewhere
 
-**Example:**
+**Example (in Apparaatsuitgaven module):**
 ```
-1.234 resultaten gevonden  •  Financiële Instrumenten (890) │ Apparaat (234) │ Publiek (110)
+23 resultaten in Apparaatsuitgaven
+
+📊 Ook in: Provinciale subsidies (12) • Financiële Instrumenten (3)
 ```
 
 **Behavior:**
-- Click module name → Filter to that module
+- Shows current module result count
+- "Ook in:" shows ALL other modules with results (ordered by count)
+- Click module name → Navigate to that module with same search applied
 - Updates in real-time as filters change
+- If no results in other modules, "Ook in:" line is hidden
+
+**UX Reference:** See `docs/plans/2026-01-21-v1-search-ux-enhancement.md` (Enhancement 6)
 
 ---
 
@@ -501,6 +508,11 @@ The main search page is the primary interface for users to search government fin
 | Row expansion | ▶ expands to show line items inline |
 | Column customization | User selects detail columns, saved per user |
 | Module columns | Each module shows only its available columns |
+| **Landing page** | Integraal (first tab) - users land on cross-module view |
+| **Trend indicator** | Red highlight for 10%+ year-over-year changes |
+| **Cross-module results** | Always show "Ook in:" with counts above table |
+
+**UX Reference:** See `docs/plans/2026-01-21-v1-search-ux-enhancement.md`
 
 ## Mobile Approach (Recommendation)
 

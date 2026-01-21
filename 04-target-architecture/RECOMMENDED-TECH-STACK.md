@@ -1,7 +1,7 @@
 # Recommended Technology Stack
 
 ## Overview
-Based on your requirements: beginner-friendly, cost-effective (€50-200/month), future-proof, scalable, with team of 2-3, ASAP launch (1-2 months), and MCP server support for AI.
+Based on your requirements: beginner-friendly, cost-effective (€50-200/month), future-proof, scalable, solo founder project, ASAP launch (8 weeks), and MCP server support for AI.
 
 ---
 

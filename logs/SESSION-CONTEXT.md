@@ -1,6 +1,6 @@
 # Session Context
 
-**Last Updated:** 2026-01-20
+**Last Updated:** 2026-01-21
 **Project Phase:** Phase 1 - V1.0 Development
 **Current Sprint:** Pre-Sprint (Account Setup)
 
@@ -20,7 +20,11 @@
 - ✅ V1.0 scope finalized (single-view architecture + new search)
 - ✅ Sprint plan created (8 weeks)
 - ✅ Documentation audit completed
-- ⏳ **NEXT:** Create Supabase and Railway accounts
+- ✅ PM audit completed (all gaps closed)
+- ✅ Deployment strategy documented
+- ✅ UX brainstorm completed (7 enhancements decided)
+- ✅ Folder restructure completed (version-explicit names)
+- ⏳ **NEXT:** Create Supabase and Railway accounts → Start Week 1
 
 ### Active Tasks
 | Task | Status | Notes |
@@ -34,25 +38,175 @@
 | Sprint plan | ✅ Completed | `09-timelines/v1-sprint-plan.md` |
 | Auth decision | ✅ Completed | Magic Link (passwordless) |
 | Documentation audit | ✅ Completed | 14 empty files deleted, auth refs updated |
+| PM audit | ✅ Completed | All gaps identified and closed |
+| Deployment strategy | ✅ Completed | beta.rijksuitgaven.nl → DNS switch |
+| UX brainstorm | ✅ Completed | 7 enhancements for V1.0 |
+| Folder restructure | ✅ Completed | Version-explicit names |
 
 ---
 
 ## Recent Work (Last 3 Files)
 
-1. **09-timelines/v1-sprint-plan.md** ⭐ NEW
-   8-week sprint plan with daily tasks, ready for development
+1. **docs/plans/2026-01-21-v1-search-ux-enhancement.md** ⭐ UPDATED
+   UX brainstorm findings: 7 enhancements including trend indicator, Integraal landing
 
-2. **CLAUDE.md** ⭐ UPDATED
-   Documentation Rules, Model Selection Policy, /closeday procedure
+2. **09-timelines/v1-sprint-plan.md** ⭐ UPDATED
+   Added UX enhancements to Weeks 3-5, effort summary
 
-3. **.claude/commands/closeday.md** ⭐ UPDATED
-   Added documentation audit as Step 0 (required before logging)
+3. **05-v1-design/wireframes/01-main-search-page.md** ⭐ UPDATED
+   Integraal as first tab, cross-module results, trend indicator decisions
 
 ---
 
 ## Key Decisions Made
 
-### V1.0 Scope Change (2026-01-20) - UPDATED
+### Deployment Strategy (2026-01-21) ⭐ NEW
+
+| Decision | Outcome |
+|----------|---------|
+| Production domain | rijksuitgaven.nl |
+| Staging domain | beta.rijksuitgaven.nl |
+| Staging protection | Magic Link (Supabase Auth) |
+| Beta testers | 5 people |
+| Cutover approach | Hard DNS switch |
+| Rollback plan | None - thorough testing before switch |
+| Current hosting | Private server (can terminate anytime) |
+| DNS control | Founder |
+
+**Development flow:**
+1. Build on beta.rijksuitgaven.nl (Weeks 1-7)
+2. Beta test with 5 users (Week 8)
+3. DNS switch to rijksuitgaven.nl
+4. Email 50 users
+5. Shut down WordPress
+
+**See:** `07-migration-strategy/deployment-strategy.md`
+
+### Folder Restructure (2026-01-21) ⭐ NEW
+
+**Problem:** Confusion about what "current state" and "design" folders referred to (WordPress vs V1.0).
+
+**Solution:** Renamed folders to be version-explicit:
+- `03-current-state/` → `03-wordpress-baseline/`
+- `05-design/` → `05-v1-design/`
+
+**Impact:** Updated all cross-references in documentation.
+
+**Rule Added to CLAUDE.md:** "Documentation must always be 100% up to date."
+
+### PM Audit Decisions (2026-01-21) ⭐ NEW
+
+| Topic | Decision |
+|-------|----------|
+| User data export | CSV from founder with full user profile |
+| User fields | Email, name, org, role, phone, subscription dates, list |
+| Data export | SQL dump from MySQL |
+| EUR normalization | Varies by module; existing scripts handle conversion |
+| universal_search | Migrate as-is; founder's SQL scripts can repopulate |
+| Homepage content | Extract from `01-Home-not logged in.html` archive |
+| Support pages | Park for later (site will change) |
+| Transactional email | Supabase built-in; Mailgun if needed |
+| Marketing email | Keep Mailster + Mailgun on nieuws.rijksuitgaven.nl |
+| Analytics | Backlog (not V1.0) |
+| Error tracking | Backlog (not V1.0) |
+
+**See:** `07-migration-strategy/migration-overview.md`
+
+### Marketing Email Decision (2026-01-21) ⭐ NEW
+
+| Aspect | Decision |
+|--------|----------|
+| Tool | Keep Mailster + Mailgun (current setup) |
+| Location | nieuws.rijksuitgaven.nl (subdomain) |
+| WordPress | Stripped to Mailster only |
+| Server | Current private server (continues running) |
+| Future | Evaluate dedicated platform post-V1.0 |
+
+**Rationale:** Don't migrate working email system during V1.0. Reduces risk, preserves data.
+
+**See:** `07-migration-strategy/deployment-strategy.md`
+
+### Final Pre-Development Decisions (2026-01-21) ⭐ NEW
+
+| Decision | Outcome |
+|----------|---------|
+| Backend framework | **FastAPI (Python)** - better for data/AI work |
+| URL sharing | **Search + key filters** (e.g., `/instrumenten?q=prorail&jaar=2024`) |
+| Staging access | **Disable public signup** - manually add beta testers in Supabase |
+| Table rename (stad→gemeente) | **Handled by existing scripts** |
+| Grouping fields | **All filter fields are groupable** - each module has its own set |
+
+### URL Sharing Specification (V1.0)
+
+**Format:** `/[module]?q=[search]&[filter1]=[value]&[filter2]=[value]`
+
+**Shareable parameters:**
+- `q` - search term
+- `jaar` - year filter
+- Module-specific key filters (top 2-3 per module)
+
+**NOT in URL (V1.0):**
+- Expanded/collapsed row state
+- Pagination position
+- Column preferences
+- Grouping selection
+
+**Full URL state restoration:** Deferred to V2.0
+
+### Grouping Fields Per Module (All Filter Fields Are Groupable)
+
+| Module | Groupable/Filterable Fields |
+|--------|----------------------------|
+| Financiële Instrumenten | Regeling, Artikel, Artikelonderdeel, Instrument, Detail, Begrotingsnaam |
+| Apparaatsuitgaven | Kostensoort, Artikel, Detail, Begrotingsnaam |
+| Provinciale subsidies | Provincie, Omschrijving |
+| Gemeentelijke subsidies | Gemeente, Beleidsterrein, Regeling, Omschrijving, Beleidsnota |
+| Inkoopuitgaven | Ministerie, Categorie, Staffel |
+| Publiek | Bron, Regeling, Trefwoorden, Sectoren, Regio, Staffel, Onderdeel |
+| Integraal | Module (cross-module grouping) |
+
+**Note:** Each module has different fields - e.g., Gemeente field exists in Gemeentelijke but not Provinciale.
+
+### V1.0 UX Enhancements (2026-01-21) ⭐ UPDATED
+
+**Source:** UX Brainstorm Sessions with founder
+
+**User research findings:**
+- 50% Political staff, 25% Journalists, 25% Researchers
+- Core need: "Where does the money go, and does it work?"
+- Users think theme-first ("wolf protection"), system is recipient-first
+- Users LOVE trends but struggle to spot anomalies in large numbers
+
+| Enhancement | Decision | Effort |
+|-------------|----------|--------|
+| **Enhanced autocomplete** | Index Omschrijving, Regeling, Beleidsterrein; show keyword matches | 4-8 hrs |
+| **Cross-module indicator** | "Ook in: Instrumenten, Publiek" on recipient rows | 3-5 hrs |
+| **Prominent expanded context** | Regeling as headline, breadcrumb hierarchy | Design only |
+| **URL sharing** | Search + key filters preserved | Already planned |
+| **Trend anomaly indicator** | Red highlight for 10%+ year-over-year changes (magnitude only) | 3-4 hrs |
+| **Cross-module search results** | Always show "Ook in:" with counts above table | 4-6 hrs |
+| **Integraal as landing** | Move Integraal tab to first position | Config only |
+
+**User struggles addressed:**
+- A) Finding recipients → Enhanced autocomplete
+- B) Connecting dots across modules → "Ook in:" indicator + cross-module results + Integraal landing
+- C) Understanding context → Prominent expanded design
+- D) Sharing findings → URL sharing
+- E) Tracking over time → Year columns + trend anomaly indicator (enhanced)
+
+**Total additional effort:** 14-23 hours (~2-3 days)
+
+**V2.0 alignment:** All decisions prepare for Research Mode without conflict.
+
+**Deferred to backlog:**
+- User-configurable anomaly threshold (5%, 10%, 15%, 20%)
+- Data provenance / freshness indicator
+- Accessibility: colorblind indicator for trend highlights
+- Newsletter: media topics + spending data (marketing idea)
+
+**See:** `docs/plans/2026-01-21-v1-search-ux-enhancement.md`
+
+### V1.0 Scope Change (2026-01-20)
 
 **V1.0 = Single-View Architecture + New Search Features**
 
@@ -182,8 +336,7 @@ Dedicated overview page showing module-level totals with year columns.
 ## Pending Decisions
 
 ### Important (Not Blocking)
-- **Wireframe review** - Batch 1 ready for approval
-- **URL parameters** - Should filters be saved in URL for sharing?
+- **Wireframe review** - Batch 1 ready for approval (when you have time)
 
 ---
 
@@ -196,12 +349,12 @@ Dedicated overview page showing module-level totals with year columns.
 ## Quick Links
 
 ### Wireframes ⭐ NEW
-- [01-Main Search Page](../05-design/wireframes/01-main-search-page.md)
-- [02-Header/Navigation](../05-design/wireframes/02-header-navigation.md)
-- [03-Search Bar](../05-design/wireframes/03-search-bar-autocomplete.md)
-- [04-Filter Panel](../05-design/wireframes/04-filter-panel.md)
-- [05-Results Table](../05-design/wireframes/05-results-table.md)
-- [06-Detail Page](../05-design/wireframes/06-detail-page.md)
+- [01-Main Search Page](../05-v1-design/wireframes/01-main-search-page.md)
+- [02-Header/Navigation](../05-v1-design/wireframes/02-header-navigation.md)
+- [03-Search Bar](../05-v1-design/wireframes/03-search-bar-autocomplete.md)
+- [04-Filter Panel](../05-v1-design/wireframes/04-filter-panel.md)
+- [05-Results Table](../05-v1-design/wireframes/05-results-table.md)
+- [06-Detail Page](../05-v1-design/wireframes/06-detail-page.md)
 
 ### Design Documents
 - [V2.0 Research Mode Design](../docs/plans/2026-01-19-v2-research-mode-design.md)
@@ -213,10 +366,10 @@ Dedicated overview page showing module-level totals with year columns.
 - [ADR-013: Search & Semantic Architecture](../08-decisions/ADR-013-search-semantic-architecture.md) ⭐ NEW
 
 ### Current State
-- [V1.0 Port Specification](../03-current-state/v1-port-specification.md) ⭐ NEW
-- [Current UI Overview](../03-current-state/current-ui-overview.md)
-- [Database Analysis](../03-current-state/database-analysis-summary.md)
-- [Web Archives](../03-current-state/web-archives/) - 18 HTML pages
+- [V1.0 Port Specification](../03-wordpress-baseline/v1-port-specification.md) ⭐ NEW
+- [Current UI Overview](../03-wordpress-baseline/current-ui-overview.md)
+- [Database Analysis](../03-wordpress-baseline/database-analysis-summary.md)
+- [Web Archives](../03-wordpress-baseline/web-archives/) - 18 HTML pages
 
 ---
 
@@ -279,5 +432,8 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 
 ---
 
-**Last Session:** 2026-01-19 - V2.0 design + Batch 1 wireframes
-**This Session:** 2026-01-20 - V1.0 scope change to technology port
+**Previous Sessions:**
+- 2026-01-19 - V2.0 design + Batch 1 wireframes
+- 2026-01-20 - V1.0 scope change, sprint planning
+
+**This Session:** 2026-01-21 - PM audit, deployment strategy, UX brainstorm (7 enhancements), folder restructure

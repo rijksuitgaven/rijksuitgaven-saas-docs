@@ -1531,7 +1531,7 @@ User lands on search page (no query entered):
 - Advanced filters per module
 - Cross-module search
 - Results <100ms
-- Export CSV (10K row limit)
+- Export CSV (500 row limit)
 
 **Scope:** 30 paying users, search only, no AI
 
@@ -1614,6 +1614,6 @@ User lands on search page (no query entered):
 
 ---
 
-**Last Updated:** 2026-01-14
+**Last Updated:** 2026-01-21
 **Author:** Technical Project Manager (AI Assistant)
 **Approvers:** TBD

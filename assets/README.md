@@ -130,7 +130,7 @@ High-fidelity design mockups and visual designs.
 From documentation files, use relative paths:
 - From root level docs: `./assets/...`
 - From 01-project-overview: `../assets/...`
-- From 03-current-state: `../assets/...`
+- From 03-wordpress-baseline: `../assets/...`
 
 ## Best Practices
 
@@ -166,12 +166,12 @@ From documentation files, use relative paths:
 2. Save them to `/assets/screenshots/current-ui/`
 3. Use descriptive names (e.g., `homepage-logged-in.png`)
 4. Reference in the documentation:
-   - In `03-current-state/current-features.md`
-   - In `05-design/` files when showing before/after
+   - In `03-wordpress-baseline/current-features.md`
+   - In `05-v1-design/` files when showing before/after
 
 ## Example Usage
 
-In `03-current-state/current-features.md`:
+In `03-wordpress-baseline/current-features.md`:
 ```markdown
 ## User Dashboard
 

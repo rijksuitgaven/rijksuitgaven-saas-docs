@@ -20,14 +20,14 @@ Detailed functional and non-functional requirements.
 - [Non-Functional Requirements](./02-requirements/non-functional-requirements.md)
 - [User Stories](./02-requirements/user-stories.md)
 
-### [03 - Current State](./03-current-state)
-Documentation of the existing platform.
+### [03 - WordPress Baseline](./03-wordpress-baseline)
+Documentation of the existing WordPress platform (baseline for migration).
 
-- [Current Architecture](./03-current-state/current-architecture.md)
-- [Current Tech Stack](./03-current-state/current-tech-stack.md)
-- [Current Features](./03-current-state/current-features.md)
-- [Current Data Model](./03-current-state/current-data-model.md)
-- [Pain Points](./03-current-state/pain-points.md)
+- [Current Architecture](./03-wordpress-baseline/current-architecture.md)
+- [Current Tech Stack](./03-wordpress-baseline/current-tech-stack.md)
+- [Current Features](./03-wordpress-baseline/current-features.md)
+- [Current Data Model](./03-wordpress-baseline/current-data-model.md)
+- [Pain Points](./03-wordpress-baseline/pain-points.md)
 
 ### [04 - Target Architecture](./04-target-architecture)
 Design of the new SaaS platform.
@@ -38,14 +38,14 @@ Design of the new SaaS platform.
 - [Security Architecture](./04-target-architecture/security-architecture.md)
 - [Integration Architecture](./04-target-architecture/integration-architecture.md)
 
-### [05 - Design](./05-design)
-UI/UX design documentation.
+### [05 - V1.0 Design](./05-v1-design)
+UI/UX design documentation for V1.0.
 
-- [Design System](./05-design/design-system.md)
-- [UI Components](./05-design/ui-components.md)
-- [User Flows](./05-design/user-flows.md)
-- [Wireframes](./05-design/wireframes.md)
-- [Visual Design](./05-design/visual-design.md)
+- [Design System](./05-v1-design/design-system.md)
+- [UI Components](./05-v1-design/ui-components.md)
+- [User Flows](./05-v1-design/user-flows.md)
+- [Wireframes](./05-v1-design/wireframes.md)
+- [Visual Design](./05-v1-design/visual-design.md)
 
 ### [06 - Technical Specifications](./06-technical-specs)
 Detailed technical documentation.

@@ -245,9 +245,9 @@ CREATE INDEX idx_ontvanger_year ON instrumenten(Ontvanger, Begrotingsjaar);
 
 ## Links
 
-- [Source Data Analysis](../03-current-state/source-data-analysis.md)
+- [Source Data Analysis](../03-wordpress-baseline/source-data-analysis.md)
 - [ADR-013: Search Architecture](./ADR-013-search-semantic-architecture.md)
-- [Original Port Specification](../03-current-state/v1-port-specification.md) - now superseded
+- [Original Port Specification](../03-wordpress-baseline/v1-port-specification.md) - now superseded
 
 ---
 

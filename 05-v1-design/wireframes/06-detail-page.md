@@ -2,7 +2,7 @@
 
 **Date:** 2026-01-19
 **Status:** Draft
-**Related:** [Current UI Overview](../../03-current-state/current-ui-overview.md), [Main Search Page](./01-main-search-page.md)
+**Related:** [Current UI Overview](../../03-wordpress-baseline/current-ui-overview.md), [Main Search Page](./01-main-search-page.md)
 
 ---
 

@@ -12,13 +12,13 @@ Create detailed text-based wireframe descriptions for UI screens. Since we can't
 ## MANDATORY: Read First (Do Not Skip)
 
 Before ANY wireframe work, read these files:
-1. `03-current-state/current-ui-overview.md`
+1. `03-wordpress-baseline/current-ui-overview.md`
 2. All images in `assets/screenshots/current-ui/`
 
 ## The Process
 
 **1. Study Current UI (MANDATORY)**
-- Read `03-current-state/current-ui-overview.md`
+- Read `03-wordpress-baseline/current-ui-overview.md`
 - View all screenshots in `assets/screenshots/current-ui/`
 - Note what works, what needs improvement
 - Identify patterns to keep vs change
@@ -37,7 +37,7 @@ Propose 2-3 layout approaches:
 - Recommend one with reasoning
 
 **4. Document Wireframe**
-Write to `05-design/wireframes/XX-<screen-name>.md`:
+Write to `05-v1-design/wireframes/XX-<screen-name>.md`:
 
 ```markdown
 # Wireframe: [Screen Name]
@@ -133,6 +133,6 @@ Present wireframe in sections, ask:
 
 ## File Naming
 
-`05-design/wireframes/01-search-results.md`
-`05-design/wireframes/02-filter-panel.md`
-`05-design/wireframes/03-recipient-detail.md`
+`05-v1-design/wireframes/01-search-results.md`
+`05-v1-design/wireframes/02-filter-panel.md`
+`05-v1-design/wireframes/03-recipient-detail.md`
