@@ -1,25 +1,66 @@
 Create a comprehensive daily log for today and update session context. Follow this process:
 
-## 0. Documentation Audit (REQUIRED)
+## 0. Documentation Audit (MANDATORY - NO EXCEPTIONS)
 
-**Documentation must always be up to date.** Before creating logs, verify all documentation reflects current decisions:
+**WE DO NOT CLOSE THE DAY WITHOUT A COMPLETE AUDIT.**
 
-1. **Audit all folders** - Go through every project folder and check for:
-   - Outdated information
-   - Inconsistencies with today's decisions
-   - Duplicate or conflicting content
+**Documentation must always be up to date.** Before creating logs, verify ALL documentation reflects current decisions.
 
-2. **Change perspectives** - If unsure about something, switch roles and verify:
-   - Project Manager → check scope, timeline, deliverables
-   - Architect → check technical decisions, ADRs, tech stack
-   - UX Designer → check wireframes, requirements, user flows
-   - Developer → check specs match implementation plans
+### Audit Process
 
-3. **Ask before updating** - Never just update something. If unclear, ask first.
+1. **Read and verify every relevant file:**
+   - `logs/SESSION-CONTEXT.md` - Is status current?
+   - `CLAUDE.md` - Do rules reflect current practices?
+   - All files created/modified today - Are they complete?
+   - Sprint plan - Does progress match reality?
+   - Any config files - Are credentials/settings documented?
 
-4. **Single source of truth** - Ensure no duplicate or conflicting information exists.
+2. **Check all folders for outdated information:**
+   - `01-project-overview/`
+   - `02-requirements/`
+   - `03-wordpress-baseline/`
+   - `04-target-architecture/`
+   - `05-v1-design/`
+   - `06-technical-specs/`
+   - `07-migration-strategy/`
+   - `08-decisions/`
+   - `09-timelines/`
+   - `config/`
+   - `scripts/`
 
-**Rule:** Be certain before making changes. When in doubt, ask.
+3. **Change perspectives** - Switch roles and verify:
+   - **Project Manager** → scope, timeline, deliverables, sprint progress
+   - **Architect** → technical decisions, ADRs, tech stack consistency
+   - **UX Designer** → wireframes, requirements, user flows
+   - **Developer** → specs match implementation, code is documented
+
+4. **Single source of truth** - Ensure no duplicate or conflicting information.
+
+### MANDATORY: Ask Questions Until Resolved
+
+**If you have ANY doubt or uncertainty:**
+- You MUST ask the user before proceeding
+- Do NOT make assumptions
+- Do NOT close the day with unresolved questions
+- Keep asking until everything is clear
+
+**Examples of things to ask about:**
+- "I see X in file A but Y in file B - which is correct?"
+- "Today we did X but it's not reflected in the sprint plan - should I update it?"
+- "The config file mentions Z but I don't see it documented - is this intentional?"
+- "I'm unsure if feature X was completed or just started - can you confirm?"
+
+### Audit Checklist (Must Complete)
+
+- [ ] SESSION-CONTEXT.md reflects today's work
+- [ ] Daily log captures everything done today
+- [ ] All new files are documented
+- [ ] All config/credentials are documented (not the secrets, just that they exist)
+- [ ] Sprint progress is accurate
+- [ ] No conflicting information across files
+- [ ] All my questions have been answered
+
+**Rule:** The day is NOT closed until all boxes are checked and all questions resolved.
 
 ---
 

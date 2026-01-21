@@ -9,7 +9,73 @@ You MUST read these files before presenting the briefing:
 3. `04-target-architecture/RECOMMENDED-TECH-STACK.md` - Current tech decisions
 4. `02-requirements/search-requirements.md` - Search feature specs
 
-## Additional Reading (Based on Current Phase)
+## 2. Create Today's Daily Log
+
+**IMMEDIATELY** create the daily log file for today:
+
+1. Create file: `logs/daily/YYYY-MM-DD.md`
+2. Add header with date, project, phase, sprint
+3. Start with empty sections ready to be filled:
+   - Summary (to be written at end of day)
+   - Work Completed (add items as you go)
+   - Files Created/Modified
+   - Issues Resolved
+   - Next Steps
+
+**Template:**
+```markdown
+# Daily Log - YYYY-MM-DD
+
+**Project:** Rijksuitgaven.nl SaaS Migration
+**Phase:** [current phase]
+**Sprint:** [current sprint]
+**Session Duration:** [to be filled]
+
+---
+
+## Summary
+
+[To be completed at /closeday]
+
+---
+
+## Work Completed
+
+[Add items throughout the day]
+
+---
+
+## Files Created
+
+| File | Description |
+|------|-------------|
+
+## Files Modified
+
+| File | Changes |
+|------|---------|
+
+---
+
+## Issues Resolved
+
+| Issue | Solution |
+|-------|----------|
+
+---
+
+## Next Steps
+
+[To be completed at /closeday]
+
+---
+
+**Session Status:** In Progress
+```
+
+This ensures the log exists from the start and can be updated throughout the session.
+
+## 3. Additional Reading (Based on Current Phase)
 
 If phase involves UI/wireframes, also read:
 - `03-wordpress-baseline/current-ui-overview.md`
@@ -18,14 +84,14 @@ If phase involves UI/wireframes, also read:
 If phase involves architecture decisions, also read:
 - `04-target-architecture/architecture-impact-analysis.md`
 
-## 3. Check for Blockers
+## 4. Check for Blockers
 
 Identify any:
 - Unresolved decisions blocking progress
 - Missing information needed
 - Dependencies on external input
 
-## 4. Present Session Briefing
+## 5. Present Session Briefing
 
 Output a structured briefing:
 
@@ -54,7 +120,7 @@ Output a structured briefing:
 Ready to begin?
 ```
 
-## 5. Await User Direction
+## 6. Await User Direction
 
 After presenting the briefing, wait for user to:
 - Confirm the plan
