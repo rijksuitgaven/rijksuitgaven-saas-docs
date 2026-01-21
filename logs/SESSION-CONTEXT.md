@@ -86,6 +86,7 @@
 | Image | `typesense/typesense:27.1` |
 | API Key | `rua-ts-k8x2m9p4q7w3` |
 | Data Dir | `/data` |
+| Volume | ✅ Attached (persistent) |
 | Status | Running |
 | Config | `config/typesense-railway.md` |
 

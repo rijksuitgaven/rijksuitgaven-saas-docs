@@ -73,14 +73,15 @@ X-TYPESENSE-API-KEY: rua-ts-k8x2m9p4q7w3
 
 ## Data Persistence
 
-**Current:** Ephemeral (data lost on redeploy)
+**Status:** ✅ Persistent (Railway Volume attached)
 
-**For production:** Add a Railway Volume:
-1. In Railway dashboard, find Volume option
-2. Mount at `/data`
-3. Size: 1-5GB depending on index size
+| Property | Value |
+|----------|-------|
+| Mount path | `/data` |
+| Size | Auto-managed by Railway |
+| Added | 2026-01-21 |
 
-**Note:** For V1.0 development, ephemeral is acceptable. We rebuild index from Supabase on each deploy.
+Search index now persists across redeploys.
 
 ---
 
