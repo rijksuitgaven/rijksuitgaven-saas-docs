@@ -329,7 +329,7 @@ User on "Financiële Instrumenten" page searches "prorail"
 **Behavior:**
 - Filters persist during session
 - "Clear All" button to reset
-- Filters update results in real-time (or "Apply" button - TBD in UI design)
+- Filters update results in real-time (no Apply button - decided 2026-01-23)
 
 **Priority:** P1 (High)
 **Version:** V1.0

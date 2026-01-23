@@ -51,14 +51,14 @@
 
 ## Recent Work (Last 3 Files)
 
-1. **scripts/sql/001-initial-schema.sql** ⭐ CREATED
-   Full database schema with 8 tables, indexes, RLS policies, PostGIS + pgvector extensions
+1. **02-requirements/brand-identity.md** ⭐ CREATED (2026-01-23)
+   Complete brand identity: fonts (Brawler, IBM Plex Sans Condensed), colors, design tokens
 
-2. **config/typesense-railway.md** ⭐ CREATED
-   Complete Typesense configuration: env vars, start command, networking, API endpoints
+2. **05-v1-design/wireframes/*.md** ⭐ UPDATED (2026-01-23)
+   All 6 wireframes approved, updated with brand colors and side panel decision
 
-3. **CLAUDE.md** ⭐ UPDATED
-   Added Code Documentation Rules section with folder structure and naming conventions
+3. **CLAUDE.md** ⭐ UPDATED (2026-01-23)
+   Brand identity added as leading for design, added to Single Source of Truth
 
 ---
 
@@ -379,6 +379,20 @@ Dedicated overview page showing module-level totals with year columns.
 | Integraal | Modules |
 
 **Files updated:** All wireframes (01-06), search-requirements.md
+
+### Brand Identity (2026-01-23) ⭐ NEW
+
+**Source:** `02-requirements/brand-identity.md` (converted from brand book PNG)
+
+| Category | Details |
+|----------|---------|
+| **Fonts** | Brawler (headings), IBM Plex Sans Condensed (body) |
+| **Primary Pink** | #E62D75 |
+| **Navy Dark** | #0E3261 |
+| **Navy Medium** | #436FA3 |
+| **Status Colors** | Green #85C97D, Yellow #FFC857, Red #E30101 |
+
+**Rule (added to CLAUDE.md):** Brand identity is **leading** for all design work. All wireframes updated with correct brand colors.
 
 ### UI/UX Decisions (2026-01-19)
 
