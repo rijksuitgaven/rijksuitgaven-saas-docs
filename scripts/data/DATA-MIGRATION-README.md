@@ -630,6 +630,34 @@ ALTER SEQUENCE table_name_id_seq RESTART WITH 1;
 
 ---
 
+## Post-Import: Source Column
+
+### Automatic (Triggers)
+
+Database triggers automatically set the `source` column on INSERT:
+
+| Table | Source Value |
+|-------|--------------|
+| apparaat | Apparaatsuitgaven |
+| gemeente | Gemeentelijke subsidieregisters |
+| inkoop | Inkoopuitgaven |
+| instrumenten | Financiële instrumenten |
+| provincie | Provinciale subsidieregisters |
+| publiek | _(varies per record - no trigger)_ |
+
+**Trigger script:** `scripts/sql/003-source-column-triggers.sql`
+
+### Manual (For existing data)
+
+If triggers weren't active during import, run:
+```bash
+/usr/local/opt/libpq/bin/psql "$CONN" -f scripts/sql/002-normalize-source-column.sql
+```
+
+**Normalization script:** `scripts/sql/002-normalize-source-column.sql`
+
+---
+
 ## Verification Queries
 
 ### Check Row Counts

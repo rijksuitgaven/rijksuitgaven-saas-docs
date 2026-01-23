@@ -281,6 +281,35 @@
 
 ---
 
+## Triggers
+
+### Source Column Auto-Population
+
+Triggers automatically set the `source` column on INSERT for tables with constant source values.
+
+| Table | Trigger | Function | Source Value |
+|-------|---------|----------|--------------|
+| apparaat | `set_apparaat_source` | `set_source_apparaat()` | Apparaatsuitgaven |
+| gemeente | `set_gemeente_source` | `set_source_gemeente()` | Gemeentelijke subsidieregisters |
+| inkoop | `set_inkoop_source` | `set_source_inkoop()` | Inkoopuitgaven |
+| instrumenten | `set_instrumenten_source` | `set_source_instrumenten()` | Financiële instrumenten |
+| provincie | `set_provincie_source` | `set_source_provincie()` | Provinciale subsidieregisters |
+| publiek | _(none)_ | - | Varies (COA, NWO, RVO, ZonMW) |
+
+**Script:** `scripts/sql/003-source-column-triggers.sql`
+
+**Future Note:** The `source` column may become redundant since each table inherently represents a single source. If removed, drop triggers using the removal script in the SQL file.
+
+### Verify Triggers
+```sql
+SELECT tgname as trigger_name, relname as table_name
+FROM pg_trigger t
+JOIN pg_class c ON t.tgrelid = c.oid
+WHERE tgname LIKE 'set_%_source';
+```
+
+---
+
 ## Row Level Security (RLS)
 
 All tables have RLS enabled with the following policies:
@@ -416,11 +445,22 @@ VACUUM ANALYZE universal_search;
 
 ---
 
+## SQL Scripts
+
+| Script | Purpose | When to Run |
+|--------|---------|-------------|
+| `001-initial-schema.sql` | Create tables, indexes, RLS | Initial setup (done) |
+| `002-normalize-source-column.sql` | Fix source values in existing data | After import if triggers weren't active |
+| `003-source-column-triggers.sql` | Auto-set source on INSERT | Once after schema setup (done) |
+
+---
+
 ## Related Documentation
 
 | Document | Location |
 |----------|----------|
 | Migration process | `scripts/data/DATA-MIGRATION-README.md` |
 | Schema SQL | `scripts/sql/001-initial-schema.sql` |
+| Source triggers | `scripts/sql/003-source-column-triggers.sql` |
 | WordPress baseline | `03-wordpress-baseline/exports/rijksuitgaven_schema.sql` |
 | Architecture | `04-target-architecture/RECOMMENDED-TECH-STACK.md` |
