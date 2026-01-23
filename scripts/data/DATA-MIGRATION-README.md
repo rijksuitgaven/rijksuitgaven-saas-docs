@@ -658,6 +658,24 @@ If triggers weren't active during import, run:
 
 ---
 
+## Post-Data Update Checklist
+
+After importing new data, run these steps:
+
+### 1. Refresh Universal Search (Required)
+```sql
+REFRESH MATERIALIZED VIEW CONCURRENTLY universal_search;
+```
+This updates the cross-module search index with new data.
+
+### 2. Source Column (Automatic)
+Triggers auto-set source values on INSERT. No action needed.
+
+### 3. Verify Row Counts
+Run verification queries below to confirm data imported correctly.
+
+---
+
 ## Verification Queries
 
 ### Check Row Counts

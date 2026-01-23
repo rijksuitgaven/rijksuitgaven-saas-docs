@@ -423,6 +423,22 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 ---
 
+## After Data Updates
+
+Run this after every data import/update:
+
+```sql
+-- Refresh cross-module search (required after data changes)
+REFRESH MATERIALIZED VIEW CONCURRENTLY universal_search;
+```
+
+**Via psql:**
+```bash
+/usr/local/opt/libpq/bin/psql "postgresql://postgres.kmdelrgtgglcrupprkqf:${SUPABASE_DB_PASSWORD}@aws-1-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require" -c "REFRESH MATERIALIZED VIEW CONCURRENTLY universal_search;"
+```
+
+---
+
 ## Maintenance Queries
 
 ### Check Row Counts
