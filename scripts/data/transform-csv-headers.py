@@ -14,7 +14,7 @@ import csv
 import os
 from pathlib import Path
 
-SOURCE_DIR = Path("/Users/michielmaandag/Downloads/RoijksuitgavenSQL")
+SOURCE_DIR = Path("/Users/michielmaandag/SynologyDrive/code/watchtower/rijksuitgavenSQL")
 OUTPUT_DIR = SOURCE_DIR / "transformed"
 
 # Column renames (after lowercase)

@@ -51,7 +51,7 @@ Successfully migrated 3.1 million rows across 7 tables from MySQL (WordPress) to
 
 ### Export Location
 ```
-/Users/michielmaandag/Downloads/RoijksuitgavenSQL/
+/Users/michielmaandag/SynologyDrive/code/watchtower/rijksuitgavenSQL/
 ├── apparaat.csv
 ├── gemeente.csv
 ├── inkoop.csv
@@ -60,6 +60,8 @@ Successfully migrated 3.1 million rows across 7 tables from MySQL (WordPress) to
 ├── publiek.csv
 └── universal_search.csv
 ```
+
+> **Note:** Originally exported to `~/Downloads/RoijksuitgavenSQL/`, moved to version-controlled location on 2026-01-23.
 
 ---
 

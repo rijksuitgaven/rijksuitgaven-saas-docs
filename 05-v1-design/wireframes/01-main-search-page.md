@@ -44,11 +44,11 @@ The main search page is the primary interface for users to search government fin
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ RESULTS TABLE                                                                │
 │ ┌─────────────────────────────────────────────────────────────────────────┐ │
-│ │ Ontvanger          │ 2016 │ 2017 │ ... │ 2023 │ 2024 │ Totaal      │ ▾ │ │
+│ │ Ontvanger          │ 2016-20[▶]│ 2021 │ 2022 │ 2023 │ 2024 │ 2025*│Totaal▾│ │
 │ ├─────────────────────────────────────────────────────────────────────────┤ │
-│ │ ▶ ProRail B.V.     │  345 │  367 │ ... │  412 │  461 │ 3.245.000 K │   │ │
-│ │ ▶ Rijkswaterstaat  │  234 │  245 │ ... │  255 │  234 │ 2.123.000 K │   │ │
-│ │ ▶ NS Reizigers     │  123 │  134 │ ... │  145 │  156 │ 1.234.000 K │   │ │
+│ │ ▶ ProRail B.V.     │           │  356 │  390 │  412 │  461 │  480 │3.245.678│ │
+│ │ ▶ Rijkswaterstaat  │           │  240 │  245 │  255 │  234 │  250 │2.123.456│ │
+│ │ ▶ NS Reizigers     │           │  128 │  134 │  145 │  156 │  170 │1.234.567│ │
 │ │ ...                                                                     │ │
 │ └─────────────────────────────────────────────────────────────────────────┘ │
 │                                                                              │
@@ -304,10 +304,18 @@ The main search page is the primary interface for users to search government fin
 **Columns:**
 | Column | Width | Sortable | Notes |
 |--------|-------|----------|-------|
-| Ontvanger | 200px min | Yes (A-Z) | Expandable rows |
+| Ontvanger | 200px min | Yes (A-Z) | Expandable rows, fixed position |
 | [Custom columns] | 120px each | No | User-selected detail columns |
-| 2016-2024 | 80px each | Yes | Per year amounts |
-| Totaal | 120px | Yes (default: desc) | Sum of all years |
+| 2016-20 [▶] | 100px | No | Collapsed older years, click to expand |
+| 2021-2024 | 80px each | Yes | Always visible year columns |
+| 2025* | 80px | Yes | Current year, asterisk = partial data |
+| Totaal | 120px | Yes (default: desc) | Sum of all years, fixed position |
+
+**Year column behavior:**
+- Default: 2016-2020 collapsed into `2016-20 [▶]`
+- Click `[▶]` expands to show all 10 year columns
+- When expanded: Ontvanger + Totaal fixed, years scroll horizontally
+- Asterisk (*) indicates partial data, hover for details
 
 **Row types:**
 
@@ -318,12 +326,12 @@ The main search page is the primary interface for users to search government fin
 
 **Expandable behavior:**
 ```
-▶ ProRail B.V.              │  390 │  412 │  461 │ 3.245.000  ← Click ▶ to expand
-▼ Rijkswaterstaat           │  245 │  255 │  234 │ 2.123.000  ← Expanded
-   ├ Regeling A             │  100 │  110 │  120 │   890.000  ← Line item
-   ├ Regeling B             │   80 │   85 │   70 │   650.000  ← Line item
-   └ Regeling C             │   65 │   60 │   44 │   583.000  ← Line item
-▶ NS Reizigers              │  134 │  145 │  156 │ 1.234.000  ← Collapsed
+▶ ProRail B.V.              │  412 │  461 │  480 │ 3.245.678  ← Click ▶ to expand
+▼ Rijkswaterstaat           │  255 │  234 │  250 │ 2.123.456  ← Expanded
+   ├ Regeling A             │  110 │  120 │  130 │   890.000  ← Line item
+   ├ Regeling B             │   85 │   70 │   80 │   650.000  ← Line item
+   └ Regeling C             │   60 │   44 │   40 │   583.456  ← Line item
+▶ NS Reizigers              │  145 │  156 │  170 │ 1.234.567  ← Collapsed
 ```
 
 **Row interactions:**
@@ -332,9 +340,11 @@ The main search page is the primary interface for users to search government fin
 - Hover → Highlight row
 
 **Amounts:**
-- Display: "Alle bedragen x €1.000"
-- Format: 1.234.567 (Dutch number format)
+- Display: Absolute euros (no multiplication factor)
+- Format: 1.234.567 (Dutch number format with period as thousands separator)
 - Alignment: Right-aligned
+- Footer note: "Bedragen in €"
+- Large amounts: Use smaller font (12px instead of 14px) when >10 characters
 
 **Empty state:**
 ```
@@ -363,7 +373,7 @@ The main search page is the primary interface for users to search government fin
 │                                                                 │
 │ Altijd zichtbaar:                                               │
 │ ☑ Ontvanger (vast)                                             │
-│ ☑ Jaren 2016-2024 (vast)                                       │
+│ ☑ Jaren 2016-2025 (vast, 2016-20 collapsed by default)         │
 │ ☑ Totaal (vast)                                                │
 │                                                                 │
 │ Detail kolommen:                                                │

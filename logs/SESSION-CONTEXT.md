@@ -28,7 +28,12 @@
 - ✅ Supabase project created and schema deployed
 - ✅ Railway account created, project configured
 - ✅ Typesense deployed with persistent volume
-- ⏳ **NEXT:** Data migration (MySQL → Supabase)
+- ✅ Data migration completed (MySQL → Supabase) - 3.1M rows
+- ✅ Universal search materialized view created
+- ✅ Source column triggers deployed
+- ✅ Data freshness tracking table created
+- ⏳ **Typesense collections & sync** - Week 1 not yet complete
+- ⏳ **NEXT:** Complete Week 1 (Typesense), then Week 2 - Backend API
 
 ### Active Tasks
 | Task | Status | Notes |
@@ -98,12 +103,19 @@
 | Script | Executed | Environment |
 |--------|----------|-------------|
 | `scripts/sql/001-initial-schema.sql` | 2026-01-21 | Supabase |
+| `scripts/sql/002-normalize-source-column.sql` | 2026-01-23 | Supabase |
+| `scripts/sql/003-source-column-triggers.sql` | 2026-01-23 | Supabase |
+| `scripts/sql/004-universal-search-materialized-view.sql` | 2026-01-23 | Supabase |
+| `scripts/data/transform-csv-headers.py` | 2026-01-23 | Local |
+| `scripts/data/import-to-supabase.sh` | 2026-01-23 | Local → Supabase |
 
 ### Configuration Files
 
 | File | Purpose |
 |------|---------|
 | `config/typesense-railway.md` | Typesense setup documentation |
+| `scripts/sql/DATABASE-DOCUMENTATION.md` | Database schema, triggers, queries |
+| `scripts/data/DATA-MIGRATION-README.md` | Migration process documentation |
 
 ---
 
@@ -394,6 +406,51 @@ Dedicated overview page showing module-level totals with year columns.
 
 **Rule (added to CLAUDE.md):** Brand identity is **leading** for all design work. All wireframes updated with correct brand colors.
 
+### Data Migration Completed (2026-01-23) ⭐ NEW
+
+| Table | Rows Imported |
+|-------|---------------|
+| instrumenten | 674,826 |
+| apparaat | 21,315 |
+| inkoop | 635,866 |
+| provincie | 67,456 |
+| gemeente | 126,377 |
+| publiek | 115,020 |
+| universal_search | 1,456,095 (materialized view) |
+| **Total** | **~3.1 million rows** |
+
+**Scripts created:**
+- `scripts/data/transform-csv-headers.py` - CSV transformation (NULL handling, UTF-8)
+- `scripts/data/import-to-supabase.sh` - psql import with encoding
+- `scripts/sql/003-source-column-triggers.sql` - Auto-populate source on INSERT
+- `scripts/sql/004-universal-search-materialized-view.sql` - Cross-module aggregation
+
+**Documentation:** `scripts/sql/DATABASE-DOCUMENTATION.md`, `scripts/data/DATA-MIGRATION-README.md`
+
+### Year Columns & Amount Format (2026-01-23) ⭐ NEW
+
+| Decision | Outcome |
+|----------|---------|
+| Year column behavior | Collapse older years: `2016-20 [▶]` + 2021-2025 visible |
+| Expand behavior | Click `[▶]` shows all 10 years, horizontal scroll |
+| Partial data indicator | Asterisk `2025*` with tooltip from `data_freshness` table |
+| Amount format | **Absolute euros** (no ×1000 notation) |
+| Large numbers | Smaller font (12px) when amount >10 characters |
+| Year range | **Dynamic** - only show years with data (no 2025 until imported) |
+
+**Rationale:** 10 years of data (2016-2025) doesn't fit on screen. Collapsing older years preserves trend analysis while managing space.
+
+### Amount Units Per Table (2026-01-23) ⭐ NEW
+
+| Table | Unit |
+|-------|------|
+| instrumenten | ×1000 (source data in thousands) |
+| apparaat | ×1000 (source data in thousands) |
+| inkoop, provincie, gemeente, publiek | Absolute euros |
+| **universal_search** | **All absolute euros** (materialized view converts) |
+
+**Important:** When querying instrumenten directly, multiply bedrag by 1000 for absolute euros.
+
 ### UI/UX Decisions (2026-01-19)
 
 **Wireframe Decisions (for NEW features):**
@@ -494,13 +551,27 @@ Dedicated overview page showing module-level totals with year columns.
 | Enable pgvector extension | ✅ For V2.0 readiness |
 | Set up Row Level Security | ✅ All tables protected |
 
-**Week 1 Next (Day 3-4: Data Migration)**
+**Week 1 Progress (Day 3-4: Data Migration) - COMPLETED 2026-01-23**
 
-| Task | Details |
-|------|---------|
-| Export MySQL data | CSV export of source tables |
-| Import to Supabase | Use Supabase CSV import or SQL INSERT |
-| Verify row counts | Compare MySQL vs Supabase |
+| Task | Status |
+|------|--------|
+| Export MySQL data | ✅ CSV export via PhpMyAdmin |
+| Transform CSV files | ✅ Python script handles headers, NULL, UTF-8 |
+| Import to Supabase | ✅ psql with UTF-8 encoding |
+| Create triggers | ✅ Source column auto-population |
+| Create materialized view | ✅ Universal search with absolute euros |
+| Document everything | ✅ DATABASE-DOCUMENTATION.md, DATA-MIGRATION-README.md |
+
+**Week 1 Remaining (Day 5-6: Typesense Setup) - NOT COMPLETE**
+
+| Task | Status |
+|------|--------|
+| Deploy Typesense on Railway | ✅ Done |
+| Create search collections | ❌ Pending |
+| Build initial index (Supabase → Typesense sync) | ❌ Pending |
+| Test search <100ms | ❌ Pending |
+
+**NEXT:** Complete Typesense setup, THEN Week 2: Backend API
 
 See full sprint plan: `09-timelines/v1-sprint-plan.md`
 
@@ -543,4 +614,4 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-20 - V1.0 scope change, sprint planning
 - 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
 
-**This Session:** 2026-01-23 - **Wireframe review completed** (all 6 approved), UI/UX decisions: side panel for detail, tablet keeps tabs, default columns updated, "Bron" → "Organisatie"
+**This Session:** 2026-01-23 - **Data migration completed** (3.1M rows), wireframe review (all 6 approved), UI/UX decisions: side panel, year column collapse, absolute euros, partial data indicator, documentation audit completed

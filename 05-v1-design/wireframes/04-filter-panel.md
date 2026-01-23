@@ -52,9 +52,9 @@ The filter panel allows users to narrow search results using:
 │  │  │        ▲ 2020                                      2024 ▲        │ │   │
 │  │  └───────────────────────────────────────────────────────────────────┘ │   │
 │  │                                                                         │   │
-│  │  BEDRAG (x €1.000)                                                      │   │
+│  │  BEDRAG (€)                                                             │   │
 │  │  ┌─────────────────────┐      ┌─────────────────────┐                  │   │
-│  │  │ Min:          1.000 │  tot │ Max:                │                  │   │
+│  │  │ Min:      1.000.000 │  tot │ Max:                │                  │   │
 │  │  └─────────────────────┘      └─────────────────────┘                  │   │
 │  │                                                                         │   │
 │  │  ───────────────────────────────────────────────────────────────────── │   │
@@ -93,7 +93,7 @@ The filter panel allows users to narrow search results using:
 │ PERIODE                     │
 │ [2020]  ───●●───  [2024]    │
 │                             │
-│ BEDRAG (x €1.000)           │
+│ BEDRAG (€)                  │
 │ Min: [________]             │
 │ Max: [________]             │
 │                             │
@@ -217,11 +217,17 @@ The filter panel allows users to narrow search results using:
 | Handle | Circle, #E62D75 |
 | Labels | Years at each end |
 
+**Dynamic Year Range:**
+- Only show years that have data in the database
+- Currently: 2016-2024 (2025 data not yet imported)
+- When 2025 data is added, slider automatically includes 2025
+- Query database for min/max year per module on load
+
 ### Amount Range Inputs
 
 ```
 ┌─────────────────────┐      ┌─────────────────────┐
-│ Min:          1.000 │  tot │ Max:                │
+│ Min:      1.000.000 │  tot │ Max:                │
 └─────────────────────┘      └─────────────────────┘
 ```
 
@@ -229,7 +235,9 @@ The filter panel allows users to narrow search results using:
 |----------|-------|
 | Format | Dutch number format (1.000.000) |
 | Validation | Numbers only |
-| Unit | Displayed as "x €1.000" in header |
+| Unit | Absolute euros (displayed as "BEDRAG (€)" in header) |
+
+**Note:** All amounts are in absolute euros. €1.000.000 = one million euros.
 
 ### Dropdown Filter
 

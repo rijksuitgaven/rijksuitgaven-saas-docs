@@ -12,7 +12,7 @@ DB_PORT="5432"
 DB_NAME="postgres"
 DB_USER="postgres.kmdelrgtgglcrupprkqf"
 PSQL="/usr/local/opt/libpq/bin/psql"
-CSV_DIR="/Users/michielmaandag/Downloads/RoijksuitgavenSQL/transformed"
+CSV_DIR="/Users/michielmaandag/SynologyDrive/code/watchtower/rijksuitgavenSQL/transformed"
 
 # Check for password
 if [ -z "$SUPABASE_DB_PASSWORD" ]; then

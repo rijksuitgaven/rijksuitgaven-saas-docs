@@ -45,6 +45,26 @@
 
 ---
 
+## Amount Units (IMPORTANT)
+
+⚠️ **Different tables store amounts in different units:**
+
+| Table | Column | Unit | Example |
+|-------|--------|------|---------|
+| **instrumenten** | bedrag | ×1000 (thousands) | 345 = €345.000 |
+| **apparaat** | bedrag | ×1000 (thousands) | 100 = €100.000 |
+| inkoop | totaal_avg | Absolute euros | 345000 = €345.000 |
+| provincie | bedrag | Absolute euros | 345000 = €345.000 |
+| gemeente | bedrag | Absolute euros | 345000 = €345.000 |
+| publiek | bedrag | Absolute euros | 345000 = €345.000 |
+| **universal_search** | all year columns | Absolute euros | 345000 = €345.000 |
+
+**Note:** The `universal_search` materialized view converts instrumenten amounts by multiplying ×1000 to get absolute euros. All other tables are already in absolute euros.
+
+**When querying instrumenten directly:** Remember to multiply bedrag by 1000 for absolute euros.
+
+---
+
 ## Tables
 
 ### 1. instrumenten (Financiële Instrumenten)
@@ -66,7 +86,7 @@
 | detail | VARCHAR(255) | Additional detail |
 | regeling | VARCHAR(255) | Regulation/scheme name |
 | ontvanger | VARCHAR(255) | Recipient name |
-| bedrag | INTEGER | Amount in euros |
+| bedrag | INTEGER | Amount in **thousands of euros (×1000)** |
 | kvk_nummer | INTEGER | Chamber of Commerce number |
 | rechtsvorm | VARCHAR(255) | Legal entity type |
 | id_nummer | INTEGER | ID number |
@@ -100,8 +120,8 @@
 | instrument | VARCHAR(255) | Instrument type |
 | detail | VARCHAR(255) | Additional detail |
 | kostensoort | VARCHAR(255) | Cost type/category |
-| bedrag | INTEGER | Amount in euros |
-| bedrag_normalized | BIGINT | Normalized amount |
+| bedrag | INTEGER | Amount in **thousands of euros (×1000)** |
+| bedrag_normalized | BIGINT | Normalized amount (×1000) |
 | source | VARCHAR(50) | Data source |
 
 **Indexes:**

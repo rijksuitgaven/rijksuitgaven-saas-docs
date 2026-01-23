@@ -56,6 +56,27 @@ Rijksuitgaven.nl SaaS Platform Migration - Documentation and planning repository
    - Before any task: verify all required info exists
    - If gaps found: stop and ask before proceeding
 
+5. **Documentation consistency after changes**
+   - After creating ANY new code, schema, or feature: update ALL related documentation
+   - Cross-check: Does this change affect other documents?
+   - Database changes → update DATABASE-DOCUMENTATION.md
+   - Schema changes → update relevant wireframes
+   - Decisions → update SESSION-CONTEXT.md
+   - **Zero tolerance for stale documentation**
+
+6. **Sprint plan is the source of truth for tasks**
+   - Before declaring a sprint/week complete: CHECK EVERY DELIVERABLE in `09-timelines/v1-sprint-plan.md`
+   - Use a checklist - go line by line through the sprint tasks
+   - A week is NOT complete until ALL deliverables have ✅
+   - Never skip ahead to next week with incomplete tasks
+   - If tasks are blocked, explicitly note them as blocked (not skipped)
+
+7. **End-of-day sprint verification**
+   - At /closeday: Compare completed work against sprint plan
+   - List what's done vs what's remaining for current week
+   - Update SESSION-CONTEXT.md with accurate sprint status
+   - **Never say "Week X complete" without verifying against the plan**
+
 ### PM Verification Checklist (Use Before Major Work)
 
 Before starting any significant task, verify:
@@ -66,6 +87,16 @@ Before starting any significant task, verify:
 - [ ] Is the decision documented in the right place?
 
 **If any checkbox fails:** Stop and ask the founder before proceeding.
+
+### PM Sprint Completion Checklist (Use Before Declaring Week Complete)
+
+Before saying "Week X is complete", verify EACH deliverable in `09-timelines/v1-sprint-plan.md`:
+- [ ] Read the sprint plan for current week
+- [ ] Check EVERY task listed - is it actually done?
+- [ ] Check EVERY deliverable checkbox - can it be marked ✅?
+- [ ] If anything is incomplete, it's NOT done - don't skip it
+
+**If any deliverable is missing:** Complete it or explicitly note it as blocked. Never proceed to next week with silent gaps.
 
 ## Working Mode
 
