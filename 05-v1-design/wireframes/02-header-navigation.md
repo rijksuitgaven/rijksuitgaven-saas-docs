@@ -1,7 +1,7 @@
 # Wireframe: Header & Navigation
 
-**Date:** 2026-01-19
-**Status:** Draft
+**Date:** 2026-01-23
+**Status:** Approved
 **Related:** [Main Search Page](./01-main-search-page.md), [Current UI Overview](../../03-wordpress-baseline/current-ui-overview.md)
 
 ---
@@ -48,11 +48,13 @@ The header provides consistent navigation across all pages. Users can:
 │ [Logo] Rijksuitgaven              [☰ Menu] [👤] │
 └─────────────────────────────────────────────────┘
 
-Module selector (replaces tabs):
+Module tabs (horizontal scroll if needed):
 ┌─────────────────────────────────────────────────┐
-│ [Financiële Instrumenten                     ▾] │
+│ ← [Integraal] [Fin. Instr.] [Apparaat] [Prov..] → │
 └─────────────────────────────────────────────────┘
 ```
+
+**Note:** Tabs remain visible on tablet (scrollable). Only mobile uses dropdown.
 
 ### Mobile Header (< 768px)
 
@@ -242,8 +244,10 @@ Module selector (replaces tabs):
 | Breakpoint | Header Changes |
 |------------|----------------|
 | ≥1200px | Full navigation, horizontal tabs |
-| 768-1199px | Hamburger menu, module dropdown |
-| <768px | Compact header, hamburger menu |
+| 768-1199px | Hamburger menu, horizontal tabs (scrollable) |
+| <768px | Compact header, hamburger menu, module dropdown |
+
+**Decision (2026-01-23):** Tabs stay visible on desktop AND tablet. Dropdown only on mobile phones. Rationale: Single-click access is important for frequent module switching.
 
 ---
 

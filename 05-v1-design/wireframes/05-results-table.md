@@ -1,7 +1,7 @@
 # Wireframe: Results Table
 
-**Date:** 2026-01-19
-**Status:** Draft
+**Date:** 2026-01-23
+**Status:** Approved
 **Related:** [Main Search Page](./01-main-search-page.md), [UX-005 Column Customization](../../02-requirements/search-requirements.md)
 
 ---
@@ -195,7 +195,7 @@ The results table displays search results with:
 |--------|---------|--------|
 | Expand | Click ▶ icon | Show line items below |
 | Collapse | Click ▼ icon | Hide line items |
-| View detail | Click recipient name | Navigate to detail page |
+| View detail | Click recipient name | Open detail in side panel |
 | Hover | Mouse over row | Highlight row background |
 | Select (future) | Checkbox | Add to selection for export |
 

@@ -1,6 +1,6 @@
 # Session Context
 
-**Last Updated:** 2026-01-21
+**Last Updated:** 2026-01-23
 **Project Phase:** Phase 1 - V1.0 Development
 **Current Sprint:** Week 1 - Infrastructure + Data Migration
 
@@ -17,6 +17,7 @@
 - ✅ Architecture impact analysis
 - ✅ V2.0 Research Mode design
 - ✅ Batch 1 wireframes (for new features)
+- ✅ Wireframes reviewed and approved (2026-01-23)
 - ✅ V1.0 scope finalized (single-view architecture + new search)
 - ✅ Sprint plan created (8 weeks)
 - ✅ Documentation audit completed
@@ -210,7 +211,7 @@
 | Provinciale subsidies | Provincie, Omschrijving |
 | Gemeentelijke subsidies | Gemeente, Beleidsterrein, Regeling, Omschrijving, Beleidsnota |
 | Inkoopuitgaven | Ministerie, Categorie, Staffel |
-| Publiek | Bron, Regeling, Trefwoorden, Sectoren, Regio, Staffel, Onderdeel |
+| Publiek | Organisatie, Regeling, Trefwoorden, Sectoren, Regio, Staffel, Onderdeel |
 | Integraal | Module (cross-module grouping) |
 
 **Note:** Each module has different fields - e.g., Gemeente field exists in Gemeentelijke but not Provinciale.
@@ -353,6 +354,32 @@ Dedicated overview page showing module-level totals with year columns.
 **V2 tables created empty in V1** - no schema migrations needed.
 **Feature flags** control V2 functionality - flip to enable.
 
+### UI/UX Review Decisions (2026-01-23) ⭐ NEW
+
+**All 6 wireframes reviewed and approved.**
+
+| Decision | Outcome |
+|----------|---------|
+| Module tabs (tablet) | Keep as scrollable tabs (NOT dropdown) - single-click access |
+| Module tabs (mobile) | Dropdown is acceptable |
+| Detail page behavior | **Side panel** (50% width) - see results + detail simultaneously |
+| "Ook in:" on detail | Show cross-module badges, click to switch module view |
+| "Bron" rename | → **"Organisatie"** in Publiek module (clearer term) |
+
+**Default Columns Per Module (updated):**
+
+| Module | Default Detail Columns |
+|--------|------------------------|
+| Financiële Instrumenten | Artikel, Instrument, Regeling |
+| Apparaatsuitgaven | Artikel, Detail |
+| Inkoopuitgaven | Categorie, Staffel |
+| Provinciale subsidieregisters | Provincie, Omschrijving |
+| Gemeentelijke subsidieregisters | Gemeente, Omschrijving |
+| Publiek | Organisatie |
+| Integraal | Modules |
+
+**Files updated:** All wireframes (01-06), search-requirements.md
+
 ### UI/UX Decisions (2026-01-19)
 
 **Wireframe Decisions (for NEW features):**
@@ -384,7 +411,8 @@ Dedicated overview page showing module-level totals with year columns.
 ## Pending Decisions
 
 ### Important (Not Blocking)
-- **Wireframe review** - Batch 1 ready for approval (when you have time)
+- ~~**Wireframe review** - Batch 1 ready for approval~~ ✅ **Completed 2026-01-23**
+- None currently
 
 ---
 
@@ -499,5 +527,6 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 **Previous Sessions:**
 - 2026-01-19 - V2.0 design + Batch 1 wireframes
 - 2026-01-20 - V1.0 scope change, sprint planning
+- 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
 
-**This Session:** 2026-01-21 - PM audit, UX brainstorm, folder restructure, **Supabase setup** (schema deployed), **Railway setup** (Typesense deployed with persistent volume)
+**This Session:** 2026-01-23 - **Wireframe review completed** (all 6 approved), UI/UX decisions: side panel for detail, tablet keeps tabs, default columns updated, "Bron" → "Organisatie"

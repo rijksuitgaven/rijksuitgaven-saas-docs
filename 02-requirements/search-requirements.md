@@ -295,7 +295,7 @@ User on "Financiële Instrumenten" page searches "prorail"
 **Priority 3 (Medium weight):**
 - Artikel, Artikelonderdeel
 - Beleidsterrein, Beleidsnota (Gemeentelijke only)
-- Bron, Regio, Staffel, Onderdeel (Publiek only)
+- Organisatie, Regio, Staffel, Onderdeel (Publiek only) *(Note: "Bron" renamed to "Organisatie" 2026-01-23)*
 - Categorie, Staffel (Inkoopuitgaven)
 - Omschrijving, Detail fields
 
@@ -901,7 +901,7 @@ AI: ProRail ontvangt in 3 modules:
 ### Module 6: Publiek (Public Implementation Organizations)
 
 **Current Filters (from screenshot):**
-1. **Bron** (Source) - Dropdown ⭐ **Unique to this module**
+1. **Organisatie** (Organization: RVO, COA, NWO, etc.) - Dropdown ⭐ **Unique to this module** *(renamed from "Bron" 2026-01-23)*
 2. **Regeling (RVO/COA)** - Dropdown
 3. **Trefwoorden (RVO)** (Keywords) - Dropdown ⭐ **Unique to this module**
 4. **Sectoren (RVO)** (Sectors) - Dropdown ⭐ **Unique to this module**
@@ -916,7 +916,7 @@ AI: ProRail ontvangt in 3 modules:
 
 **Priority Ranking:**
 1. Year Range
-2. Bron (Source - critical filter)
+2. Organisatie (critical filter)
 3. Regeling
 4. Amount Range
 5. Regio/Location
@@ -1210,11 +1210,21 @@ User lands on search page (no query entered):
 | Inkoopuitgaven | Ministerie, Categorie, Staffel |
 | Provinciale subsidieregisters | Provincie, Omschrijving |
 | Gemeentelijke subsidieregisters | Gemeente, Beleidsterrein, Regeling, Omschrijving |
-| Publiek | Bron, Regeling, Trefwoorden, Sectoren, Regio |
+| Publiek | Organisatie, Regeling, Trefwoorden, Sectoren, Regio |
 | Integraal | Modules (which modules recipient appears in) |
 
-**Default columns (per module):**
-- Show Regeling + Artikel by default (where available)
+**Default columns per module (updated 2026-01-23):**
+
+| Module | Default Detail Columns |
+|--------|------------------------|
+| Financiële Instrumenten | Artikel, Instrument, Regeling |
+| Apparaatsuitgaven | Artikel, Detail |
+| Inkoopuitgaven | Categorie, Staffel |
+| Provinciale subsidieregisters | Provincie, Omschrijving |
+| Gemeentelijke subsidieregisters | Gemeente, Omschrijving |
+| Publiek | Organisatie |
+| Integraal | Modules |
+
 - User can modify and save preferences
 
 **Priority:** P1 (High)

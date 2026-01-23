@@ -1,7 +1,7 @@
 # Wireframe: Main Search Page
 
-**Date:** 2026-01-21
-**Status:** Updated (UX Enhancements)
+**Date:** 2026-01-23
+**Status:** Approved
 **Related:** [Search Requirements](../../02-requirements/search-requirements.md), [Current UI Overview](../../03-wordpress-baseline/current-ui-overview.md)
 
 ---
@@ -385,15 +385,15 @@ The main search page is the primary interface for users to search government fin
 - Preferences saved per user, persist across sessions
 - "Standaard herstellen" resets to default columns
 
-**Default columns per module:**
+**Default columns per module (updated 2026-01-23):**
 | Module | Default Detail Columns |
 |--------|------------------------|
-| Financiële Instrumenten | Regeling, Artikel |
-| Apparaatsuitgaven | Kostensoort, Artikel |
-| Inkoopuitgaven | Ministerie, Categorie |
-| Provinciale subsidieregisters | Provincie |
-| Gemeentelijke subsidieregisters | Gemeente, Beleidsterrein |
-| Publiek | Bron, Regeling |
+| Financiële Instrumenten | Artikel, Instrument, Regeling |
+| Apparaatsuitgaven | Artikel, Detail |
+| Inkoopuitgaven | Categorie, Staffel |
+| Provinciale subsidieregisters | Provincie, Omschrijving |
+| Gemeentelijke subsidieregisters | Gemeente, Omschrijving |
+| Publiek | Organisatie |
 | Integraal | Modules |
 
 ---
@@ -418,7 +418,7 @@ The main search page is the primary interface for users to search government fin
 | Filter | Change any filter | Update results in real-time |
 | Sort | Click column header | Sort by that column (toggle asc/desc) |
 | Expand row | Click ▶ icon | Show sub-rows for consolidated recipient |
-| View detail | Click recipient name | Navigate to detail page |
+| View detail | Click recipient name | Open detail in side panel (50% width) |
 | Export | Click CSV | Download file (500 row limit) |
 | Change module | Click tab | Filter results to that module |
 | Clear filters | Click "Wissen" | Reset all filters to default |

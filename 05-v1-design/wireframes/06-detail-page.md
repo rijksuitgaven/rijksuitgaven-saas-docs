@@ -1,24 +1,62 @@
 # Wireframe: Detail Page
 
-**Date:** 2026-01-19
-**Status:** Draft
+**Date:** 2026-01-23
+**Status:** Approved
 **Related:** [Current UI Overview](../../03-wordpress-baseline/current-ui-overview.md), [Main Search Page](./01-main-search-page.md)
 
 ---
 
 ## Purpose
 
-The detail page shows comprehensive information about a recipient, including:
+The detail panel shows comprehensive information about a recipient in a **side panel** (50% width on desktop). This allows users to:
+- View details while keeping search results visible
+- Click through multiple recipients without closing/reopening
+- Quick compare by clicking different rows
+
+**Content includes:**
 - All expenditures across years
 - Budget and instrument breakdown
 - Related regulations and articles
 - Links to external sources
+- "Ook in:" cross-module navigation
 
 ---
 
 ## Layout
 
-### Desktop Detail Page
+### Desktop Side Panel View (50% width)
+
+**Decision (2026-01-23):** Detail opens as side panel, not full page. Users can see search results on the left while viewing detail on the right.
+
+```
+┌────────────────────────────────────┬────────────────────────────────────────┐
+│ SEARCH RESULTS (50%)               │ DETAIL PANEL (50%)              [✕]   │
+│                                    │                                        │
+│ ▶ ProRail B.V.          3.245K    │ Da vinci europe laboratory            │
+│ ▶ Rijkswaterstaat       2.123K    │ solutions b.v.                        │
+│ ● Da vinci europe ←     179K      │ 🔍 Zoek op Google                      │
+│ ▶ NS Reizigers          1.234K    │                                        │
+│ ▶ Schiphol              890K      │ ┌────────────────────────────────────┐ │
+│                                    │ │ UITGAVEN                          │ │
+│                                    │ │ 2023: 36  2024: 36  Totaal: 179   │ │
+│                                    │ │ [Alle 6 uitgaven ▾]               │ │
+│                                    │ └────────────────────────────────────┘ │
+│                                    │ ┌────────────────────────────────────┐ │
+│                                    │ │ BEGROTING                         │ │
+│                                    │ │ XIII - Economische Zaken en Klim. │ │
+│                                    │ └────────────────────────────────────┘ │
+│                                    │ ┌────────────────────────────────────┐ │
+│                                    │ │ INSTRUMENT                        │ │
+│                                    │ │ Subsidies                         │ │
+│                                    │ └────────────────────────────────────┘ │
+│                                    │                                        │
+│                                    │ Ook in: [Publiek (3)] [Inkoop (1)]    │
+│                                    │                                        │
+│                                    │              [CSV] [📷 Screenshot]    │
+└────────────────────────────────────┴────────────────────────────────────────┘
+```
+
+### Side Panel Detail (Scrollable Content)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -333,7 +371,7 @@ Different modules show different cards based on available data:
 
 ### Publiek
 - Year breakdown
-- Bron
+- Organisatie (renamed from "Bron")
 - Regeling
 - Trefwoorden
 - Sectoren
@@ -350,13 +388,14 @@ Different modules show different cards based on available data:
 
 | Action | Trigger | Result |
 |--------|---------|--------|
-| Go back | Click "← Terug" | Return to search results |
-| Close | Click "Sluit" | Return to search results |
+| Close panel | Click "✕" or press Escape | Close side panel |
+| Switch recipient | Click another row in results | Panel updates (no close needed) |
+| Switch module | Click "Ook in: [Publiek]" badge | Panel updates to show Publiek data |
 | Google search | Click "🔍 Zoek op Google" | Open Google in new tab |
-| View all | Click "Overzicht van alle X uitgaven" | Expand expenditures table |
+| View all | Click "Alle X uitgaven ▾" | Expand expenditures table in panel |
 | External link | Click "🔗 wetten.overheid.nl" | Open in new tab |
 | Export CSV | Click "CSV" | Download data for this recipient |
-| Screenshot | Click "📷" | Download page as image |
+| Screenshot | Click "📷" | Download panel content as image |
 
 ---
 
@@ -455,9 +494,9 @@ Years with €0 are displayed but grayed out:
 
 ## Open Questions
 
-1. **Multiple modules:** When recipient appears in multiple modules, how to display?
-   - Current: Shows data for selected module only
-   - Option: Show tabs or accordion for each module
+~~1. **Multiple modules:** When recipient appears in multiple modules, how to display?~~
+
+**Resolved (2026-01-23):** Use "Ook in:" pattern (same as search results). Show clickable badges like `[Publiek (3)] [Inkoop (1)]`. Clicking a badge updates the side panel to show that module's data for the same recipient.
 
 ---
 

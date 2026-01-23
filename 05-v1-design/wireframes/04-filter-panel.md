@@ -1,7 +1,7 @@
 # Wireframe: Filter Panel
 
-**Date:** 2026-01-19
-**Status:** Draft
+**Date:** 2026-01-23
+**Status:** Approved
 **Related:** [Search Requirements SR-009, SR-010](../../02-requirements/search-requirements.md), [Main Search Page](./01-main-search-page.md)
 
 ---
@@ -165,13 +165,15 @@ The filter panel allows users to narrow search results using:
 
 | Filter | Type | Options |
 |--------|------|---------|
-| Bron | Dropdown | RVO, COA, NWO, etc. |
-| Regeling | Dropdown | Depends on Bron |
+| Organisatie | Dropdown | RVO, COA, NWO, etc. |
+| Regeling | Dropdown | Depends on Organisatie |
 | Trefwoorden | Multi-select | Keywords (RVO) |
 | Sectoren | Multi-select | Sectors (RVO) |
 | Regio | Dropdown | Regions |
 | Staffel | Dropdown | Amount brackets (COA) |
 | Onderdeel | Dropdown | Parts (NWO) |
+
+**Note (2026-01-23):** Renamed "Bron" to "Organisatie" for clarity. These are public implementation organizations (RVO, COA, NWO), not data sources.
 
 ### Integraal
 

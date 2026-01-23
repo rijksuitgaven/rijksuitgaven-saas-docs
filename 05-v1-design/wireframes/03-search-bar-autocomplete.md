@@ -1,7 +1,7 @@
 # Wireframe: Search Bar with Autocomplete
 
-**Date:** 2026-01-19
-**Status:** Draft
+**Date:** 2026-01-23
+**Status:** Approved
 **Related:** [Search Requirements SR-002 to SR-006](../../02-requirements/search-requirements.md), [Main Search Page](./01-main-search-page.md)
 
 ---
