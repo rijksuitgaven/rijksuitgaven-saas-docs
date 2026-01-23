@@ -44,9 +44,10 @@ def transform_csv(filename):
                 col_lower = renames[col_lower]
             new_fieldnames.append(col_lower)
 
-        # Write transformed CSV
+        # Write transformed CSV (UTF-8, no BOM - psql handles encoding natively)
+        # Use QUOTE_MINIMAL so empty values become ,, not ,"", which PostgreSQL handles as NULL
         with open(output_path, 'w', encoding='utf-8', newline='') as outfile:
-            writer = csv.DictWriter(outfile, fieldnames=new_fieldnames, quoting=csv.QUOTE_ALL)
+            writer = csv.DictWriter(outfile, fieldnames=new_fieldnames, quoting=csv.QUOTE_MINIMAL)
             writer.writeheader()
 
             row_count = 0
