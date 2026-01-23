@@ -221,41 +221,69 @@
 
 ---
 
-### 7. universal_search (Cross-module search index)
+### 7. universal_search (Cross-module search - MATERIALIZED VIEW)
 
-**Description:** Pre-aggregated search index combining data from all modules for the "Integraal" cross-module search.
+**Description:** Aggregated cross-module search for "Integraal zoeken". One row per unique recipient with yearly totals across all recipient-based modules.
 
-**Rows:** 1,456,095
+**Type:** MATERIALIZED VIEW (not a table)
+
+**Unique Recipients:** ~466,827
+
+**Modules Included:**
+- Financiële instrumenten (ontvanger)
+- Inkoopuitgaven (leverancier)
+- Publiek (ontvanger) - RVO, COA, NWO, ZonMW
+- Gemeentelijke subsidieregisters (ontvanger)
+- Provinciale subsidieregisters (ontvanger)
+
+**Excluded:** Apparaatsuitgaven (operational costs, no external recipients)
 
 | Column | Type | Description |
 |--------|------|-------------|
-| id | SERIAL | Primary key (auto-generated) |
-| ontvanger | VARCHAR(255) | Recipient name (main search field) |
+| ontvanger_key | TEXT | Normalized recipient (UPPER) for grouping |
+| ontvanger | TEXT | Display name (original case) |
 | sources | TEXT | Comma-separated list of modules |
-| sub_sources | TEXT | Detailed source breakdown |
-| sub_sources_count | INTEGER | Number of sub-sources |
-| source_count | INTEGER | Number of source modules |
-| row_count | INTEGER | Total row count across modules |
-| "2016" | DECIMAL(20,6) | Total for 2016 |
-| "2017" | DECIMAL(20,6) | Total for 2017 |
-| "2018" | DECIMAL(20,6) | Total for 2018 |
-| "2019" | DECIMAL(20,6) | Total for 2019 |
-| "2020" | DECIMAL(20,6) | Total for 2020 |
-| "2021" | DECIMAL(20,6) | Total for 2021 |
-| "2022" | DECIMAL(20,6) | Total for 2022 |
-| "2023" | DECIMAL(20,6) | Total for 2023 |
-| "2024" | DECIMAL(20,6) | Total for 2024 |
-| totaal | DECIMAL(20,6) | Grand total |
+| source_count | INTEGER | Number of modules recipient appears in |
+| "2016" - "2025" | BIGINT | Yearly totals in absolute euros |
+| totaal | BIGINT | Grand total across all years |
+
+**All amounts in ABSOLUTE EUROS** (€1 = 1)
 
 **Indexes:**
-- `idx_universal_ontvanger` - Fast recipient search
-- `idx_universal_sources` - Fast source filtering
+- `idx_universal_search_key` - Unique on ontvanger_key
+- `idx_universal_search_ontvanger` - Fast recipient search
+- `idx_universal_search_sources` - Fast source filtering
+- `idx_universal_search_totaal` - Fast sorting by amount
 
-**Note:** Year columns are quoted ("2016") because they start with numbers.
+**Refresh Command:**
+```sql
+REFRESH MATERIALIZED VIEW CONCURRENTLY universal_search;
+```
+
+**Script:** `scripts/sql/004-universal-search-materialized-view.sql`
 
 ---
 
-### 8. user_profiles (Authentication)
+### 8. data_freshness (Data completeness tracking)
+
+**Description:** Tracks when each data source was last updated, for UI indicators showing partial/incomplete data.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | SERIAL | Primary key |
+| source | VARCHAR(100) | Module name (e.g., 'Gemeentelijke subsidieregisters') |
+| sub_source | VARCHAR(100) | Sub-source (e.g., 'Amsterdam', 'Noord-Holland') |
+| year | INTEGER | Data year |
+| last_updated | DATE | When data was last imported |
+| is_complete | BOOLEAN | Whether all expected data is present |
+| record_count | INTEGER | Number of records for this source/year |
+| notes | TEXT | Optional notes |
+
+**Purpose:** UI shows indicators (e.g., "2025*") when year data is incomplete.
+
+---
+
+### 9. user_profiles (Authentication)
 
 **Description:** User profile data linked to Supabase Auth.
 
@@ -452,6 +480,7 @@ VACUUM ANALYZE universal_search;
 | `001-initial-schema.sql` | Create tables, indexes, RLS | Initial setup (done) |
 | `002-normalize-source-column.sql` | Fix source values in existing data | After import if triggers weren't active |
 | `003-source-column-triggers.sql` | Auto-set source on INSERT | Once after schema setup (done) |
+| `004-universal-search-materialized-view.sql` | Cross-module search view | After data updates (refresh) |
 
 ---
 
