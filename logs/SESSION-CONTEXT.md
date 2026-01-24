@@ -1,6 +1,6 @@
 # Session Context
 
-**Last Updated:** 2026-01-23
+**Last Updated:** 2026-01-24
 **Project Phase:** Phase 1 - V1.0 Development
 **Current Sprint:** Week 1 - Infrastructure + Data Migration
 
@@ -58,14 +58,14 @@
 
 ## Recent Work (Last 3 Files)
 
-1. **02-requirements/brand-identity.md** ⭐ CREATED (2026-01-23)
-   Complete brand identity: fonts (Brawler, IBM Plex Sans Condensed), colors, design tokens
+1. **app/** ⭐ CREATED (2026-01-24)
+   Next.js application with Supabase, Typesense, TanStack, shadcn/ui. Deployed to Railway.
 
-2. **05-v1-design/wireframes/*.md** ⭐ UPDATED (2026-01-23)
-   All 6 wireframes approved, updated with brand colors and side panel decision
+2. **docs/LOCAL-SETUP.md** ⭐ CREATED (2026-01-24)
+   Local development setup guide for machine switching. All dependencies documented.
 
-3. **CLAUDE.md** ⭐ UPDATED (2026-01-23)
-   Brand identity added as leading for design, added to Single Source of Truth
+3. **docs/plans/2026-01-24-apparaat-typesense-search-design.md** ⭐ CREATED (2026-01-24)
+   Apparaat search design: kostensoort as primary field, mixed results in global search.
 
 ---
 
@@ -651,5 +651,6 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-19 - V2.0 design + Batch 1 wireframes
 - 2026-01-20 - V1.0 scope change, sprint planning
 - 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
+- 2026-01-23 - Data migration complete (3.1M rows), Typesense sync (466K recipients)
 
-**This Session:** 2026-01-24 - Apparaat Typesense decision (brainstorm), PM Rule #9 added (verify implementation), Copy-paste instructions rule added, Apparaat synced (9,628 records <18ms). **Remaining:** Day 7 Next.js setup
+**This Session:** 2026-01-24 - **WEEK 1 COMPLETE.** Apparaat Typesense decision (brainstorm), PM Rules #9-#11 added, Apparaat synced (9,628 records), Next.js app created and deployed to Railway, DNS configured (beta.rijksuitgaven.nl). **Next:** Week 2 - Backend API (FastAPI)
