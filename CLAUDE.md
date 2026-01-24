@@ -224,6 +224,8 @@ Before saying "Week X is complete", verify EACH deliverable in `09-timelines/v1-
 | **Brand identity** | `02-requirements/brand-identity.md` |
 | **V1.0 Search** | `02-requirements/search-requirements.md` |
 | **V2.0 Research Mode** | `02-requirements/research-mode-vision.md` |
+| **Local dev setup** | `docs/LOCAL-SETUP.md` |
+| **Typesense sync** | `scripts/typesense/README.md` |
 
 **If information exists in multiple places:** Delete duplicates, keep the most comprehensive version.
 
