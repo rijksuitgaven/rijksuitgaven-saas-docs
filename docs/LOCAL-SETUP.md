@@ -163,11 +163,20 @@ SUPABASE_DB_URL="postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad
 | Property | Value |
 |----------|-------|
 | App URL | `https://rijksuitgaven-production.up.railway.app` |
+| **Beta URL** | `https://beta.rijksuitgaven.nl` |
 | Root Directory | `app` |
 | Region | EU West (Amsterdam) |
 | Auto-deploy | Yes (on push to main) |
 
 **To redeploy manually:** Push to GitHub, Railway auto-deploys.
+
+### DNS Configuration (Vimexx)
+
+| Type | Name | Value |
+|------|------|-------|
+| CNAME | beta | `rijksuitgaven-production.up.railway.app` |
+
+**Production DNS (Week 8):** Will point `rijksuitgaven.nl` to Railway.
 
 ---
 

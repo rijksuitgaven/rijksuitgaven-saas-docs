@@ -89,6 +89,7 @@
 | Created | 2026-01-21 |
 | Billing | Active (credit card added) |
 | **Next.js App URL** | `https://rijksuitgaven-production.up.railway.app` |
+| **Beta URL** | `https://beta.rijksuitgaven.nl` (DNS added 2026-01-24) |
 | Root Directory | `app` |
 | Region | EU West (Amsterdam) |
 
