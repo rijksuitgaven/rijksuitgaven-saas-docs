@@ -86,15 +86,18 @@
     },
     {
       "name": "apparaat",
+      "comment": "Aggregated by kostensoort + begrotingsnaam. Primary search: kostensoort, Secondary: begrotingsnaam",
       "fields": [
-        {"name": "begrotingsnaam", "type": "string", "facet": true, "optional": true},
+        {"name": "id", "type": "string"},
+        {"name": "kostensoort", "type": "string", "facet": true},
+        {"name": "kostensoort_lower", "type": "string"},
+        {"name": "begrotingsnaam", "type": "string", "facet": true},
+        {"name": "begrotingsnaam_lower", "type": "string"},
         {"name": "artikel", "type": "string", "facet": true, "optional": true},
-        {"name": "kostensoort", "type": "string", "facet": true, "optional": true},
         {"name": "detail", "type": "string", "optional": true},
-        {"name": "begrotingsjaar", "type": "int32", "facet": true},
-        {"name": "bedrag", "type": "int64"}
+        {"name": "totaal", "type": "int64"}
       ],
-      "default_sorting_field": "bedrag",
+      "default_sorting_field": "totaal",
       "token_separators": ["-", ".", "/"]
     }
   ]

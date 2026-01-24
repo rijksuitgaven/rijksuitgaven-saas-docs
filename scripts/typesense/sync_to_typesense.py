@@ -395,6 +395,60 @@ def index_provincie(client, conn, recreate=False):
     print(f"  Total provincie indexed: {count}")
     cursor.close()
 
+def index_apparaat(client, conn, recreate=False):
+    """Index apparaat table - aggregated by kostensoort + begrotingsnaam."""
+    print("\nIndexing apparaat...")
+
+    schemas = load_collection_schemas()
+    create_collection(client, schemas['apparaat'], recreate)
+
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    # Aggregate by kostensoort + begrotingsnaam, sum bedrag across all years
+    # Note: apparaat bedrag is in ×1000, so multiply by 1000 for absolute euros
+    cursor.execute("""
+        SELECT
+            kostensoort,
+            begrotingsnaam,
+            artikel,
+            detail,
+            SUM(COALESCE(bedrag, 0)) * 1000 as totaal
+        FROM apparaat
+        WHERE kostensoort IS NOT NULL AND kostensoort != ''
+        GROUP BY kostensoort, begrotingsnaam, artikel, detail
+        ORDER BY totaal DESC
+    """)
+
+    documents = []
+    count = 0
+
+    for row in cursor:
+        # Create unique ID from kostensoort + begrotingsnaam combination
+        id_str = f"{row['kostensoort']}|{row['begrotingsnaam'] or 'unknown'}"
+        doc = {
+            'id': id_str[:512],  # Typesense max ID length
+            'kostensoort': row['kostensoort'] or '',
+            'kostensoort_lower': (row['kostensoort'] or '').lower(),
+            'begrotingsnaam': row['begrotingsnaam'] or '',
+            'begrotingsnaam_lower': (row['begrotingsnaam'] or '').lower(),
+            'artikel': row['artikel'] or '',
+            'detail': (row['detail'] or '')[:500],
+            'totaal': int(row['totaal'] or 0)
+        }
+        documents.append(doc)
+
+        if len(documents) >= BATCH_SIZE:
+            client.collections['apparaat'].documents.import_(documents, {'action': 'upsert'})
+            count += len(documents)
+            print(f"  Indexed {count} apparaat records...")
+            documents = []
+
+    if documents:
+        client.collections['apparaat'].documents.import_(documents, {'action': 'upsert'})
+        count += len(documents)
+
+    print(f"  Total apparaat records indexed: {count}")
+    cursor.close()
+
 def test_search(client):
     """Test search performance."""
     print("\n" + "="*50)
@@ -403,6 +457,8 @@ def test_search(client):
 
     import time
 
+    # Test recipients collection
+    print("\n  Recipients collection:")
     test_queries = ['prorail', 'amsterdam', 'subsidie', 'ns']
 
     for query in test_queries:
@@ -415,7 +471,29 @@ def test_search(client):
         elapsed = (time.time() - start) * 1000
 
         hits = result.get('found', 0)
-        print(f"  '{query}': {hits} hits in {elapsed:.0f}ms {'✅' if elapsed < 100 else '⚠️'}")
+        print(f"    '{query}': {hits} hits in {elapsed:.0f}ms {'✅' if elapsed < 100 else '⚠️'}")
+
+    # Test apparaat collection (if it has data)
+    try:
+        info = client.collections['apparaat'].retrieve()
+        if info.get('num_documents', 0) > 0:
+            print("\n  Apparaat collection:")
+            apparaat_queries = ['ICT', 'defensie', 'abonnementen', 'huisvesting']
+
+            for query in apparaat_queries:
+                start = time.time()
+                result = client.collections['apparaat'].documents.search({
+                    'q': query,
+                    'query_by': 'kostensoort,kostensoort_lower,begrotingsnaam,begrotingsnaam_lower',
+                    'query_by_weights': '100,100,50,50',
+                    'per_page': 10
+                })
+                elapsed = (time.time() - start) * 1000
+
+                hits = result.get('found', 0)
+                print(f"    '{query}': {hits} hits in {elapsed:.0f}ms {'✅' if elapsed < 100 else '⚠️'}")
+    except Exception:
+        print("\n  Apparaat collection: not yet populated")
 
 def main():
     parser = argparse.ArgumentParser(description='Sync data to Typesense')
@@ -452,6 +530,7 @@ def main():
         'publiek': index_publiek,
         'gemeente': index_gemeente,
         'provincie': index_provincie,
+        'apparaat': index_apparaat,
     }
 
     if args.collection:
