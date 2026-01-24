@@ -33,8 +33,9 @@
 - ✅ Source column triggers deployed
 - ✅ Data freshness tracking table created
 - ✅ **Typesense collections & sync** - 466,827 recipients indexed, <25ms search
-- ⏳ **Week 1 Day 7:** Next.js project setup (not started)
-- ⏳ **NEXT:** Complete Week 1 (Next.js), then Week 2 - Backend API
+- ✅ **Week 1 Day 7:** Next.js project setup (COMPLETED 2026-01-24)
+- ✅ **Week 1 COMPLETE** - All deliverables done
+- ⏳ **NEXT:** Week 2 - Backend API (FastAPI)
 
 ### Active Tasks
 | Task | Status | Notes |
@@ -87,6 +88,9 @@
 | Project | rijksuitgaven |
 | Created | 2026-01-21 |
 | Billing | Active (credit card added) |
+| **Next.js App URL** | `https://rijksuitgaven-production.up.railway.app` |
+| Root Directory | `app` |
+| Region | EU West (Amsterdam) |
 
 ### Typesense (Search Engine)
 
@@ -590,15 +594,17 @@ Dedicated overview page showing module-level totals with year columns.
 | Build initial index (Supabase → Typesense sync) | ✅ 466,827 recipients indexed |
 | Test search <100ms | ✅ <25ms achieved |
 
-**Week 1 (Day 7: Next.js Setup) - NOT STARTED**
+**Week 1 (Day 7: Next.js Setup) - COMPLETED 2026-01-24**
 
 | Task | Status |
 |------|--------|
-| Create Next.js app | ❌ Pending |
-| Install dependencies | ❌ Pending |
-| Deploy to Railway | ❌ Pending |
+| Create Next.js app | ✅ Done |
+| Install dependencies | ✅ Done (Supabase, Typesense, TanStack, shadcn/ui) |
+| Deploy to Railway | ✅ Done (`rijksuitgaven-production.up.railway.app`) |
 
-**NEXT:** Complete Week 1 Day 7, then Week 2: Backend API
+**Note:** Tremor skipped (React 19 incompatible) - will revisit Week 3.
+
+**WEEK 1 COMPLETE.** Next: Week 2 - Backend API (FastAPI)
 
 See full sprint plan: `09-timelines/v1-sprint-plan.md`
 

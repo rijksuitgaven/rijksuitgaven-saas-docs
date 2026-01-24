@@ -89,9 +89,9 @@
 
 **Week 1 Deliverables:**
 - [x] Supabase with all source data (3.1M rows migrated 2026-01-23)
-- [x] Typesense with search index (466,827 recipients, <25ms search)
-- [ ] Next.js deployed on Railway (Week 2)
-- [ ] All services connected (Week 2)
+- [x] Typesense with search index (466,827 recipients + 9,628 apparaat, <25ms search)
+- [x] Next.js deployed on Railway (2026-01-24: `rijksuitgaven-production.up.railway.app`)
+- [x] All services connected (Supabase, Typesense, TanStack, shadcn/ui installed)
 
 ---
 

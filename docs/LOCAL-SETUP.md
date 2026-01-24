@@ -69,18 +69,27 @@ pip3 install typesense psycopg2-binary
 
 Installed via `npm install` from `package.json`. Key packages:
 
-| Package | Purpose |
-|---------|---------|
-| next | React framework |
-| react | UI library |
-| typescript | Type safety |
-| tailwindcss | Styling |
-| @supabase/supabase-js | Supabase client |
-| typesense | Typesense client |
-| @tanstack/react-table | Data tables |
-| @tanstack/react-query | Server state |
-| @tremor/react | Charts/dashboards |
-| shadcn/ui components | UI components |
+| Package | Purpose | Status |
+|---------|---------|--------|
+| next | React framework | ✅ Installed |
+| react | UI library (v19) | ✅ Installed |
+| typescript | Type safety | ✅ Installed |
+| tailwindcss | Styling | ✅ Installed |
+| @supabase/supabase-js | Supabase client | ✅ Installed |
+| typesense | Typesense client | ✅ Installed |
+| @tanstack/react-table | Data tables | ✅ Installed |
+| @tanstack/react-query | Server state | ✅ Installed |
+| @tremor/react | Charts/dashboards | ⏳ **NOT YET** - needs React 18, we have React 19 |
+| shadcn/ui components | UI components | ✅ Installed (v3.7.0) |
+
+### Tremor Compatibility Issue (2026-01-24)
+
+Tremor v3.18.7 requires React 18, but Next.js 15 uses React 19. Options:
+1. Wait for Tremor to update (recommended - we don't need charts until Week 3)
+2. Use `--legacy-peer-deps` to force install (risky)
+3. Use Recharts directly (Tremor is built on Recharts)
+
+**Decision:** Skip Tremor for now, revisit in Week 3 when charts are needed.
 
 ---
 
@@ -146,6 +155,19 @@ SUPABASE_DB_URL="postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
 ```
+
+---
+
+## Railway Deployment
+
+| Property | Value |
+|----------|-------|
+| App URL | `https://rijksuitgaven-production.up.railway.app` |
+| Root Directory | `app` |
+| Region | EU West (Amsterdam) |
+| Auto-deploy | Yes (on push to main) |
+
+**To redeploy manually:** Push to GitHub, Railway auto-deploys.
 
 ---
 
