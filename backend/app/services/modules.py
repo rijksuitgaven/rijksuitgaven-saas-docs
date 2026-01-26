@@ -148,6 +148,9 @@ async def get_module_data(
 
     sort_direction = "DESC" if sort_order == "desc" else "ASC"
 
+    # Store params for count query (before adding limit/offset)
+    count_params = params.copy()
+
     # Main query with aggregation
     query = f"""
         SELECT
@@ -176,10 +179,9 @@ async def get_module_data(
     """
 
     # Execute queries
-    rows = await fetch_all(query, *params[:-2] if params[:-2] else [])
+    rows = await fetch_all(query, *params)
 
-    # For count, we need to pass params without limit/offset
-    count_params = params[:-2] if len(params) > 2 else []
+    # For count, use params without limit/offset
     total = await fetch_val(count_query, *count_params) if count_params else await fetch_val(count_query)
 
     # Transform rows to include year dict
