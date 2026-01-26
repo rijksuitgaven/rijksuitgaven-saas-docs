@@ -1,7 +1,7 @@
 # V1.0 Sprint Plan
 
 **Created:** 2026-01-20
-**Duration:** 8 weeks
+**Duration:** 9 weeks (was 8, added UX/UI sprint)
 **Working Mode:** Solo founder + AI (few hours daily)
 **Start Date:** 2026-01-21
 
@@ -379,7 +379,58 @@
 
 ---
 
-## Week 8: Launch
+## Week 8: UX/UI Optimization
+
+**Goal:** Polish all interfaces with senior UX/UI specialist review
+
+### Day 1-2: UX Audit
+
+| Task | Details |
+|------|---------|
+| Heuristic evaluation | Review all pages against UX best practices |
+| User flow analysis | Map critical paths, identify friction points |
+| Accessibility check | WCAG 2.1 AA compliance, keyboard navigation |
+| Mobile UX review | Touch targets, scroll behavior, responsive issues |
+
+### Day 3-4: Visual Design Polish
+
+| Task | Details |
+|------|---------|
+| Typography audit | Consistent font sizes, line heights, spacing |
+| Color consistency | Brand colors applied correctly everywhere |
+| Component alignment | Grid alignment, padding/margin consistency |
+| Icon/visual consistency | Consistent icon style, visual weight |
+| Empty/loading states | Polish skeleton loaders, empty state messages |
+
+### Day 5-6: Interaction Refinement
+
+| Task | Details |
+|------|---------|
+| Micro-interactions | Hover states, focus states, transitions |
+| Feedback clarity | Loading indicators, success/error messages |
+| Table UX | Column widths, row heights, click targets |
+| Filter UX | Clear affordances, reset behavior, state indication |
+| Navigation flow | Breadcrumbs, back navigation, deep linking |
+
+### Day 7: Final Polish
+
+| Task | Details |
+|------|---------|
+| Cross-browser testing | Chrome, Firefox, Safari, Edge |
+| Responsive breakpoints | 320px, 768px, 1024px, 1440px |
+| Performance perception | Perceived speed improvements |
+| Documentation | Update FRONTEND-DOCUMENTATION.md with changes |
+
+**Week 8 Deliverables:**
+- [ ] UX audit completed with findings documented
+- [ ] All critical UX issues resolved
+- [ ] Visual design consistent across all pages
+- [ ] Accessibility basics verified (WCAG AA)
+- [ ] Mobile experience polished
+
+---
+
+## Week 9: Launch
 
 **Goal:** Go live with V1.0
 
@@ -422,7 +473,7 @@
 | Send announcement | Email 50 users with Magic Link instructions |
 | Monitor | Watch for issues first 24-48 hours |
 
-### Post-Launch (Week 9+)
+### Post-Launch (Week 10+)
 
 | Task | Details |
 |------|---------|
@@ -430,7 +481,7 @@
 | WordPress | Shut down after stable period |
 | Cleanup | Remove beta subdomain or keep for future testing |
 
-**Week 8 Deliverables:**
+**Week 9 Deliverables:**
 - [ ] All tests passing
 - [ ] Performance targets met
 - [ ] 50 users notified and migrated

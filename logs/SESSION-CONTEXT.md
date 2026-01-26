@@ -540,7 +540,7 @@ Dedicated overview page showing module-level totals with year columns.
 **ADR-008 to ADR-012:** IBOS domain classification, domain-first entry point, wetten.overheid.nl integration, advanced visualizations, V3.0 data requirements
 
 ### Product Decisions
-- **V1.0 Timeline:** 8 weeks (Tech port + new search)
+- **V1.0 Timeline:** 9 weeks (was 8, added UX/UI optimization sprint)
 - **V2.0 Timeline:** +12 weeks (Research Mode)
 - **Pricing:** €150/month or €1,500/year
 - **Export limit:** 500 rows (always)
