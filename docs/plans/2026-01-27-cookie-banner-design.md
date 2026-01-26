@@ -254,15 +254,18 @@ The current component is isolated and easy to replace.
 
 ## Privacy Policy Page
 
-The `/privacybeleid` page needs to exist. Content should include:
+The `/privacybeleid` page content is ready: `content/privacybeleid.md`
 
-- What data is collected (minimal: IP address in server logs, auth data)
-- What cookies are used (Supabase session)
-- No third-party sharing
-- Contact information
-- Rights under GDPR (access, deletion, etc.)
+**Content includes:**
+- 10 articles covering GDPR requirements
+- Article 8 specifically covers cookies (merged cookie policy)
+- Based on existing WordPress policy, updated for V1.0
 
-**Note:** Actual privacy policy text is a legal document - recommend having it reviewed or using the existing WordPress policy text as a starting point.
+**URL Structure:**
+- `/privacybeleid` - Main privacy policy page
+- `/cookiebeleid` - Redirects to `/privacybeleid#artikel-8--cookies`
+
+**Note:** Update `[datum]` placeholder when launching V1.0.
 
 ---
 
