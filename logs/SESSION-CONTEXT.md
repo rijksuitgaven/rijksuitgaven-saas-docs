@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-01-26
 **Project Phase:** Phase 1 - V1.0 Development
-**Current Sprint:** Week 2 COMPLETE → Next: Week 3 - Core UI Components
+**Current Sprint:** Week 4 COMPLETE → Next: Week 5 - Search + Navigation
 
 ---
 
@@ -701,7 +701,38 @@ Dedicated overview page showing module-level totals with year columns.
 | publiek | 222ms | 247ms | ✅ |
 | integraal | 190-380ms | 181-226ms | ✅ |
 
-**WEEK 2 COMPLETE.** Next: Week 3 - Core UI Components
+**WEEK 2 COMPLETE.**
+
+### Week 3 Progress (Core UI Components) - COMPLETED 2026-01-26
+
+| Task | Status |
+|------|--------|
+| DataTable component | ✅ TanStack Table, year columns, trend anomaly indicator |
+| Expandable rows | ✅ Grouping selector, cross-module indicator, lazy loading |
+| Filter panel | ✅ Debounced search, year/amount filters, URL state sync |
+| Real-time filtering | ✅ 300ms debounce, Suspense boundaries |
+
+**Components created:**
+- `app/src/components/data-table/data-table.tsx`
+- `app/src/components/data-table/expanded-row.tsx`
+- `app/src/components/filter-panel/filter-panel.tsx`
+
+**WEEK 3 COMPLETE.**
+
+### Week 4 Progress (Module Pages) - COMPLETED 2026-01-26
+
+| Task | Status |
+|------|--------|
+| All 6 module pages | ✅ Using reusable ModulePage component |
+| Integraal page | ✅ Cross-module search |
+| Consistent styling | ✅ Brand colors, shadcn/ui theme |
+| Mobile-friendly tables | ✅ Sticky columns on horizontal scroll |
+
+**Components created:**
+- `app/src/components/module-page/module-page.tsx` - Reusable template
+- All 7 module pages (5 lines each)
+
+**WEEK 4 COMPLETE.** Next: Week 5 - Search + Navigation
 
 See full sprint plan: `09-timelines/v1-sprint-plan.md`
 
@@ -749,4 +780,4 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
 - 2026-01-23 - Data migration complete (3.1M rows), Typesense sync (466K recipients)
 
-**This Session:** 2026-01-26 - **WEEK 2 COMPLETE.** FastAPI backend deployed, materialized views for performance (100x improvement), all 7 endpoints tested. Year filter Option B (show all years for recipients active in filtered year). Data Update Runbook created. Recharts selected (React 19 compatible). Entity resolution: 15,382 duplicates merged (466,827 → 451,445). Typesense re-synced with 451,445 recipients. **Next:** Week 3 - Core UI Components
+**This Session:** 2026-01-26 - **WEEKS 3 & 4 COMPLETE.** DataTable with TanStack Table, expandable rows with grouping, filter panel with URL sync. Reusable ModulePage component for all 7 modules. Sticky columns for mobile. **Next:** Week 5 - Search + Navigation

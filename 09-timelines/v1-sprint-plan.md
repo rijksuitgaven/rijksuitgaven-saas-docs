@@ -190,10 +190,10 @@
 | Clear all | Reset button |
 
 **Week 3 Deliverables:**
-- [ ] DataTable component working
-- [ ] Expandable rows with grouping
-- [ ] Filter panel functional
-- [ ] Real-time filter application
+- [x] DataTable component working (2026-01-26)
+- [x] Expandable rows with grouping (2026-01-26)
+- [x] Filter panel functional (2026-01-26)
+- [x] Real-time filter application (2026-01-26)
 
 ---
 
@@ -235,10 +235,10 @@
 | Error states | User-friendly error messages |
 
 **Week 4 Deliverables:**
-- [ ] All 6 module pages working
-- [ ] Integraal (cross-module) page working
-- [ ] Consistent styling across all pages
-- [ ] Mobile-friendly tables
+- [x] All 6 module pages working (2026-01-26)
+- [x] Integraal (cross-module) page working (2026-01-26)
+- [x] Consistent styling across all pages (2026-01-26)
+- [x] Mobile-friendly tables (2026-01-26: sticky columns)
 
 ---
 
