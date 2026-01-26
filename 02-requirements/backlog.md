@@ -42,37 +42,35 @@ Items logged for future versions, not in V1.0 scope.
 
 ### Entity Resolution / Recipient Normalization
 
-**Priority:** High (Post-V1.0)
+**Priority:** ✅ COMPLETED (V1.0)
 **Added:** 2026-01-20
+**Completed:** 2026-01-26
 
 **Problem:**
-Recipients are spelled differently across data sources:
-- "politie", "Politie", "POLITIE" (casing)
-- "Politie" vs "Korps Nationale Politie" (name variations)
-- Same entity appears as multiple rows in aggregated views
+Recipients were spelled differently across data sources:
+- "N.V. Nederlandse Spoorwegen" vs "Nederlandse Spoorwegen" (N.V. format)
+- "NS Vastgoed B.V." vs "NS Vastgoed BV" (B.V. format)
+- Casing variations
 
-**V1.0 Workaround:**
-Case-insensitive grouping using `UPPER(Ontvanger)` in SQL queries.
-- Solves: casing differences
-- Does NOT solve: name variations, entity matching
+**Solution Implemented:**
+Created `normalize_recipient()` PostgreSQL function that handles:
+- Casing (UPPER)
+- B.V./BV/N.V./NV format variations (stripped)
+- Extra spaces (normalized)
 
-**Future Solution (V2.0+):**
-Build entity mapping table:
-```
-┌─────────────────────────┬──────────────────────┬───────────┐
-│ variant                 │ canonical_name       │ kvk       │
-├─────────────────────────┼──────────────────────┼───────────┤
-│ politie                 │ Politie Nederland    │ 12345678  │
-│ Korps Nationale Politie │ Politie Nederland    │ 12345678  │
-└─────────────────────────┴──────────────────────┴───────────┘
-```
+Rebuilt `universal_search` materialized view with normalization.
 
-**Approach:**
-1. KvK-based matching where available
-2. Fuzzy matching + manual review for rest
-3. Maintain entity table for new data imports
+**Result:**
+- 466,827 → 451,445 entities
+- **15,382 duplicates merged (3.3%)**
+- ProRail: multiple rows → 1 row (€12.7B)
+- NS Spoorwegen: 3 rows → 1 row (€90M)
 
-**Effort:** Medium-High (data analysis + tooling + manual review)
+**Script:** `scripts/sql/009-entity-resolution-normalization.sql`
+
+**Remaining (V2.0+):**
+- KvK-based matching for remaining name variations (e.g., "Politie" vs "Korps Nationale Politie")
+- Entity mapping table for complex cases
 
 ---
 

@@ -5,7 +5,7 @@
 **Region:** eu-west-1
 **Created:** 2026-01-21
 **Data Migrated:** 2026-01-23
-**Last Updated:** 2026-01-26 (source table indexes, pg_trgm extension)
+**Last Updated:** 2026-01-26 (entity resolution, source table indexes, pg_trgm extension)
 
 ---
 
@@ -28,10 +28,10 @@
 │                                                                 │
 │  ┌─────────────────┐  ┌─────────────────┐                      │
 │  │ universal_search│  │  user_profiles  │                      │
-│  │ 1,456,095 rows  │  │    (auth)       │                      │
+│  │  451,445 rows   │  │    (auth)       │                      │
 │  └─────────────────┘  └─────────────────┘                      │
 │                                                                 │
-│  Total: 3,096,955 data rows + user profiles                    │
+│  Total: 2,092,305 data rows + user profiles                    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -261,7 +261,16 @@
 
 **Type:** MATERIALIZED VIEW (not a table)
 
-**Unique Recipients:** ~466,827
+**Unique Recipients:** 451,445 (after entity resolution)
+
+**Entity Resolution (2026-01-26):**
+Uses `normalize_recipient()` function to merge duplicate recipients with different spellings:
+- B.V./BV variations (e.g., "ProRail B.V." → "PRORAIL")
+- N.V./NV variations (e.g., "N.V. Nederlandse Spoorwegen" → "NEDERLANDSE SPOORWEGEN")
+- Casing variations (all converted to UPPER)
+- Extra spaces (normalized to single space)
+
+**Result:** 15,382 duplicates merged (466,827 → 451,445)
 
 **Modules Included:**
 - Financiële instrumenten (ontvanger)
@@ -274,8 +283,8 @@
 
 | Column | Type | Description |
 |--------|------|-------------|
-| ontvanger_key | TEXT | Normalized recipient (UPPER) for grouping |
-| ontvanger | TEXT | Display name (original case) |
+| ontvanger_key | TEXT | Normalized recipient (UPPER, no B.V./N.V.) for grouping |
+| ontvanger | TEXT | Display name (original case, first occurrence) |
 | sources | TEXT | Comma-separated list of modules |
 | source_count | INTEGER | Number of modules recipient appears in |
 | "2016" - "2025" | BIGINT | Yearly totals in absolute euros |
@@ -294,7 +303,9 @@
 REFRESH MATERIALIZED VIEW CONCURRENTLY universal_search;
 ```
 
-**Script:** `scripts/sql/004-universal-search-materialized-view.sql`
+**Scripts:**
+- `scripts/sql/004-universal-search-materialized-view.sql` (original version)
+- `scripts/sql/009-entity-resolution-normalization.sql` (with entity resolution)
 
 ---
 
@@ -430,6 +441,62 @@ WHERE tgname LIKE 'set_%_source';
 
 ---
 
+## Functions
+
+### normalize_recipient()
+
+**Description:** Normalizes recipient names for entity resolution. Merges variations like "ProRail B.V." and "Prorail BV" into a single entity.
+
+**Created:** 2026-01-26
+**Script:** `scripts/sql/009-entity-resolution-normalization.sql`
+
+```sql
+CREATE OR REPLACE FUNCTION normalize_recipient(name TEXT)
+RETURNS TEXT AS $$
+SELECT
+  TRIM(
+    REGEXP_REPLACE(
+      REGEXP_REPLACE(
+        REGEXP_REPLACE(
+          REGEXP_REPLACE(
+            REGEXP_REPLACE(
+              REGEXP_REPLACE(
+                REGEXP_REPLACE(
+                  UPPER(TRIM(COALESCE(name, ''))),
+                  '\s+', ' ', 'g'),              -- multiple spaces → single
+                '\.+$', ''),                      -- trailing dots
+              ' B\.V\.?$', ''),                   -- " B.V." at end
+            ' BV\.?$', ''),                       -- " BV" at end
+          ' N\.V\.?$', ''),                       -- " N.V." at end
+        ' NV\.?$', ''),                           -- " NV" at end
+      '^N\.V\.? ', '')                            -- "N.V. " at start
+  );
+$$ LANGUAGE SQL IMMUTABLE STRICT;
+```
+
+**Transformations applied (in order):**
+1. Convert to UPPER case
+2. Collapse multiple spaces to single space
+3. Remove trailing dots
+4. Remove ` B.V.` or ` B.V` at end
+5. Remove ` BV` at end
+6. Remove ` N.V.` or ` N.V` at end
+7. Remove ` NV` at end
+8. Remove `N.V. ` or `N.V ` at start
+
+**Examples:**
+| Input | Output |
+|-------|--------|
+| "ProRail B.V." | "PRORAIL" |
+| "Prorail BV" | "PRORAIL" |
+| "N.V. Nederlandse Spoorwegen" | "NEDERLANDSE SPOORWEGEN" |
+| "NEDERLANDSE SPOORWEGEN N.V." | "NEDERLANDSE SPOORWEGEN" |
+| "NS Vastgoed B.V." | "NS VASTGOED" |
+
+**Used by:** `universal_search` materialized view for entity grouping
+
+---
+
 ## Row Level Security (RLS)
 
 All tables have RLS enabled with the following policies:
@@ -510,8 +577,8 @@ CREATE EXTENSION IF NOT EXISTS vector;
 | provincie | 67,456 | ~300 bytes | ~20 MB |
 | gemeente | 126,377 | ~350 bytes | ~42 MB |
 | publiek | 115,020 | ~400 bytes | ~44 MB |
-| universal_search | 1,456,095 | ~200 bytes | ~280 MB |
-| **Total** | **3,096,955** | | **~834 MB** |
+| universal_search | 451,445 | ~200 bytes | ~85 MB |
+| **Total** | **2,092,305** | | **~640 MB** |
 
 ---
 
@@ -588,9 +655,12 @@ VACUUM ANALYZE universal_search;
 | `001-initial-schema.sql` | Create tables, indexes, RLS | Initial setup (done) |
 | `002-normalize-source-column.sql` | Fix source values in existing data | After import if triggers weren't active |
 | `003-source-column-triggers.sql` | Auto-set source on INSERT | Once after schema setup (done) |
-| `004-universal-search-materialized-view.sql` | Cross-module search view | After data updates (refresh) |
+| `004-universal-search-materialized-view.sql` | Cross-module search view (original) | Superseded by 009 |
 | `005-backend-rls-policy.sql` | RLS policies for postgres role | Once after backend setup (done) |
 | `006-aggregated-materialized-views.sql` | Pre-computed aggregations for API | Once (creates views) |
+| `007-search-optimization-indexes.sql` | pg_trgm + GIN indexes for ILIKE | Once after views created (done) |
+| `008-source-table-indexes.sql` | Source table indexes for details | Once (done) |
+| `009-entity-resolution-normalization.sql` | Entity resolution + universal_search | Once (done) |
 | `refresh-all-views.sql` | Refresh all materialized views | After every data update |
 
 ---
