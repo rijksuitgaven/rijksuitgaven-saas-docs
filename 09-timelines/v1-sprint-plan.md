@@ -43,11 +43,12 @@
 
 | Task | Details |
 |------|---------|
-| Add CNAME record | `beta.rijksuitgaven.nl` → Railway app URL |
+| Add custom domain in Railway | `beta.rijksuitgaven.nl` → Railway provides CNAME target |
+| Add CNAME record in DNS | `beta` → Railway-provided target (e.g., `j65ghs38.up.railway.app`) |
 | Add A record | `nieuws.rijksuitgaven.nl` → current server IP |
 | Verify propagation | `dig beta.rijksuitgaven.nl` or online DNS checker |
 
-**Note:** Railway URL will be known after deploying Next.js app. Can set DNS after Day 7.
+**Note:** Must add custom domain in Railway FIRST, then use the CNAME target Railway provides.
 
 **nieuws subdomain:** For Mailster/Mailgun email system. Keep WordPress running on current server for marketing emails only.
 

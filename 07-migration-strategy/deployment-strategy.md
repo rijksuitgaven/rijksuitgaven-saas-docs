@@ -38,8 +38,9 @@ rijksuitgaven.nl
 ```
 
 ### DNS Control
-- **Registrar/DNS:** Controlled by founder
-- **Action needed:** Create CNAME for beta subdomain, later update A/CNAME for main domain
+- **Registrar/DNS:** Controlled by founder (Vimexx)
+- **Railway process:** Add custom domain in Railway dashboard → Railway provides unique CNAME target → Add CNAME in DNS
+- **Current:** beta.rijksuitgaven.nl → `j65ghs38.up.railway.app`
 
 ---
 
@@ -54,7 +55,8 @@ rijksuitgaven.nl
 
 ### Staging Setup (Week 1)
 
-1. **DNS:** Add CNAME record `beta.rijksuitgaven.nl` → Railway app URL
+1. **Custom Domain:** Add `beta.rijksuitgaven.nl` in Railway dashboard → Railway provides CNAME target
+2. **DNS:** Add CNAME record `beta` → Railway-provided target (e.g., `j65ghs38.up.railway.app`)
 2. **Auth:** Supabase Magic Link required to access any page
 3. **Data:** Copy of production data (refreshed as needed)
 4. **Users:** Only founder + invited beta testers
@@ -158,15 +160,21 @@ New:      rijksuitgaven.nl → Railway (Next.js)
 
 ## DNS Records Reference
 
-### During Development
+**Important:** Railway custom domains require adding the domain in Railway dashboard FIRST. Railway then provides a unique CNAME target to use in your DNS records.
+
+### During Development (Current)
 ```
-beta.rijksuitgaven.nl    CNAME    [railway-app-url].up.railway.app
+# Step 1: Add beta.rijksuitgaven.nl in Railway → Railway provides CNAME target
+# Step 2: Add DNS record:
+beta.rijksuitgaven.nl    CNAME    j65ghs38.up.railway.app  (Railway-provided)
 nieuws.rijksuitgaven.nl  A        [current-server-ip]
 ```
 
 ### After Switch
 ```
-rijksuitgaven.nl         A/CNAME  [railway-app-url] or Railway IP
+# Step 1: Add rijksuitgaven.nl in Railway → Railway provides CNAME target
+# Step 2: Add DNS records:
+rijksuitgaven.nl         CNAME    [railway-provided-target].up.railway.app
 www.rijksuitgaven.nl     CNAME    rijksuitgaven.nl
 nieuws.rijksuitgaven.nl  A        [current-server-ip]  (keep for email)
 beta.rijksuitgaven.nl    (remove or keep for future testing)
