@@ -38,6 +38,7 @@ cp .env.example .env.local
 | Python | 3.10+ | `brew install python3` | Typesense sync scripts |
 | npm | 9+ | Comes with Node | Package manager |
 | Git | Any | `brew install git` | Version control |
+| psql (libpq) | Any | `brew install libpq` | Database scripts (data updates) |
 
 ### Verify Installation
 
@@ -46,7 +47,10 @@ node --version    # Should be v18+
 npm --version     # Should be v9+
 python3 --version # Should be 3.10+
 git --version     # Any version
+/usr/local/opt/libpq/bin/psql --version  # Any version (for data updates)
 ```
+
+**Note:** psql is installed via libpq but not symlinked. Use full path: `/usr/local/opt/libpq/bin/psql`
 
 ---
 
@@ -181,9 +185,11 @@ SUPABASE_DB_URL="postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad
 
 | Type | Name | Value |
 |------|------|-------|
-| CNAME | beta | `rijksuitgaven-production.up.railway.app` |
+| CNAME | beta | `j65ghs38.up.railway.app` (Railway-provided target) |
 
-**Production DNS (Week 8):** Will point `rijksuitgaven.nl` to Railway.
+**Note:** CNAME target is provided by Railway when adding custom domain. Don't use app URL directly.
+
+**Production DNS (Week 8):** Will point `rijksuitgaven.nl` to Railway (new target will be provided).
 
 ---
 
