@@ -539,18 +539,19 @@ async def get_integraal_details(
     Shows how much the recipient received from each module by querying
     each module's aggregated view.
     """
-    # Modules that have ontvanger as primary field (not apparaat)
+    # Modules with their aggregated table and primary field
+    # (not apparaat - it uses kostensoort, not recipients)
     modules_to_query = [
-        ("instrumenten", "instrumenten_aggregated"),
-        ("inkoop", "inkoop_aggregated"),
-        ("provincie", "provincie_aggregated"),
-        ("gemeente", "gemeente_aggregated"),
-        ("publiek", "publiek_aggregated"),
+        ("instrumenten", "instrumenten_aggregated", "ontvanger"),
+        ("inkoop", "inkoop_aggregated", "leverancier"),
+        ("provincie", "provincie_aggregated", "ontvanger"),
+        ("gemeente", "gemeente_aggregated", "ontvanger"),
+        ("publiek", "publiek_aggregated", "ontvanger"),
     ]
 
     result = []
 
-    for module_name, agg_table in modules_to_query:
+    for module_name, agg_table, primary_field in modules_to_query:
         # Year filter clause
         year_filter = f'AND "{jaar}" > 0' if jaar else ""
 
@@ -562,7 +563,7 @@ async def get_integraal_details(
                 totaal,
                 row_count
             FROM {agg_table}
-            WHERE ontvanger = $1 {year_filter}
+            WHERE {primary_field} = $1 {year_filter}
         """
 
         rows = await fetch_all(query, primary_value)
