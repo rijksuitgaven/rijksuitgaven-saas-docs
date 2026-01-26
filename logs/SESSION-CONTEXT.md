@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-01-26
 **Project Phase:** Phase 1 - V1.0 Development
-**Current Sprint:** Week 4 COMPLETE → Next: Week 5 - Search + Navigation
+**Current Sprint:** Week 5 COMPLETE → Next: Week 6 - User Auth
 
 ---
 
@@ -61,14 +61,14 @@
 
 ## Recent Work (Last 3 Files)
 
-1. **docs/FRONTEND-DOCUMENTATION.md** ⭐ CREATED (2026-01-26)
-   Comprehensive documentation for all frontend components built in Weeks 3-4
+1. **app/src/components/search-bar/search-bar.tsx** ⭐ CREATED (2026-01-26)
+   Global search bar with Typesense autocomplete (<50ms), 150ms debounce, keyboard navigation
 
-2. **app/src/components/cookie-banner/** ⭐ CREATED (2026-01-26)
-   GDPR-compliant cookie disclosure banner with localStorage persistence
+2. **app/src/components/header/header.tsx** ⭐ CREATED (2026-01-26)
+   Global navigation header with modules dropdown, search bar, mobile menu
 
-3. **app/src/app/privacybeleid/page.tsx** ⭐ CREATED (2026-01-26)
-   Privacy policy page (10 articles, includes cookie policy)
+3. **app/src/components/data-table/data-table.tsx** ⭐ UPDATED (2026-01-26)
+   Added CSV export functionality (max 500 rows)
 
 ---
 
@@ -732,7 +732,24 @@ Dedicated overview page showing module-level totals with year columns.
 - `app/src/components/module-page/module-page.tsx` - Reusable template
 - All 7 module pages (5 lines each)
 
-**WEEK 4 COMPLETE.** Next: Week 5 - Search + Navigation
+**WEEK 4 COMPLETE.**
+
+### Week 5 Progress (Search + Navigation) - COMPLETED 2026-01-26
+
+| Task | Status |
+|------|--------|
+| Global search bar | ✅ Typesense autocomplete, <50ms |
+| Header navigation | ✅ Modules dropdown, mobile menu |
+| URL sharing | ✅ Search + filter state preserved |
+| CSV export | ✅ Max 500 rows, Dutch format |
+| Remove duplicate headers | ✅ Global header in layout.tsx |
+
+**Components created:**
+- `app/src/components/search-bar/search-bar.tsx` - Typesense autocomplete
+- `app/src/components/header/header.tsx` - Global navigation
+- Updated `data-table.tsx` with CSV export
+
+**WEEK 5 COMPLETE.** Next: Week 6 - User Auth
 
 See full sprint plan: `09-timelines/v1-sprint-plan.md`
 
@@ -780,4 +797,4 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
 - 2026-01-23 - Data migration complete (3.1M rows), Typesense sync (466K recipients)
 
-**This Session:** 2026-01-26 - **WEEKS 3 & 4 COMPLETE.** DataTable with TanStack Table, expandable rows with grouping, filter panel with URL sync. Reusable ModulePage component for all 7 modules. Sticky columns for mobile. Documentation audit: Brawler font added, cookie banner built, privacy policy page created, Integraal config fixed, FRONTEND-DOCUMENTATION.md created. **Next:** Week 5 - Search + Navigation
+**This Session:** 2026-01-26 - **WEEKS 3, 4 & 5 COMPLETE.** DataTable with TanStack Table, expandable rows with grouping, filter panel with URL sync. Reusable ModulePage component for all 7 modules. Sticky columns for mobile. Documentation audit: Brawler font added, cookie banner built, privacy policy page created, Integraal config fixed, FRONTEND-DOCUMENTATION.md created. **Week 5:** Global search bar (Typesense autocomplete), header navigation with modules dropdown, CSV export (500 rows max). **Next:** Week 6 - User Auth
