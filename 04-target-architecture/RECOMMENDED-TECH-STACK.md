@@ -124,7 +124,7 @@ Based on your requirements: beginner-friendly, cost-effective (€50-200/month),
 | **Language** | TypeScript | Type safety |
 | **Styling** | Tailwind CSS | Utility-first CSS |
 | **UI Components** | shadcn/ui | Accessible, customizable |
-| **Charts** | Tremor | Dashboards, trend charts, KPIs |
+| **Charts** | Recharts | Dashboards, trend charts, KPIs (React 19 compatible) |
 | **Tables** | TanStack Table v8 | Sorting, filtering, pagination |
 | **Forms** | React Hook Form + Zod | Validation |
 | **State** | TanStack Query | Server state, caching |
@@ -133,31 +133,44 @@ Based on your requirements: beginner-friendly, cost-effective (€50-200/month),
 | **Rich Text (V2)** | Tiptap | Dossier notes |
 | **PDF Export (V2)** | Puppeteer | Server-side rendering |
 
-**Why Tremor for Charts:**
-- Built for dashboards (matches "terminal" vision)
-- Tailwind-native (consistent with shadcn/ui)
-- Based on Recharts (proven, maintained)
-- Handles V1 needs (trends, bars, KPIs)
-- Handles V2 needs (interactive, tooltips, legends)
+**Why Recharts for Charts (Updated 2026-01-26):**
+- ✅ **React 19 compatible** (Tremor not yet supported)
+- Small bundle footprint (~50KB gzipped)
+- Recharts is the proven base that Tremor builds on
+- Handles V1 needs (trends, bars, areas with full customization)
+- V2.0 prepared: Sankey built-in, Treemap/Heatmap via Nivo addition
+- Tailwind-compatible with minimal setup
 
 ```tsx
-// Example: One-click trend chart
-import { AreaChart } from "@tremor/react";
+// Example: Trend chart with Recharts
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
-<AreaChart
-  data={spendingByYear}
-  index="year"
-  categories={["amount"]}
-  colors={["blue"]}
-  valueFormatter={(v) => `€${v}M`}
-/>
+<ResponsiveContainer width="100%" height={300}>
+  <AreaChart data={spendingByYear}>
+    <XAxis dataKey="year" />
+    <YAxis />
+    <Area type="monotone" dataKey="bedrag" stroke="#E62D75" fill="#E62D75" />
+  </AreaChart>
+</ResponsiveContainer>
 ```
 
-**Why not alternatives:**
-- React alone: Too much configuration needed
-- Chart.js: Less React-friendly
-- D3 directly: Too complex for team
-- Nivo: Heavier bundle than needed
+**Why Recharts over Tremor:**
+- ✅ React 19 compatibility (Tremor not yet updated)
+- ✅ Lower bundle size (50KB vs 95KB with Tremor)
+- ✅ Direct component library (no wrapper overhead)
+- ✅ Component wrapper approach matches shadcn/ui pattern
+- ⚠️ Requires custom styling vs Tremor's opinionated design (mitigated with component library)
+
+**V2.0 Advanced Visualization Plan:**
+- Recharts Sankey (built-in for module flow viz)
+- Nivo for Treemap + Heatmap (added selectively when needed, ~80KB)
+- Total V2 bundle: ~130KB for full suite
+
+**Why not alternatives (2026-01-26):**
+- Tremor: ❌ React 19 not supported
+- Chart.js: No Sankey/Treemap/Heatmap support (V2 blocker)
+- Victory: Slightly larger bundle, missing some V2 viz
+- Nivo: Excellent but over-engineered for V1, bundle too large upfront
 
 ---
 
@@ -942,7 +955,7 @@ Ready to proceed? Let me know and I'll create:
 
 | Component | V1 Setup | V2 Enablement |
 |-----------|----------|---------------|
-| **Frontend** | Next.js + shadcn/ui + Tremor + TanStack Table | Add Mapbox, Tiptap, Puppeteer routes |
+| **Frontend** | Next.js + shadcn/ui + Recharts + TanStack Table | Add Mapbox, Tiptap, Puppeteer, Nivo (advanced viz) |
 | **Backend** | FastAPI with /api/v1/* endpoints | Enable /api/v2/* endpoints |
 | **Database** | All V2 tables created (empty) | Populate with data |
 | **pgvector** | Extension enabled, embeddings table ready | Generate embeddings |

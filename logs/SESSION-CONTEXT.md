@@ -89,7 +89,8 @@
 | Created | 2026-01-21 |
 | Billing | Active (credit card added) |
 | **Next.js App URL** | `https://rijksuitgaven-production.up.railway.app` |
-| **Beta URL** | `https://beta.rijksuitgaven.nl` (DNS added 2026-01-24) |
+| **Beta URL** | `https://beta.rijksuitgaven.nl` |
+| **Beta CNAME Target** | `j65ghs38.up.railway.app` (Railway-provided) |
 | Root Directory | `app` |
 | Region | EU West (Amsterdam) |
 
@@ -501,6 +502,26 @@ Dedicated overview page showing module-level totals with year columns.
 ### Important (Not Blocking)
 - ~~**Wireframe review** - Batch 1 ready for approval~~ ✅ **Completed 2026-01-23**
 
+### Chart Library Decision ✅ **RESOLVED 2026-01-26**
+
+**Decision:** Use Recharts instead of Tremor
+
+| Aspect | Recharts | Tremor | Winner |
+|--------|----------|--------|--------|
+| React 19 Compatible | ✅ Yes | ❌ No | Recharts |
+| Bundle Size | 50KB | 95KB | Recharts |
+| Line/Bar/Area Charts | ✅ | ✅ | Tie |
+| Sankey (V2.0) | ✅ | ✅ | Tie |
+| Treemap (V2.0) | ❌ | ✅ | Tremor |
+| Heatmap (V2.0) | ❌ | ✅ | Tremor |
+| **Decision Rationale** | Must support React 19; Tremor incompatible. Add Nivo selectively for V2.0 treemap/heatmap. |
+
+**Details:** See `docs/plans/2026-01-26-chart-library-evaluation.md`
+
+**Impact:**
+- V1.0: Switch Tremor → Recharts (2-4 hours, Week 2)
+- V2.0: Add Nivo for advanced viz when needed (deferred, no impact on timeline)
+
 ### Resolved (2026-01-24)
 - **Apparaat Typesense Search:** ✅ Include in global search
   - Primary search field: `kostensoort` (weight: 100)
@@ -603,7 +624,7 @@ Dedicated overview page showing module-level totals with year columns.
 | Install dependencies | ✅ Done (Supabase, Typesense, TanStack, shadcn/ui) |
 | Deploy to Railway | ✅ Done (`rijksuitgaven-production.up.railway.app`) |
 
-**Note:** Tremor skipped (React 19 incompatible) - will revisit Week 3.
+**Note:** Tremor skipped (React 19 incompatible). Decision made 2026-01-26: Switch to Recharts (React 19 compatible, lower bundle).
 
 **WEEK 1 COMPLETE.** Next: Week 2 - Backend API (FastAPI)
 
