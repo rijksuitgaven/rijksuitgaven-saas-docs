@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.config import Settings, get_settings
+from app.services.database import check_connection
 
 router = APIRouter()
 
@@ -25,12 +26,17 @@ async def health_check(settings: Settings = Depends(get_settings)):
 
     Returns status of API and connections to external services.
     """
-    # TODO: Add actual database and Typesense connectivity checks
-    db_status = "configured" if settings.database_url else "not_configured"
+    # Check actual database connection
+    try:
+        db_connected = await check_connection()
+        db_status = "connected" if db_connected else "error"
+    except Exception as e:
+        db_status = f"error: {str(e)[:50]}"
+
     ts_status = "configured" if settings.typesense_host else "not_configured"
 
     return HealthResponse(
-        status="healthy",
+        status="healthy" if db_status == "connected" else "degraded",
         version=settings.app_version,
         database=db_status,
         typesense=ts_status,

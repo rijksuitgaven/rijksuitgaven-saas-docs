@@ -12,9 +12,18 @@ Modules:
 """
 from typing import Optional
 from enum import Enum
+import time
 
 from fastapi import APIRouter, Query, HTTPException
 from pydantic import BaseModel, Field
+
+from app.services.modules import (
+    get_module_data,
+    get_row_details,
+    get_integraal_data,
+    MODULE_CONFIG,
+    YEARS,
+)
 
 router = APIRouter()
 
@@ -42,42 +51,37 @@ class SortOrder(str, Enum):
 
 class AggregatedRow(BaseModel):
     """Aggregated row with year columns."""
-
-    # Primary identifier (Ontvanger for most, Kostensoort for apparaat)
-    primary_field: str
     primary_value: str
-
-    # Year columns (dynamic based on available data)
-    years: dict[int, Optional[float]] = Field(
-        default_factory=dict,
-        description="Year to amount mapping, e.g., {2020: 1000000, 2021: 1200000}"
-    )
-
-    # Totals
+    years: dict[int, float] = Field(default_factory=dict)
     totaal: float = 0
-
-    # Row count for expansion
     row_count: int = 1
-
-    # Cross-module indicator (for integraal)
-    modules: Optional[list[str]] = None
+    modules: Optional[list[str]] = None  # For integraal only
 
 
 class ModuleResponse(BaseModel):
     """Standard response for module queries."""
-
     success: bool = True
     module: str
+    primary_field: str
     data: list[AggregatedRow]
     meta: dict = Field(default_factory=dict)
 
 
-class ErrorResponse(BaseModel):
-    """Error response."""
+class DetailRow(BaseModel):
+    """Detail row for expanded view."""
+    group_by: str
+    group_value: Optional[str]
+    years: dict[int, float]
+    totaal: float
+    row_count: int
 
-    success: bool = False
-    error: str
-    details: Optional[dict] = None
+
+class DetailResponse(BaseModel):
+    """Response for row details."""
+    success: bool = True
+    module: str
+    primary_value: str
+    details: list[DetailRow]
 
 
 # =============================================================================
@@ -91,7 +95,7 @@ async def list_modules():
 
 
 @router.get("/{module}", response_model=ModuleResponse)
-async def get_module_data(
+async def get_module(
     module: ModuleName,
     # Search
     q: Optional[str] = Query(None, min_length=1, max_length=200, description="Search query"),
@@ -103,10 +107,8 @@ async def get_module_data(
     min_bedrag: Optional[float] = Query(None, ge=0, description="Minimum amount"),
     max_bedrag: Optional[float] = Query(None, ge=0, description="Maximum amount"),
     # Sorting
-    sort_by: str = Query("totaal", description="Sort field"),
+    sort_by: str = Query("totaal", description="Sort field: totaal, primary, or year (e.g., y2024)"),
     sort_order: SortOrder = Query(SortOrder.desc, description="Sort direction"),
-    # Grouping (for expandable rows)
-    group_by: Optional[str] = Query(None, description="Group results by field"),
 ):
     """
     Get aggregated data for a module.
@@ -122,7 +124,6 @@ async def get_module_data(
     - **min_bedrag/max_bedrag**: Filter by amount range
     - **sort_by**: Field to sort by (default: totaal)
     - **sort_order**: asc or desc (default: desc)
-    - **group_by**: Group expanded rows by field (e.g., regeling, artikel)
 
     ## Response
 
@@ -132,47 +133,57 @@ async def get_module_data(
     - Total amount
     - Row count (for expansion indicator)
     """
-    # TODO: Implement actual database query
-    # This is a placeholder response
+    start_time = time.time()
 
-    return ModuleResponse(
-        success=True,
-        module=module.value,
-        data=[
-            AggregatedRow(
-                primary_field="ontvanger" if module != ModuleName.apparaat else "kostensoort",
-                primary_value="ProRail B.V." if module != ModuleName.apparaat else "Personeel",
-                years={
-                    2020: 100000000,
-                    2021: 120000000,
-                    2022: 115000000,
-                    2023: 130000000,
-                    2024: 145000000,
-                },
-                totaal=610000000,
-                row_count=42,
-                modules=["instrumenten", "publiek"] if module == ModuleName.integraal else None,
+    try:
+        # Handle integraal separately (uses universal_search table)
+        if module == ModuleName.integraal:
+            data, total = await get_integraal_data(
+                search=q,
+                limit=limit,
+                offset=offset,
             )
-        ],
-        meta={
-            "total": 1,
-            "limit": limit,
-            "offset": offset,
-            "query": q,
-            "filters": {
-                "jaar": jaar,
-                "min_bedrag": min_bedrag,
-                "max_bedrag": max_bedrag,
+            primary_field = "ontvanger"
+        else:
+            data, total = await get_module_data(
+                module=module.value,
+                search=q,
+                jaar=jaar,
+                min_bedrag=min_bedrag,
+                max_bedrag=max_bedrag,
+                sort_by=sort_by,
+                sort_order=sort_order.value,
+                limit=limit,
+                offset=offset,
+            )
+            primary_field = MODULE_CONFIG[module.value]["primary_field"]
+
+        elapsed_ms = (time.time() - start_time) * 1000
+
+        return ModuleResponse(
+            success=True,
+            module=module.value,
+            primary_field=primary_field,
+            data=[AggregatedRow(**row) for row in data],
+            meta={
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+                "query": q,
+                "elapsed_ms": round(elapsed_ms, 2),
+                "years": YEARS,
             },
-        },
-    )
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{module}/{primary_value}/details")
-async def get_row_details(
+@router.get("/{module}/{primary_value}/details", response_model=DetailResponse)
+async def get_details(
     module: ModuleName,
     primary_value: str,
-    group_by: Optional[str] = Query(None, description="Group by field"),
+    group_by: Optional[str] = Query(None, description="Group by field (e.g., regeling, artikel)"),
     jaar: Optional[int] = Query(None, ge=2016, le=2025, description="Filter by year"),
 ):
     """
@@ -183,27 +194,26 @@ async def get_row_details(
 
     Used when user clicks to expand a row in the table.
     """
-    # TODO: Implement actual database query
+    if module == ModuleName.integraal:
+        raise HTTPException(
+            status_code=400,
+            detail="Use individual module endpoints for details"
+        )
 
-    return {
-        "success": True,
-        "module": module.value,
-        "primary_value": primary_value,
-        "group_by": group_by,
-        "details": [
-            {
-                "id": 1,
-                "regeling": "Beheer en onderhoud spoor",
-                "artikel": "13 Spoorwegen",
-                "years": {2023: 50000000, 2024: 55000000},
-                "totaal": 105000000,
-            },
-            {
-                "id": 2,
-                "regeling": "Investeringen spoor",
-                "artikel": "17 Megaprojecten",
-                "years": {2023: 80000000, 2024: 90000000},
-                "totaal": 170000000,
-            },
-        ],
-    }
+    try:
+        details = await get_row_details(
+            module=module.value,
+            primary_value=primary_value,
+            group_by=group_by,
+            jaar=jaar,
+        )
+
+        return DetailResponse(
+            success=True,
+            module=module.value,
+            primary_value=primary_value,
+            details=[DetailRow(**row) for row in details],
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
