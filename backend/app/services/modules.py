@@ -109,14 +109,16 @@ async def get_module_data(
     config = MODULE_CONFIG[module]
     primary = config["primary_field"]
 
-    # Use materialized view when no year filter (fast path)
-    # Year filter requires source table to filter before aggregation
-    use_aggregated = jaar is None and config.get("aggregated_table")
+    # Always use materialized view when available (fast path)
+    # Year filter: shows recipients active in that year (with all their year data)
+    # Source table fallback: only if no aggregated view exists
+    use_aggregated = config.get("aggregated_table") is not None
 
     if use_aggregated:
         return await _get_from_aggregated_view(
             config=config,
             search=search,
+            jaar=jaar,
             min_bedrag=min_bedrag,
             max_bedrag=max_bedrag,
             sort_by=sort_by,
@@ -141,6 +143,7 @@ async def get_module_data(
 async def _get_from_aggregated_view(
     config: dict,
     search: Optional[str] = None,
+    jaar: Optional[int] = None,
     min_bedrag: Optional[float] = None,
     max_bedrag: Optional[float] = None,
     sort_by: str = "totaal",
@@ -162,6 +165,11 @@ async def _get_from_aggregated_view(
         where_clauses.append(f"{primary} ILIKE ${param_idx}")
         params.append(f"%{search}%")
         param_idx += 1
+
+    # Year filter: show recipients who have data in that year
+    # (still shows all years in response, but filters to active recipients)
+    if jaar:
+        where_clauses.append(f'"{jaar}" > 0')
 
     # Amount filters
     if min_bedrag is not None:

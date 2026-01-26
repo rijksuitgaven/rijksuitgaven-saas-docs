@@ -20,6 +20,7 @@ Rijksuitgaven.nl SaaS Platform Migration - Documentation and planning repository
 - Speed to market matters
 - Don't over-engineer solutions
 - One-person bandwidth = realistic scope
+- **Never hurry - always complete tasks properly before moving on**
 
 ## Senior Specialist Role (MANDATORY)
 
