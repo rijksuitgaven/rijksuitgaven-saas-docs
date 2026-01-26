@@ -21,6 +21,27 @@
 
 ---
 
+## Post-Import Commands (Copy-Paste Ready)
+
+After importing new data (Steps 1-3), run these 2 commands from terminal:
+
+```bash
+# Step 4: Refresh all materialized views
+/usr/local/opt/libpq/bin/psql "postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.pooler.supabase.com:5432/postgres" -f scripts/sql/refresh-all-views.sql
+```
+
+```bash
+# Step 5: Re-sync Typesense
+export SUPABASE_DB_URL="postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
+python3 scripts/typesense/sync_to_typesense.py --recreate
+```
+
+**Expected results:**
+- Views: "7 rows" returned (one per view)
+- Typesense: ~451,445 recipients + module collections indexed
+
+---
+
 ## Prerequisites
 
 - Access to Supabase dashboard (SQL Editor)
