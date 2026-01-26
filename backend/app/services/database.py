@@ -16,14 +16,28 @@ _pool: Optional[asyncpg.Pool] = None
 
 
 async def get_pool() -> asyncpg.Pool:
-    """Get or create the connection pool."""
+    """
+    Get or create the connection pool.
+
+    Pool settings tuned for production:
+    - min_size: Keep 5 connections warm (reduces latency for first requests)
+    - max_size: Allow up to 20 concurrent connections (handles traffic spikes)
+    - max_inactive_connection_lifetime: Close idle connections after 5 min
+    - command_timeout: 60s for complex aggregation queries
+    - statement_cache_size: Cache 100 prepared statements per connection
+
+    Supabase pooler limit: 60 connections (Pro plan)
+    We use max 20 to leave headroom for other services.
+    """
     global _pool
     if _pool is None:
         _pool = await asyncpg.create_pool(
             settings.database_url,
-            min_size=2,
-            max_size=10,
-            command_timeout=30,
+            min_size=5,
+            max_size=20,
+            max_inactive_connection_lifetime=300,  # 5 minutes
+            command_timeout=60,
+            statement_cache_size=100,
         )
     return _pool
 
