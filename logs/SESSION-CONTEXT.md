@@ -61,14 +61,14 @@
 
 ## Recent Work (Last 3 Files)
 
-1. **backend/** ⭐ CREATED (2026-01-26)
-   FastAPI backend with real aggregation queries. Deployed to Railway at `rijksuitgaven-api-production-3448.up.railway.app`
+1. **docs/FRONTEND-DOCUMENTATION.md** ⭐ CREATED (2026-01-26)
+   Comprehensive documentation for all frontend components built in Weeks 3-4
 
-2. **docs/plans/2026-01-26-chart-library-evaluation.md** ⭐ CREATED (2026-01-26)
-   Chart library research: Recharts selected over Tremor (React 19 compatibility)
+2. **app/src/components/cookie-banner/** ⭐ CREATED (2026-01-26)
+   GDPR-compliant cookie disclosure banner with localStorage persistence
 
-3. **scripts/sql/005-backend-rls-policy.sql** ⭐ CREATED (2026-01-26)
-   RLS policies allowing backend (postgres role) to read all data tables
+3. **app/src/app/privacybeleid/page.tsx** ⭐ CREATED (2026-01-26)
+   Privacy policy page (10 articles, includes cookie policy)
 
 ---
 
@@ -780,4 +780,4 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
 - 2026-01-23 - Data migration complete (3.1M rows), Typesense sync (466K recipients)
 
-**This Session:** 2026-01-26 - **WEEKS 3 & 4 COMPLETE.** DataTable with TanStack Table, expandable rows with grouping, filter panel with URL sync. Reusable ModulePage component for all 7 modules. Sticky columns for mobile. **Next:** Week 5 - Search + Navigation
+**This Session:** 2026-01-26 - **WEEKS 3 & 4 COMPLETE.** DataTable with TanStack Table, expandable rows with grouping, filter panel with URL sync. Reusable ModulePage component for all 7 modules. Sticky columns for mobile. Documentation audit: Brawler font added, cookie banner built, privacy policy page created, Integraal config fixed, FRONTEND-DOCUMENTATION.md created. **Next:** Week 5 - Search + Navigation
