@@ -149,7 +149,7 @@ export function DataTable({
         ),
         size: 40,
       },
-      // Primary column (Ontvanger)
+      // Primary column (Ontvanger) - sticky on mobile
       {
         id: 'primary',
         accessorKey: 'primary_value',
@@ -170,6 +170,7 @@ export function DataTable({
           </div>
         ),
         minSize: 200,
+        meta: { sticky: true }, // Mark as sticky column
       },
     ]
 
@@ -300,17 +301,24 @@ export function DataTable({
           <thead className="bg-[var(--gray-light)]">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="px-3 py-2 text-left text-xs font-semibold text-[var(--navy-dark)] border-b border-[var(--border)]"
-                    style={{ width: header.getSize() }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
+                {headerGroup.headers.map((header, headerIndex) => {
+                  const isSticky = (header.column.columnDef.meta as any)?.sticky || headerIndex === 0 || headerIndex === 1
+                  return (
+                    <th
+                      key={header.id}
+                      className={cn(
+                        'px-3 py-2 text-left text-xs font-semibold text-[var(--navy-dark)] border-b border-[var(--border)]',
+                        isSticky && 'sticky left-0 bg-[var(--gray-light)] z-10',
+                        headerIndex === 1 && 'sticky left-10 bg-[var(--gray-light)] z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]'
+                      )}
+                      style={{ width: header.getSize() }}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </th>
+                  )
+                })}
               </tr>
             ))}
           </thead>
@@ -350,15 +358,24 @@ export function DataTable({
                       row.getIsExpanded() && 'bg-[var(--gray-light)]'
                     )}
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <td
-                        key={cell.id}
-                        className="px-3 py-2 border-b border-[var(--border)]"
-                        style={{ width: cell.column.getSize() }}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
+                    {row.getVisibleCells().map((cell, cellIndex) => {
+                      const isSticky = (cell.column.columnDef.meta as any)?.sticky || cellIndex === 0 || cellIndex === 1
+                      const isExpanded = row.getIsExpanded()
+                      return (
+                        <td
+                          key={cell.id}
+                          className={cn(
+                            'px-3 py-2 border-b border-[var(--border)]',
+                            isSticky && 'sticky left-0 bg-white z-10',
+                            cellIndex === 1 && 'sticky left-10 bg-white z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
+                            isExpanded && isSticky && 'bg-[var(--gray-light)]'
+                          )}
+                          style={{ width: cell.column.getSize() }}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
+                      )
+                    })}
                   </tr>
                   {/* Expanded row content */}
                   {row.getIsExpanded() && renderExpandedRow && (
