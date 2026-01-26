@@ -21,6 +21,7 @@ from app.services.modules import (
     get_module_data,
     get_row_details,
     get_integraal_data,
+    get_integraal_details,
     MODULE_CONFIG,
     YEARS,
 )
@@ -140,6 +141,11 @@ async def get_module(
         if module == ModuleName.integraal:
             data, total = await get_integraal_data(
                 search=q,
+                jaar=jaar,
+                min_bedrag=min_bedrag,
+                max_bedrag=max_bedrag,
+                sort_by=sort_by,
+                sort_order=sort_order.value,
                 limit=limit,
                 offset=offset,
             )
@@ -193,20 +199,23 @@ async def get_details(
     optionally grouped by a field (e.g., regeling, artikel).
 
     Used when user clicks to expand a row in the table.
-    """
-    if module == ModuleName.integraal:
-        raise HTTPException(
-            status_code=400,
-            detail="Use individual module endpoints for details"
-        )
 
+    For integraal: shows breakdown by module (which modules, amounts per module).
+    """
     try:
-        details = await get_row_details(
-            module=module.value,
-            primary_value=primary_value,
-            group_by=group_by,
-            jaar=jaar,
-        )
+        if module == ModuleName.integraal:
+            # Integraal shows module breakdown
+            details = await get_integraal_details(
+                primary_value=primary_value,
+                jaar=jaar,
+            )
+        else:
+            details = await get_row_details(
+                module=module.value,
+                primary_value=primary_value,
+                group_by=group_by,
+                jaar=jaar,
+            )
 
         return DetailResponse(
             success=True,

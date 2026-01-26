@@ -432,6 +432,11 @@ async def get_row_details(
 
 async def get_integraal_data(
     search: Optional[str] = None,
+    jaar: Optional[int] = None,
+    min_bedrag: Optional[float] = None,
+    max_bedrag: Optional[float] = None,
+    sort_by: str = "totaal",
+    sort_order: str = "desc",
     limit: int = 25,
     offset: int = 0,
 ) -> tuple[list[dict], int]:
@@ -450,7 +455,35 @@ async def get_integraal_data(
         params.append(f"%{search}%")
         param_idx += 1
 
+    # Year filter: show recipients who have data in that year
+    if jaar:
+        where_clauses.append(f'"{jaar}" > 0')
+
+    # Amount filters
+    if min_bedrag is not None:
+        where_clauses.append(f"totaal >= ${param_idx}")
+        params.append(min_bedrag)
+        param_idx += 1
+
+    if max_bedrag is not None:
+        where_clauses.append(f"totaal <= ${param_idx}")
+        params.append(max_bedrag)
+        param_idx += 1
+
     where_sql = f"WHERE {' AND '.join(where_clauses)}" if where_clauses else ""
+
+    # Sort field mapping
+    sort_field = "totaal"
+    if sort_by == "primary":
+        sort_field = "ontvanger"
+    elif sort_by.startswith("y") and sort_by[1:].isdigit():
+        year = sort_by[1:]
+        sort_field = f'"{year}"'
+
+    sort_direction = "DESC" if sort_order == "desc" else "ASC"
+
+    # Store params for count query
+    count_params = params.copy()
 
     query = f"""
         SELECT
@@ -469,7 +502,7 @@ async def get_integraal_data(
             totaal
         FROM universal_search
         {where_sql}
-        ORDER BY totaal DESC
+        ORDER BY {sort_field} {sort_direction}
         LIMIT ${param_idx} OFFSET ${param_idx + 1}
     """
     params.extend([limit, offset])
@@ -477,7 +510,6 @@ async def get_integraal_data(
     count_query = f"SELECT COUNT(*) FROM universal_search {where_sql}"
 
     rows = await fetch_all(query, *params)
-    count_params = params[:-2] if len(params) > 2 else []
     total = await fetch_val(count_query, *count_params) if count_params else await fetch_val(count_query)
 
     result = []
@@ -495,3 +527,57 @@ async def get_integraal_data(
         })
 
     return result, total or 0
+
+
+async def get_integraal_details(
+    primary_value: str,
+    jaar: Optional[int] = None,
+) -> list[dict]:
+    """
+    Get module breakdown for a specific recipient in integraal view.
+
+    Shows how much the recipient received from each module.
+    """
+    # Query universal_search_source for module breakdown
+    where_clauses = ["ontvanger = $1"]
+    params = [primary_value]
+
+    if jaar:
+        where_clauses.append("jaar = $2")
+        params.append(jaar)
+
+    where_sql = f"WHERE {' AND '.join(where_clauses)}"
+
+    # Build year columns
+    year_columns = ", ".join([
+        f"COALESCE(SUM(CASE WHEN jaar = {year} THEN bedrag END), 0) AS \"y{year}\""
+        for year in YEARS
+    ])
+
+    query = f"""
+        SELECT
+            source AS group_value,
+            {year_columns},
+            COALESCE(SUM(bedrag), 0) AS totaal,
+            COUNT(*) AS row_count
+        FROM universal_search_source
+        {where_sql}
+        GROUP BY source
+        ORDER BY totaal DESC
+        LIMIT 100
+    """
+
+    rows = await fetch_all(query, *params)
+
+    result = []
+    for row in rows:
+        years_dict = {year: float(row.get(f"y{year}", 0) or 0) for year in YEARS}
+        result.append({
+            "group_by": "module",
+            "group_value": row["group_value"],
+            "years": years_dict,
+            "totaal": float(row["totaal"] or 0),
+            "row_count": row["row_count"],
+        })
+
+    return result
