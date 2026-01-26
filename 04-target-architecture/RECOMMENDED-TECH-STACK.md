@@ -26,7 +26,7 @@ Based on your requirements: beginner-friendly, cost-effective (€50-200/month),
 **Migration-Free Guarantee:**
 | Component | V1 | V2 | Migration |
 |-----------|----|----|-----------|
-| Next.js + Tremor | ✅ | ✅ | None |
+| Next.js + Recharts | ✅ | ✅ | None |
 | FastAPI | ✅ | ✅ | None |
 | Supabase | ✅ | ✅ | None |
 | Typesense | ✅ | ✅ | None |
@@ -53,7 +53,7 @@ Based on your requirements: beginner-friendly, cost-effective (€50-200/month),
 │  │                         NEXT.JS FRONTEND                            │   │
 │  │                                                                     │   │
 │  │  UI Components:    shadcn/ui (Tailwind-based)                       │   │
-│  │  Charts:           Tremor (built on Recharts)                       │   │
+│  │  Charts:           Recharts (+ Nivo for V2)                         │   │
 │  │  Tables:           TanStack Table v8                                │   │
 │  │  Forms:            React Hook Form + Zod                            │   │
 │  │  State:            TanStack Query (server state)                    │   │

@@ -1,12 +1,45 @@
 # Product Backlog
 
-**Last Updated:** 2026-01-21
+**Last Updated:** 2026-01-26
 
 Items logged for future versions, not in V1.0 scope.
 
 ---
 
 ## Post-V1.0 Backlog
+
+### API Performance: Inkoop & Integraal Endpoints
+
+**Priority:** Low
+**Added:** 2026-01-26
+**Source:** Week 2 Performance Optimization
+
+**Current State:**
+Most API endpoints meet the <500ms target after implementing materialized views:
+
+| Module | Response Time | Status |
+|--------|---------------|--------|
+| instrumenten | 114ms | ✅ |
+| apparaat | 172ms | ✅ |
+| provincie | 196ms | ✅ |
+| gemeente | 191ms | ✅ |
+| publiek | 222ms | ✅ |
+| **inkoop** | 567ms | ⚠️ Slightly over |
+| **integraal** | 989ms | ⚠️ Under 1s but over target |
+
+**Why slightly slower:**
+- inkoop: 208K unique leveranciers (largest aggregated dataset)
+- integraal: 466K rows in universal_search view
+
+**Possible optimizations (if needed):**
+1. Add covering indexes to aggregated views
+2. Partition tables by year
+3. Add Redis/memory caching layer
+4. Consider separate read replica
+
+**Decision:** Acceptable for V1.0 launch. Monitor user feedback. Optimize if users report slowness.
+
+---
 
 ### Entity Resolution / Recipient Normalization
 

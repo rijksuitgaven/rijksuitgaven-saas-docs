@@ -5,6 +5,7 @@
 **Region:** eu-west-1
 **Created:** 2026-01-21
 **Data Migrated:** 2026-01-23
+**Last Updated:** 2026-01-26
 
 ---
 
@@ -284,6 +285,63 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY universal_search;
 
 ---
 
+### 7b. Aggregated Materialized Views (API Performance) ⭐ NEW 2026-01-26
+
+**Description:** Pre-computed aggregations per module for fast API queries. Each view contains one row per primary entity (ontvanger/kostensoort/leverancier) with year columns.
+
+**Purpose:** Reduces API response time from 9-19 seconds to <500ms by avoiding GROUP BY on large tables.
+
+**Script:** `scripts/sql/006-aggregated-materialized-views.sql`
+
+| View | Source Table | Primary Field | Unique Rows |
+|------|--------------|---------------|-------------|
+| `instrumenten_aggregated` | instrumenten | ontvanger | 221,362 |
+| `apparaat_aggregated` | apparaat | kostensoort | 759 |
+| `inkoop_aggregated` | inkoop | leverancier | 208,737 |
+| `provincie_aggregated` | provincie | ontvanger | 25,960 |
+| `gemeente_aggregated` | gemeente | ontvanger | 21,989 |
+| `publiek_aggregated` | publiek | ontvanger | 63,194 |
+
+**Column Structure (all views):**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| [primary_field] | TEXT | ontvanger, kostensoort, or leverancier |
+| "2016" - "2024" | BIGINT | Yearly totals in absolute euros |
+| totaal | BIGINT | Grand total across all years |
+| row_count | BIGINT | Number of source rows aggregated |
+
+**Amount Normalization:**
+- `instrumenten_aggregated` and `apparaat_aggregated`: Amounts multiplied by 1000 (source data in ×1000)
+- All other views: Amounts as-is (already in absolute euros)
+
+**Indexes per view:**
+- `idx_[view]_[primary]` - Fast lookup by primary field
+- `idx_[view]_totaal` - Fast sorting by total amount
+
+**Refresh Commands (run after data updates):**
+```sql
+REFRESH MATERIALIZED VIEW instrumenten_aggregated;
+REFRESH MATERIALIZED VIEW apparaat_aggregated;
+REFRESH MATERIALIZED VIEW inkoop_aggregated;
+REFRESH MATERIALIZED VIEW provincie_aggregated;
+REFRESH MATERIALIZED VIEW gemeente_aggregated;
+REFRESH MATERIALIZED VIEW publiek_aggregated;
+```
+
+**Performance Results:**
+
+| View | Query Time | Improvement |
+|------|------------|-------------|
+| instrumenten_aggregated | 114ms | 100x faster |
+| apparaat_aggregated | 172ms | - |
+| inkoop_aggregated | 567ms | - |
+| provincie_aggregated | 196ms | - |
+| gemeente_aggregated | 191ms | - |
+| publiek_aggregated | 222ms | - |
+
+---
+
 ### 8. data_freshness (Data completeness tracking)
 
 **Description:** Tracks when each data source was last updated, for UI indicators showing partial/incomplete data.
@@ -517,6 +575,8 @@ VACUUM ANALYZE universal_search;
 | `002-normalize-source-column.sql` | Fix source values in existing data | After import if triggers weren't active |
 | `003-source-column-triggers.sql` | Auto-set source on INSERT | Once after schema setup (done) |
 | `004-universal-search-materialized-view.sql` | Cross-module search view | After data updates (refresh) |
+| `005-backend-rls-policy.sql` | RLS policies for postgres role | Once after backend setup (done) |
+| `006-aggregated-materialized-views.sql` | Pre-computed aggregations for API | After data updates (refresh) |
 
 ---
 

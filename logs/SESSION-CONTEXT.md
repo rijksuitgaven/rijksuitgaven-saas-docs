@@ -146,6 +146,8 @@ postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.
 | `scripts/data/transform-csv-headers.py` | 2026-01-23 | Local |
 | `scripts/data/import-to-supabase.sh` | 2026-01-23 | Local → Supabase |
 | `scripts/sql/005-backend-rls-policy.sql` | 2026-01-26 | Supabase |
+| `scripts/sql/006-aggregated-materialized-views.sql` | 2026-01-26 | Supabase |
+| VACUUM ANALYZE (all tables) | 2026-01-26 | Supabase |
 
 ### Configuration Files
 
@@ -393,7 +395,7 @@ Dedicated overview page showing module-level totals with year columns.
 | Layer | Technology | V1 | V2 |
 |-------|------------|----|----|
 | UI Components | shadcn/ui | ✅ | ✅ |
-| Charts | Tremor | ✅ | ✅ |
+| Charts | Recharts (+ Nivo for V2) | ✅ | ✅ |
 | Tables | TanStack Table | ✅ | ✅ |
 | Backend | FastAPI | ✅ | ✅ |
 | Database | Supabase + pgvector | ✅ | ✅ |

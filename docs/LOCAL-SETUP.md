@@ -79,17 +79,24 @@ Installed via `npm install` from `package.json`. Key packages:
 | typesense | Typesense client | ✅ Installed |
 | @tanstack/react-table | Data tables | ✅ Installed |
 | @tanstack/react-query | Server state | ✅ Installed |
-| @tremor/react | Charts/dashboards | ⏳ **NOT YET** - needs React 18, we have React 19 |
+| recharts | Charts (React 19 compatible) | ⏳ To install Week 3 |
 | shadcn/ui components | UI components | ✅ Installed (v3.7.0) |
 
-### Tremor Compatibility Issue (2026-01-24)
+### Chart Library Decision (2026-01-26)
 
-Tremor v3.18.7 requires React 18, but Next.js 15 uses React 19. Options:
-1. Wait for Tremor to update (recommended - we don't need charts until Week 3)
-2. Use `--legacy-peer-deps` to force install (risky)
-3. Use Recharts directly (Tremor is built on Recharts)
+Tremor v3.18.7 requires React 18, but Next.js 15 uses React 19.
 
-**Decision:** Skip Tremor for now, revisit in Week 3 when charts are needed.
+**Decision:** Use **Recharts** instead of Tremor.
+
+| Aspect | Recharts | Tremor |
+|--------|----------|--------|
+| React 19 | ✅ Compatible | ❌ Not compatible |
+| Bundle size | 50KB | 95KB |
+| Charts needed | ✅ All V1.0 charts | - |
+
+**For V2.0:** Add Nivo selectively for treemap/heatmap (Recharts doesn't have these).
+
+**Reference:** `docs/plans/CHART-LIBRARY-QUICK-REFERENCE.md`
 
 ---
 
