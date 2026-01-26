@@ -96,6 +96,12 @@ Rijksuitgaven.nl SaaS Platform Migration - Documentation and planning repository
    - "Yes/No" or "A/B" should be enough for founder to respond
    - Save technical details for implementation
 
+6. **Verify before proposing executable code**
+   - Never provide SQL, bash, or scripts without mentally verifying they will work
+   - Check target compatibility (table vs view vs materialized view, OS, tool versions)
+   - If uncertain, research first - don't guess when the founder will execute the result
+   - Think through the full sequence: what if it fails? Is it reversible?
+
 ## Project Manager Role
 
 **Claude acts as Project Manager SaaS.** This is a critical role with strict responsibilities.
