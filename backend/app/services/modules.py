@@ -224,11 +224,11 @@ async def _get_from_aggregated_view(
     # Transform rows
     result = []
     for row in rows:
-        years_dict = {year: float(row.get(f"y{year}", 0) or 0) for year in YEARS}
+        years_dict = {year: int(row.get(f"y{year}", 0) or 0) for year in YEARS}
         result.append({
             "primary_value": row["primary_value"],
             "years": years_dict,
-            "totaal": float(row["totaal"] or 0),
+            "totaal": int(row["totaal"] or 0),
             "row_count": row["row_count"],
         })
 
@@ -341,11 +341,11 @@ async def _get_from_source_table(
     # Transform rows
     result = []
     for row in rows:
-        years_dict = {year: float(row.get(f"y{year}", 0) or 0) for year in YEARS}
+        years_dict = {year: int(row.get(f"y{year}", 0) or 0) for year in YEARS}
         result.append({
             "primary_value": row["primary_value"],
             "years": years_dict,
-            "totaal": float(row["totaal"] or 0),
+            "totaal": int(row["totaal"] or 0),
             "row_count": row["row_count"],
         })
 
@@ -418,12 +418,12 @@ async def get_row_details(
 
     result = []
     for row in rows:
-        years_dict = {year: float(row.get(f"y{year}", 0) or 0) for year in YEARS}
+        years_dict = {year: int(row.get(f"y{year}", 0) or 0) for year in YEARS}
         result.append({
             "group_by": group_field,
             "group_value": row["group_value"],
             "years": years_dict,
-            "totaal": float(row["totaal"] or 0),
+            "totaal": int(row["totaal"] or 0),
             "row_count": row["row_count"],
         })
 
@@ -515,13 +515,13 @@ async def get_integraal_data(
     result = []
     for row in rows:
         years_dict = {
-            year: float(row.get(f"y{year}", 0) or 0)
+            year: int(row.get(f"y{year}", 0) or 0)
             for year in YEARS
         }
         result.append({
             "primary_value": row["primary_value"],
             "years": years_dict,
-            "totaal": float(row["totaal"] or 0),
+            "totaal": int(row["totaal"] or 0),
             "row_count": row["source_count"] or 1,  # Use source_count as row_count
             "modules": row["sources"].split(",") if row["sources"] else [],
         })
@@ -570,12 +570,12 @@ async def get_integraal_details(
 
         if rows:
             row = rows[0]
-            years_dict = {year: float(row.get(f"y{year}", 0) or 0) for year in YEARS}
+            years_dict = {year: int(row.get(f"y{year}", 0) or 0) for year in YEARS}
             result.append({
                 "group_by": "module",
                 "group_value": module_name,
                 "years": years_dict,
-                "totaal": float(row["totaal"] or 0),
+                "totaal": int(row["totaal"] or 0),
                 "row_count": row["row_count"],
             })
 

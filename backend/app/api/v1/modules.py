@@ -53,8 +53,8 @@ class SortOrder(str, Enum):
 class AggregatedRow(BaseModel):
     """Aggregated row with year columns."""
     primary_value: str
-    years: dict[int, float] = Field(default_factory=dict)
-    totaal: float = 0
+    years: dict[int, int] = Field(default_factory=dict)
+    totaal: int = 0
     row_count: int = 1
     modules: Optional[list[str]] = None  # For integraal only
 
@@ -72,8 +72,8 @@ class DetailRow(BaseModel):
     """Detail row for expanded view."""
     group_by: str
     group_value: Optional[str]
-    years: dict[int, float]
-    totaal: float
+    years: dict[int, int]
+    totaal: int
     row_count: int
 
 
