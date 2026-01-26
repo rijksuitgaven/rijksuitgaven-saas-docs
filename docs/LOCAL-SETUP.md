@@ -2,7 +2,7 @@
 
 **Purpose:** Everything needed to develop on a new machine.
 
-**Last Updated:** 2026-01-24
+**Last Updated:** 2026-01-26
 
 ---
 
@@ -196,11 +196,19 @@ SUPABASE_DB_URL="postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad
 
 ```
 rijksuitgaven/
-├── app/                    # Next.js application (NEW)
+├── app/                    # Next.js frontend
 │   ├── src/
 │   ├── public/
 │   ├── package.json
 │   └── .env.local         # Environment variables (not in git)
+├── backend/                # FastAPI backend (NEW - Week 2)
+│   ├── app/
+│   │   ├── main.py        # FastAPI application
+│   │   ├── config.py      # Environment configuration
+│   │   └── api/v1/        # API endpoints
+│   ├── requirements.txt
+│   ├── .env               # Environment variables (not in git)
+│   └── README.md
 ├── scripts/
 │   ├── typesense/         # Typesense sync scripts
 │   ├── sql/               # Database scripts
@@ -209,3 +217,56 @@ rijksuitgaven/
 ├── logs/                  # Session logs
 └── ...
 ```
+
+---
+
+## Backend (FastAPI) Setup
+
+### Install Dependencies
+
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip3 install -r requirements.txt
+```
+
+### Environment Variables
+
+Create `backend/.env`:
+
+```env
+# Supabase (PostgreSQL) - Use pooler URL
+DATABASE_URL=postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.pooler.supabase.com:5432/postgres
+
+# Typesense
+TYPESENSE_HOST=typesense-production-35ae.up.railway.app
+TYPESENSE_API_KEY=0vh4mxafjeuvd676gw92kpjflg6fuv57
+TYPESENSE_PROTOCOL=https
+TYPESENSE_PORT=443
+
+# Debug mode
+DEBUG=false
+```
+
+### Run Backend Locally
+
+```bash
+cd backend
+source venv/bin/activate
+uvicorn app.main:app --reload --port 8000
+```
+
+Opens at: http://localhost:8000
+API Docs: http://localhost:8000/docs
+
+### Backend Packages
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| fastapi | 0.115.0 | Web framework |
+| uvicorn | 0.32.0 | ASGI server |
+| asyncpg | 0.30.0 | PostgreSQL async driver |
+| sqlalchemy | 2.0.36 | ORM (optional) |
+| pydantic | 2.10.0 | Validation |
+| httpx | 0.28.0 | HTTP client for Typesense |
