@@ -61,14 +61,14 @@
 
 ## Recent Work (Last 3 Files)
 
-1. **app/src/components/search-bar/search-bar.tsx** ⭐ CREATED (2026-01-26)
-   Global search bar with Typesense autocomplete (<50ms), 150ms debounce, keyboard navigation
+1. **app/src/components/detail-panel/detail-panel.tsx** ⭐ CREATED (2026-01-26)
+   Recipient detail side panel (50% width), year breakdown, cross-module badges, CSV export
 
-2. **app/src/components/header/header.tsx** ⭐ CREATED (2026-01-26)
-   Global navigation header with modules dropdown, search bar, mobile menu
+2. **app/src/components/cross-module-results/cross-module-results.tsx** ⭐ CREATED (2026-01-26)
+   "Ook in:" counts above table when searching - queries all modules
 
-3. **app/src/components/data-table/data-table.tsx** ⭐ UPDATED (2026-01-26)
-   Added CSV export functionality (max 500 rows)
+3. **app/src/components/search-bar/search-bar.tsx** ⭐ UPDATED (2026-01-26)
+   Enhanced autocomplete: "ZOEKTERMEN" (keywords) + "ONTVANGERS" (recipients) sections
 
 ---
 

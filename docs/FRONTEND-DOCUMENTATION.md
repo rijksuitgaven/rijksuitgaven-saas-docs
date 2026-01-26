@@ -38,8 +38,14 @@ app/src/
 │   ├── module-page/              # Reusable module page template
 │   │   ├── module-page.tsx
 │   │   └── index.ts
-│   └── search-bar/               # Typesense autocomplete search
-│       ├── search-bar.tsx
+│   ├── search-bar/               # Typesense autocomplete search
+│   │   ├── search-bar.tsx
+│   │   └── index.ts
+│   ├── detail-panel/             # Recipient detail side panel
+│   │   ├── detail-panel.tsx
+│   │   └── index.ts
+│   └── cross-module-results/     # "Ook in:" cross-module counts
+│       ├── cross-module-results.tsx
 │       └── index.ts
 ├── lib/
 │   ├── api.ts                    # API client for backend
@@ -229,15 +235,18 @@ const MODULES = [
 
 ### SearchBar (`components/search-bar/search-bar.tsx`)
 
-Global search with Typesense autocomplete.
+Global search with Typesense autocomplete (enhanced with keyword search).
 
 **Features:**
 - Real-time autocomplete (<50ms target)
 - Debounced input (150ms)
+- **Grouped results:** "ZOEKTERMEN" + "ONTVANGERS" sections
+- **Keyword search:** Searches Regeling, Omschrijving, Beleidsterrein
+- Shows field context (e.g., "in Regeling")
 - Keyboard navigation (Arrow Up/Down, Escape, Enter)
-- Shows recipient name + total amount
-- Module badges ("Ook in: Instrumenten, Publiek")
-- Routes to `/integraal?q=QUERY` on selection
+- Module badges for recipients
+- Click keyword → navigate to module with filter
+- Click recipient → navigate to `/integraal?q=QUERY`
 - Loading spinner during search
 - Clear button in input
 
@@ -250,18 +259,69 @@ interface SearchBarProps {
 }
 ```
 
-**Typesense Query:**
-- Collection: `recipients`
-- Query fields: `name,name_lower` (case-insensitive)
-- Sort: `totaal:desc`
-- Results: 8 per query
-- Minimum query: 2 characters
+**Typesense Queries:**
+1. **Recipients:** `recipients` collection, `name,name_lower` fields
+2. **Keywords:** `instrumenten`, `publiek`, `gemeente`, `provincie` collections
+   - Fields: `regeling`, `omschrijving`, `beleidsterrein`
+   - Grouped by field value (deduped)
+
+**Results:** 4 keywords + 5 recipients max
+**Minimum query:** 2 characters
 
 **Environment Variables:**
 | Variable | Default |
 |----------|---------|
 | `NEXT_PUBLIC_TYPESENSE_HOST` | `typesense-production-35ae.up.railway.app` |
 | `NEXT_PUBLIC_TYPESENSE_API_KEY` | (set in deployment) |
+
+### DetailPanel (`components/detail-panel/detail-panel.tsx`)
+
+Side panel showing comprehensive recipient information.
+
+**Features:**
+- 50% width on desktop, full screen on mobile
+- Recipient name with Google search link
+- Year breakdown (expandable to show all years)
+- Module-specific detail fields (Regeling, Artikel, etc.)
+- "Ook in:" cross-module badges with navigation
+- CSV export for recipient data
+- Close via X button or Escape key
+- Switch between recipients without closing
+
+**Props:**
+```typescript
+interface DetailPanelProps {
+  recipientName: string
+  moduleId: string
+  isOpen: boolean
+  onClose: () => void
+  onNavigateToModule?: (module: string, recipientName: string) => void
+}
+```
+
+**Usage:** Opens when user clicks recipient name in DataTable.
+
+### CrossModuleResults (`components/cross-module-results/cross-module-results.tsx`)
+
+Shows search results counts from other modules above the table.
+
+**Features:**
+- Displays "Ook in: Instrumenten (45) • Publiek (23)"
+- Clickable module links preserve search query
+- Hidden when no search query or no results in other modules
+- Queries all modules in parallel with debouncing
+- Sorted by result count (highest first)
+
+**Props:**
+```typescript
+interface CrossModuleResultsProps {
+  searchQuery: string
+  currentModule: string
+  className?: string
+}
+```
+
+**Usage:** Automatically appears in module pages when search query is entered.
 
 ### CookieBanner (`components/cookie-banner/cookie-banner.tsx`)
 
@@ -436,12 +496,32 @@ npm run build
 
 ### SearchBar
 - [ ] Autocomplete appears after 2 chars
-- [ ] Results show recipient name + amount
-- [ ] Module badges display correctly
+- [ ] "ZOEKTERMEN" section shows keyword matches
+- [ ] "ONTVANGERS" section shows recipient matches
+- [ ] Keywords show field context (e.g., "in Regeling")
+- [ ] Click keyword navigates to correct module
+- [ ] Click recipient navigates to /integraal
 - [ ] Keyboard navigation works (arrows, enter, escape)
-- [ ] Click selects and navigates to /integraal
 - [ ] Clear button works
 - [ ] Click outside closes dropdown
+
+### DetailPanel
+- [ ] Opens when clicking recipient name in table
+- [ ] Shows year breakdown correctly
+- [ ] "Alle jaren" expands to show full history
+- [ ] Module-specific fields display
+- [ ] "Ook in:" badges appear for cross-module recipients
+- [ ] Google search link opens in new tab
+- [ ] CSV export downloads correctly
+- [ ] Close button/Escape key closes panel
+- [ ] Switching recipient updates panel content
+
+### CrossModuleResults
+- [ ] Appears when search query entered
+- [ ] Shows correct counts for each module
+- [ ] Module links preserve search query
+- [ ] Hidden when no results in other modules
+- [ ] Hidden on integraal page
 
 ### FilterPanel
 - [ ] Search input debounces (300ms)
@@ -472,3 +552,4 @@ npm run build
 |------|--------|
 | 2026-01-26 | Initial documentation (Week 3-4 components) |
 | 2026-01-26 | Added Header, SearchBar, CSV export documentation (Week 5) |
+| 2026-01-26 | Added DetailPanel, CrossModuleResults, enhanced SearchBar (UX features) |
