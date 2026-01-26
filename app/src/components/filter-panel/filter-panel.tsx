@@ -110,6 +110,14 @@ export function FilterPanel({
     setLocalFilters(clearedFilters)
   }, [moduleFilters])
 
+  // Count active filters (excluding search which is always visible)
+  const activeFilterCount = [
+    localFilters.jaar,
+    localFilters.minBedrag,
+    localFilters.maxBedrag,
+    ...moduleFilters.map((f) => localFilters[f.value]),
+  ].filter(Boolean).length
+
   const hasActiveFilters =
     localFilters.search ||
     localFilters.jaar ||
@@ -159,7 +167,7 @@ export function FilterPanel({
           </select>
         </div>
 
-        {/* Expand/collapse button */}
+        {/* Expand/collapse button with badge count */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
@@ -170,7 +178,19 @@ export function FilterPanel({
           )}
         >
           <SlidersHorizontal className="h-4 w-4" />
-          <span className="text-sm">Meer filters</span>
+          <span className="text-sm">
+            Filters
+            {activeFilterCount > 0 && (
+              <span className={cn(
+                'ml-1.5 px-1.5 py-0.5 text-xs font-medium rounded-full',
+                isExpanded
+                  ? 'bg-white/20 text-white'
+                  : 'bg-[var(--pink)] text-white'
+              )}>
+                {activeFilterCount}
+              </span>
+            )}
+          </span>
         </button>
 
         {/* Clear all button */}

@@ -61,20 +61,20 @@
 
 ## Recent Work (Last 5 Files)
 
-1. **app/src/components/data-table/expanded-row.tsx** ⭐ UPDATED (2026-01-26)
-   Added UX Enhancement 3: Prominent context header with Regeling headline + breadcrumb hierarchy
+1. **app/src/components/column-selector/column-selector.tsx** ⭐ CREATED (2026-01-26)
+   UX-005: Column customization with "Kolommen" button, localStorage persistence
 
-2. **app/src/components/detail-panel/detail-panel.tsx** ⭐ UPDATED (2026-01-26)
-   Fixed API response handling (details vs rows array), recipient detail side panel
+2. **app/src/components/search-bar/search-bar.tsx** ⭐ UPDATED (2026-01-26)
+   Added keyboard shortcut `/` to focus, "Did you mean" suggestions when no results
 
-3. **app/src/components/cross-module-results/cross-module-results.tsx** ⭐ CREATED (2026-01-26)
-   "Ook in:" counts above table when searching - queries all modules
+3. **app/src/components/filter-panel/filter-panel.tsx** ⭐ UPDATED (2026-01-26)
+   Added filter badge count showing number of active filters (e.g., "Filters (3)")
 
-4. **app/src/components/search-bar/search-bar.tsx** ⭐ UPDATED (2026-01-26)
-   Enhanced autocomplete: "ZOEKTERMEN" (keywords) + "ONTVANGERS" (recipients) sections
+4. **app/src/components/data-table/data-table.tsx** ⭐ UPDATED (2026-01-26)
+   Integrated ColumnSelector component for detail column customization
 
-5. **CLAUDE.md** ⭐ UPDATED (2026-01-26)
-   Added PM Rule #12: Requirements-first implementation (mandatory checklist before coding)
+5. **docs/FRONTEND-DOCUMENTATION.md** ⭐ UPDATED (2026-01-26)
+   Added ColumnSelector documentation, updated SearchBar and FilterPanel features
 
 ---
 

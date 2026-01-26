@@ -22,12 +22,21 @@ app/src/
 │   ├── publiek/page.tsx          # Module page
 │   └── integraal/page.tsx        # Cross-module search page
 ├── components/
+│   ├── column-selector/          # Column customization (UX-005)
+│   │   ├── column-selector.tsx
+│   │   └── index.ts
 │   ├── cookie-banner/            # GDPR cookie disclosure
 │   │   ├── cookie-banner.tsx
+│   │   └── index.ts
+│   ├── cross-module-results/     # "Ook in:" cross-module counts
+│   │   ├── cross-module-results.tsx
 │   │   └── index.ts
 │   ├── data-table/               # Main data table component
 │   │   ├── data-table.tsx        # TanStack Table + CSV export
 │   │   ├── expanded-row.tsx      # Expandable row with grouping
+│   │   └── index.ts
+│   ├── detail-panel/             # Recipient detail side panel
+│   │   ├── detail-panel.tsx
 │   │   └── index.ts
 │   ├── filter-panel/             # Search and filter UI
 │   │   ├── filter-panel.tsx
@@ -38,14 +47,8 @@ app/src/
 │   ├── module-page/              # Reusable module page template
 │   │   ├── module-page.tsx
 │   │   └── index.ts
-│   ├── search-bar/               # Typesense autocomplete search
-│   │   ├── search-bar.tsx
-│   │   └── index.ts
-│   ├── detail-panel/             # Recipient detail side panel
-│   │   ├── detail-panel.tsx
-│   │   └── index.ts
-│   └── cross-module-results/     # "Ook in:" cross-module counts
-│       ├── cross-module-results.tsx
+│   └── search-bar/               # Typesense autocomplete search
+│       ├── search-bar.tsx
 │       └── index.ts
 ├── lib/
 │   ├── api.ts                    # API client for backend
@@ -183,11 +186,34 @@ Search and filter controls.
 **Features:**
 - Debounced search input (300ms)
 - Year dropdown filter
-- Expandable "Meer filters" section
+- Expandable "Filters" section with **badge count** (e.g., "Filters (3)")
 - Amount range (min/max)
 - Module-specific filters
 - Clear all button
 - URL state sync (filters in query params)
+
+### ColumnSelector (`components/column-selector/column-selector.tsx`)
+
+Column customization for expanded row detail fields (UX-005).
+
+**Features:**
+- "Kolommen" button in DataTable footer
+- Badge when non-default columns selected
+- Checkbox list of available columns per module
+- Preferences stored in localStorage (per module)
+- "Herstel standaard" (reset to default) option
+
+**Available Columns Per Module:**
+
+| Module | Columns (* = default) |
+|--------|----------------------|
+| instrumenten | Regeling*, Artikel*, Instrument*, Artikelonderdeel, Begrotingsnaam, Detail |
+| apparaat | Kostensoort*, Artikel*, Detail*, Begrotingsnaam |
+| inkoop | Ministerie*, Categorie*, Staffel* |
+| provincie | Provincie*, Omschrijving* |
+| gemeente | Gemeente*, Omschrijving*, Beleidsterrein, Regeling |
+| publiek | Organisatie*, Regeling, Trefwoorden, Sectoren, Regio |
+| integraal | Modules* |
 
 ### ModulePage (`components/module-page/module-page.tsx`)
 
@@ -257,11 +283,14 @@ Global search with Typesense autocomplete (enhanced with keyword search).
 - **Keyword search:** Searches Regeling, Omschrijving, Beleidsterrein
 - Shows field context (e.g., "in Regeling")
 - Keyboard navigation (Arrow Up/Down, Escape, Enter)
+- **Keyboard shortcut:** Press `/` to focus search (SR-004)
 - Module badges for recipients
 - Click keyword → navigate to module with filter
 - Click recipient → navigate to `/integraal?q=QUERY`
+- **"Did you mean" suggestions:** Shows fuzzy matches when no exact results
 - Loading spinner during search
 - Clear button in input
+- Footer hint showing keyboard shortcut
 
 **Props:**
 ```typescript

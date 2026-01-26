@@ -65,6 +65,7 @@ export function SearchBar({ className, placeholder = 'Zoek op ontvanger, regelin
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
+  const [noResultsQuery, setNoResultsQuery] = useState<string | null>(null)
 
   // Combined results for keyboard navigation
   const allResults: SearchResultItem[] = [...keywords, ...recipients]
@@ -75,6 +76,7 @@ export function SearchBar({ className, placeholder = 'Zoek op ontvanger, regelin
     if (query.length < 2) {
       setKeywords([])
       setRecipients([])
+      setNoResultsQuery(null)
       setIsOpen(false)
       return
     }
@@ -90,12 +92,28 @@ export function SearchBar({ className, placeholder = 'Zoek op ontvanger, regelin
 
         setRecipients(recipientsData)
         setKeywords(keywordsData)
-        setIsOpen(recipientsData.length > 0 || keywordsData.length > 0)
+
+        // Track if no results found (for "did you mean" suggestions)
+        if (recipientsData.length === 0 && keywordsData.length === 0 && query.length >= 3) {
+          setNoResultsQuery(query)
+          // Try fuzzy search for suggestions
+          const fuzzySuggestions = await fetchFuzzySuggestions(query)
+          if (fuzzySuggestions.length > 0) {
+            setRecipients(fuzzySuggestions)
+            setIsOpen(true)
+          } else {
+            setIsOpen(true) // Show "no results" state
+          }
+        } else {
+          setNoResultsQuery(null)
+          setIsOpen(recipientsData.length > 0 || keywordsData.length > 0)
+        }
         setSelectedIndex(-1)
       } catch (error) {
         console.error('Search error:', error)
         setRecipients([])
         setKeywords([])
+        setNoResultsQuery(null)
       } finally {
         setIsLoading(false)
       }
@@ -205,6 +223,38 @@ export function SearchBar({ className, placeholder = 'Zoek op ontvanger, regelin
     return results.slice(0, 4)
   }
 
+  // Fetch fuzzy suggestions when exact search returns no results (typo tolerance)
+  async function fetchFuzzySuggestions(q: string): Promise<RecipientResult[]> {
+    const response = await fetch(
+      `https://${TYPESENSE_HOST}/collections/recipients/documents/search?` +
+      new URLSearchParams({
+        q,
+        query_by: 'name,name_lower',
+        prefix: 'true',
+        per_page: '3',
+        sort_by: 'totaal:desc',
+        num_typos: '2', // Allow up to 2 typos
+        typo_tokens_threshold: '1',
+      }),
+      {
+        headers: {
+          'X-TYPESENSE-API-KEY': TYPESENSE_API_KEY,
+        },
+      }
+    )
+
+    if (!response.ok) return []
+
+    const data = await response.json()
+    return (data.hits || []).map((hit: any) => ({
+      type: 'recipient' as const,
+      name: hit.document.name,
+      sources: hit.document.sources || [],
+      source_count: hit.document.source_count || 0,
+      totaal: hit.document.totaal || 0,
+    }))
+  }
+
   // Handle click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -220,6 +270,23 @@ export function SearchBar({ className, placeholder = 'Zoek op ontvanger, regelin
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Keyboard shortcut: "/" to focus search (SR-004)
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      // Only trigger if not already in an input/textarea
+      const target = event.target as HTMLElement
+      const isInputFocused = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable
+
+      if (event.key === '/' && !isInputFocused) {
+        event.preventDefault()
+        inputRef.current?.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
 
   const handleSelectRecipient = useCallback((result: RecipientResult) => {
@@ -311,12 +378,33 @@ export function SearchBar({ className, placeholder = 'Zoek op ontvanger, regelin
       </form>
 
       {/* Autocomplete dropdown */}
-      {isOpen && (keywords.length > 0 || recipients.length > 0) && (
+      {isOpen && (
         <div
           ref={dropdownRef}
           className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-[var(--border)] z-50 overflow-hidden"
         >
           <div className="max-h-96 overflow-y-auto">
+            {/* "Did you mean" suggestion when no exact results */}
+            {noResultsQuery && recipients.length > 0 && (
+              <div className="px-4 py-2 bg-[var(--warning)]/10 border-b border-[var(--border)]">
+                <span className="text-sm text-[var(--navy-dark)]">
+                  Geen exacte resultaten voor "<strong>{noResultsQuery}</strong>". Bedoelde u:
+                </span>
+              </div>
+            )}
+
+            {/* No results at all */}
+            {noResultsQuery && recipients.length === 0 && keywords.length === 0 && (
+              <div className="px-4 py-6 text-center">
+                <p className="text-sm text-[var(--navy-dark)]">
+                  Geen resultaten voor "<strong>{noResultsQuery}</strong>"
+                </p>
+                <p className="text-xs text-[var(--muted-foreground)] mt-1">
+                  Controleer de spelling of probeer een andere zoekterm
+                </p>
+              </div>
+            )}
+
             {/* Keywords section */}
             {keywords.length > 0 && (
               <div>
@@ -407,8 +495,9 @@ export function SearchBar({ className, placeholder = 'Zoek op ontvanger, regelin
               </div>
             )}
           </div>
-          <div className="px-4 py-2 bg-[var(--gray-light)] text-xs text-[var(--muted-foreground)] border-t border-[var(--border)]">
-            Druk op Enter om te zoeken in alle modules
+          <div className="px-4 py-2 bg-[var(--gray-light)] text-xs text-[var(--muted-foreground)] border-t border-[var(--border)] flex items-center justify-between">
+            <span>Druk op Enter om te zoeken in alle modules</span>
+            <span className="text-[var(--navy-medium)]">Tip: druk <kbd className="px-1.5 py-0.5 bg-white rounded border border-[var(--border)] font-mono text-[10px]">/</kbd> om te zoeken</span>
           </div>
         </div>
       )}

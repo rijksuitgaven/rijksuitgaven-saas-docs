@@ -22,6 +22,7 @@ import {
   formatPercentage,
   getAmountFontClass,
 } from '@/lib/format'
+import { ColumnSelector, getStoredColumns } from '@/components/column-selector'
 import type { RecipientRow, YearAmount } from '@/types/api'
 
 // Collapsible year range (2016-2020 by default)
@@ -153,6 +154,7 @@ export function DataTable({
   const [expanded, setExpanded] = useState<ExpandedState>({})
   const [yearsExpanded, setYearsExpanded] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(() => getStoredColumns(moduleId))
 
   // Export handler
   const handleExport = () => {
@@ -462,6 +464,13 @@ export function DataTable({
               <span className="ml-4">* Data nog niet compleet</span>
             )}
           </div>
+
+          {/* Column selector (UX-005) */}
+          <ColumnSelector
+            moduleId={moduleId}
+            selectedColumns={selectedColumns}
+            onColumnsChange={setSelectedColumns}
+          />
 
           {/* Export button */}
           <button
