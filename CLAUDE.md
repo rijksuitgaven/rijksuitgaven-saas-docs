@@ -320,6 +320,7 @@ Before saying "Week X is complete", verify EACH deliverable in `09-timelines/v1-
 | **V1.0 Search** | `02-requirements/search-requirements.md` |
 | **V2.0 Research Mode** | `02-requirements/research-mode-vision.md` |
 | **Local dev setup** | `docs/LOCAL-SETUP.md` |
+| **Frontend components** | `docs/FRONTEND-DOCUMENTATION.md` |
 | **Typesense sync** | `scripts/typesense/README.md` |
 | **Privacy policy** | `content/privacybeleid.md` |
 | **Cookie banner** | `docs/plans/2026-01-27-cookie-banner-design.md` |

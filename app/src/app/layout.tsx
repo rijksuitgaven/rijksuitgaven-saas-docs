@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Condensed } from "next/font/google";
+import { IBM_Plex_Sans_Condensed, Brawler } from "next/font/google";
+import { CookieBanner } from "@/components/cookie-banner";
 import "./globals.css";
 
+// Body text - IBM Plex Sans Condensed
 const ibmPlexSansCondensed = IBM_Plex_Sans_Condensed({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+// Headings - Brawler (serif)
+const brawler = Brawler({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -21,10 +30,11 @@ export default function RootLayout({
   return (
     <html lang="nl">
       <body
-        className={`${ibmPlexSansCondensed.variable} font-sans antialiased`}
+        className={`${ibmPlexSansCondensed.variable} ${brawler.variable} antialiased`}
         style={{ fontFamily: "var(--font-body), sans-serif" }}
       >
         {children}
+        <CookieBanner />
       </body>
     </html>
   );

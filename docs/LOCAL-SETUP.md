@@ -109,6 +109,9 @@ Tremor v3.18.7 requires React 18, but Next.js 15 uses React 19.
 Create `app/.env.local` with:
 
 ```env
+# Backend API (FastAPI)
+NEXT_PUBLIC_API_URL=https://rijksuitgaven-api-production-3448.up.railway.app
+
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://kmdelrgtgglcrupprkqf.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=[get from Supabase dashboard]
@@ -123,6 +126,8 @@ TYPESENSE_API_KEY=0vh4mxafjeuvd676gw92kpjflg6fuv57
 # Database (for scripts only, not Next.js)
 SUPABASE_DB_URL=postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.pooler.supabase.com:5432/postgres
 ```
+
+**Note:** `NEXT_PUBLIC_API_URL` defaults to the Railway API if not set.
 
 **Get keys from:**
 - Supabase: https://supabase.com/dashboard/project/kmdelrgtgglcrupprkqf/settings/api

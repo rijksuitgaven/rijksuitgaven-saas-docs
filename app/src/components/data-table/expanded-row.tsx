@@ -32,6 +32,9 @@ const GROUPABLE_FIELDS: Record<string, { value: string; label: string }[]> = {
     { value: 'source', label: 'Organisatie' },
     { value: 'regeling', label: 'Regeling' },
   ],
+  integraal: [
+    { value: 'module', label: 'Module' },
+  ],
 }
 
 // Module display names for cross-module indicator

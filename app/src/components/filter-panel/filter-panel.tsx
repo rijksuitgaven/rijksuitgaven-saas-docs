@@ -31,6 +31,9 @@ const MODULE_FILTERS: Record<string, { value: string; label: string; type: 'sele
     { value: 'source', label: 'Organisatie', type: 'text' },
     { value: 'regeling', label: 'Regeling', type: 'text' },
   ],
+  integraal: [
+    // Integraal searches across all modules, no module-specific filters
+  ],
 }
 
 export interface FilterValues {
