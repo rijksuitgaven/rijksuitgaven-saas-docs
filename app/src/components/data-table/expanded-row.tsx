@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronDown, Loader2 } from 'lucide-react'
+import { ChevronDown, Loader2, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatAmount, getAmountFontClass } from '@/lib/format'
 import type { RecipientRow, YearAmount } from '@/types/api'
@@ -37,6 +37,18 @@ const GROUPABLE_FIELDS: Record<string, { value: string; label: string }[]> = {
   ],
 }
 
+// Context fields per module (headline + breadcrumb hierarchy)
+// UX Enhancement 3: Prominent Expanded Context
+const CONTEXT_FIELDS: Record<string, { headline: string; headlineLabel: string; breadcrumb: string[] }> = {
+  instrumenten: { headline: 'regeling', headlineLabel: 'Regeling', breadcrumb: ['artikel', 'begrotingsnaam'] },
+  apparaat: { headline: 'kostensoort', headlineLabel: 'Kostensoort', breadcrumb: ['artikel', 'begrotingsnaam'] },
+  inkoop: { headline: 'categorie', headlineLabel: 'Categorie', breadcrumb: ['ministerie'] },
+  provincie: { headline: 'omschrijving', headlineLabel: 'Omschrijving', breadcrumb: ['provincie'] },
+  gemeente: { headline: 'regeling', headlineLabel: 'Regeling', breadcrumb: ['beleidsterrein', 'gemeente'] },
+  publiek: { headline: 'regeling', headlineLabel: 'Regeling', breadcrumb: ['source'] },
+  integraal: { headline: 'module', headlineLabel: 'Module', breadcrumb: [] },
+}
+
 // Module display names for cross-module indicator
 const MODULE_NAMES: Record<string, string> = {
   instrumenten: 'Instrumenten',
@@ -53,6 +65,19 @@ interface DetailRow {
   years: Record<string, number>
   totaal: number
   row_count: number
+  // Context fields (may be present depending on API response)
+  regeling?: string
+  artikel?: string
+  begrotingsnaam?: string
+  kostensoort?: string
+  ministerie?: string
+  categorie?: string
+  provincie?: string
+  gemeente?: string
+  beleidsterrein?: string
+  omschrijving?: string
+  source?: string
+  module?: string
 }
 
 interface ExpandedRowProps {
@@ -106,24 +131,74 @@ export function ExpandedRow({
   // Cross-module sources (excluding current module)
   const otherSources = row.sources?.filter((s) => s !== module && s !== 'current') ?? []
 
+  // Extract context from first detail row (UX Enhancement 3: Prominent Expanded Context)
+  const contextConfig = CONTEXT_FIELDS[module]
+  const firstDetail = details[0] as DetailRow | undefined
+
+  // Get headline value from the detail row
+  const headlineValue = firstDetail?.[contextConfig?.headline as keyof DetailRow] as string | undefined
+    || (firstDetail?.group_by === contextConfig?.headline ? firstDetail?.group_value : null)
+    || null
+
+  // Get breadcrumb values
+  const breadcrumbValues = contextConfig?.breadcrumb
+    ?.map(field => firstDetail?.[field as keyof DetailRow] as string | undefined)
+    .filter(Boolean) ?? []
+
   return (
     <div className="space-y-4">
-      {/* Context header with cross-module indicator */}
+      {/* Prominent Context Header (UX Enhancement 3) */}
+      {!isLoading && !error && headlineValue && (
+        <div className="bg-white border border-[var(--border)] rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <FileText className="h-5 w-5 text-[var(--navy-medium)] mt-0.5 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              {/* Headline (e.g., Regeling name) */}
+              <h4 className="text-lg font-semibold text-[var(--navy-dark)] leading-tight">
+                {headlineValue}
+              </h4>
+              {/* Breadcrumb hierarchy (e.g., Artikel › Begrotingsnaam) */}
+              {breadcrumbValues.length > 0 && (
+                <p className="text-sm text-[var(--muted-foreground)] mt-1">
+                  {breadcrumbValues.join(' › ')}
+                </p>
+              )}
+              {/* Cross-module indicator */}
+              {otherSources.length > 0 && (
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-[var(--navy-medium)]">
+                  <span className="font-medium">Ook in:</span>
+                  {otherSources.map((source) => (
+                    <button
+                      key={source}
+                      onClick={() => onNavigateToModule?.(source, row.primary_value)}
+                      className="inline-flex items-center px-2 py-0.5 rounded bg-[var(--gray-light)] hover:bg-[var(--blue-light)] transition-colors"
+                    >
+                      {MODULE_NAMES[source] || source}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Recipient info and controls */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h4 className="text-lg font-semibold text-[var(--navy-dark)]">
+          <h4 className="text-base font-medium text-[var(--navy-dark)]">
             {row.primary_value}
           </h4>
           {row.row_count > 1 && (
-            <p className="text-sm text-[var(--muted-foreground)] mt-1">
+            <p className="text-sm text-[var(--muted-foreground)] mt-0.5">
               {row.row_count} regelingen
             </p>
           )}
-          {/* Cross-module indicator */}
-          {otherSources.length > 0 && (
+          {/* Cross-module indicator (fallback if no context header) */}
+          {!headlineValue && otherSources.length > 0 && (
             <div className="mt-2 flex items-center gap-2 text-sm text-[var(--navy-medium)]">
               <span className="font-medium">Ook in:</span>
-              {otherSources.map((source, i) => (
+              {otherSources.map((source) => (
                 <button
                   key={source}
                   onClick={() => onNavigateToModule?.(source, row.primary_value)}

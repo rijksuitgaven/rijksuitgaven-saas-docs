@@ -145,11 +145,24 @@ interface DataTableProps {
 Content displayed when a table row is expanded.
 
 **Features:**
-- Context header with recipient name
-- Cross-module indicator ("Ook in: Instrumenten, Publiek")
+- **Prominent context header** (UX Enhancement 3): Shows Regeling/primary context as headline with breadcrumb hierarchy
+- Cross-module indicator ("Ook in: Instrumenten, Publiek") in context header
+- Recipient name and row count below context
 - Grouping selector dropdown (per-module fields)
 - Detail rows with tree structure (├ └ connectors)
 - Lazy loading of detail data
+
+**Context Header Per Module:**
+
+| Module | Headline | Breadcrumb |
+|--------|----------|------------|
+| instrumenten | Regeling | Artikel › Begrotingsnaam |
+| apparaat | Kostensoort | Artikel › Begrotingsnaam |
+| inkoop | Categorie | Ministerie |
+| provincie | Omschrijving | Provincie |
+| gemeente | Regeling | Beleidsterrein › Gemeente |
+| publiek | Regeling | Organisatie |
+| integraal | Module | - |
 
 **Groupable Fields Per Module:**
 
@@ -540,9 +553,11 @@ npm run build
 
 ### ExpandedRow
 - [ ] Detail data loads on expand
+- [ ] **Context header shows** (Regeling/headline + breadcrumb)
 - [ ] Grouping selector changes data
-- [ ] Cross-module indicator shows
+- [ ] Cross-module indicator shows in context header
 - [ ] Navigate to module works
+- [ ] Fallback to simple view if no context data
 
 ---
 

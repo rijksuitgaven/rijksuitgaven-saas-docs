@@ -59,16 +59,22 @@
 
 ---
 
-## Recent Work (Last 3 Files)
+## Recent Work (Last 5 Files)
 
-1. **app/src/components/detail-panel/detail-panel.tsx** ⭐ CREATED (2026-01-26)
-   Recipient detail side panel (50% width), year breakdown, cross-module badges, CSV export
+1. **app/src/components/data-table/expanded-row.tsx** ⭐ UPDATED (2026-01-26)
+   Added UX Enhancement 3: Prominent context header with Regeling headline + breadcrumb hierarchy
 
-2. **app/src/components/cross-module-results/cross-module-results.tsx** ⭐ CREATED (2026-01-26)
+2. **app/src/components/detail-panel/detail-panel.tsx** ⭐ UPDATED (2026-01-26)
+   Fixed API response handling (details vs rows array), recipient detail side panel
+
+3. **app/src/components/cross-module-results/cross-module-results.tsx** ⭐ CREATED (2026-01-26)
    "Ook in:" counts above table when searching - queries all modules
 
-3. **app/src/components/search-bar/search-bar.tsx** ⭐ UPDATED (2026-01-26)
+4. **app/src/components/search-bar/search-bar.tsx** ⭐ UPDATED (2026-01-26)
    Enhanced autocomplete: "ZOEKTERMEN" (keywords) + "ONTVANGERS" (recipients) sections
+
+5. **CLAUDE.md** ⭐ UPDATED (2026-01-26)
+   Added PM Rule #12: Requirements-first implementation (mandatory checklist before coding)
 
 ---
 
@@ -287,15 +293,15 @@ postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.
 - Users think theme-first ("wolf protection"), system is recipient-first
 - Users LOVE trends but struggle to spot anomalies in large numbers
 
-| Enhancement | Decision | Effort |
+| Enhancement | Decision | Status |
 |-------------|----------|--------|
-| **Enhanced autocomplete** | Index Omschrijving, Regeling, Beleidsterrein; show keyword matches | 4-8 hrs |
-| **Cross-module indicator** | "Ook in: Instrumenten, Publiek" on recipient rows | 3-5 hrs |
-| **Prominent expanded context** | Regeling as headline, breadcrumb hierarchy | Design only |
-| **URL sharing** | Search + key filters preserved | Already planned |
-| **Trend anomaly indicator** | Red highlight for 10%+ year-over-year changes (magnitude only) | 3-4 hrs |
-| **Cross-module search results** | Always show "Ook in:" with counts above table | 4-6 hrs |
-| **Integraal as landing** | Move Integraal tab to first position | Config only |
+| **Enhanced autocomplete** | Index Omschrijving, Regeling, Beleidsterrein; show keyword matches | ✅ Done |
+| **Cross-module indicator** | "Ook in: Instrumenten, Publiek" on recipient rows | ✅ Done |
+| **Prominent expanded context** | Regeling as headline, breadcrumb hierarchy | ✅ Done |
+| **URL sharing** | Search + key filters preserved | ✅ Done |
+| **Trend anomaly indicator** | Red highlight for 10%+ year-over-year changes (magnitude only) | ✅ Done |
+| **Cross-module search results** | Always show "Ook in:" with counts above table | ✅ Done |
+| **Integraal as landing** | Move Integraal tab to first position | ✅ Done |
 
 **User struggles addressed:**
 - A) Finding recipients → Enhanced autocomplete
@@ -799,4 +805,4 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
 - 2026-01-23 - Data migration complete (3.1M rows), Typesense sync (466K recipients)
 
-**This Session:** 2026-01-26 - **WEEKS 3, 4 & 5 COMPLETE.** DataTable with TanStack Table, expandable rows with grouping, filter panel with URL sync. Reusable ModulePage component for all 7 modules. Sticky columns for mobile. Documentation audit: Brawler font added, cookie banner built, privacy policy page created, Integraal config fixed, FRONTEND-DOCUMENTATION.md created. **Week 5:** Global search bar (Typesense autocomplete), header navigation with modules dropdown, CSV export (500 rows max). **Next:** Week 6 - User Auth
+**This Session:** 2026-01-26 - **WEEKS 3, 4 & 5 COMPLETE + ALL UX ENHANCEMENTS.** DataTable with TanStack Table, expandable rows with grouping, filter panel with URL sync. Reusable ModulePage component for all 7 modules. Sticky columns for mobile. Documentation audit: Brawler font added, cookie banner built, privacy policy page created, Integraal config fixed, FRONTEND-DOCUMENTATION.md created. **Week 5:** Global search bar (Typesense autocomplete), header navigation with modules dropdown, CSV export (500 rows max). **UX Enhancements:** Enhanced autocomplete (keywords+recipients), DetailPanel (side panel), CrossModuleResults ("Ook in:" above table), Prominent expanded context (Regeling headline + breadcrumb). **Added:** PM Rule #12 requirements-first implementation. **Next:** Week 6 - User Auth
