@@ -43,6 +43,7 @@
 |-----------|---------|
 | `postgis` | Geographic/geometry data (publiek.locatie) |
 | `vector` | Future: AI embeddings for semantic search |
+| `pg_trgm` | Trigram indexes for fast ILIKE searches |
 
 ---
 
@@ -318,6 +319,7 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY universal_search;
 **Indexes per view:**
 - `idx_[view]_[primary]` - Fast lookup by primary field
 - `idx_[view]_totaal` - Fast sorting by total amount
+- `idx_[view]_[primary]_trgm` - GIN trigram index for fast ILIKE searches (added 2026-01-26)
 
 **Refresh Commands (run after data updates):**
 ```sql
