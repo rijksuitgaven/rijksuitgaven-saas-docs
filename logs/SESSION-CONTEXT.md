@@ -32,7 +32,7 @@
 - ✅ Universal search materialized view created
 - ✅ Source column triggers deployed
 - ✅ Data freshness tracking table created
-- ✅ **Typesense collections & sync** - 466,827 recipients indexed, <25ms search
+- ✅ **Typesense collections & sync** - recipients indexed, <25ms search (⚠️ re-sync needed after entity resolution)
 - ✅ **Week 1 Day 7:** Next.js project setup (COMPLETED 2026-01-24)
 - ✅ **Week 1 COMPLETE** - All deliverables done
 - ✅ **Week 2 Day 1:** FastAPI backend deployed (COMPLETED 2026-01-26)
@@ -123,7 +123,7 @@
 | API Key | `0vh4mxafjeuvd676gw92kpjflg6fuv57` |
 | Status | ✅ Running |
 | Collections | 7 (recipients, instrumenten, inkoop, publiek, gemeente, provincie, apparaat) |
-| Indexed | 466,827 recipients + 9,628 apparaat |
+| Indexed | ⚠️ Needs re-sync after entity resolution (will be 451,445 recipients) |
 | Performance | <25ms search (target <100ms) |
 | Scripts | `scripts/typesense/collections.json`, `scripts/typesense/sync_to_typesense.py` |
 | **Sync Docs** | `scripts/typesense/README.md` ← **Use this for re-indexing** |
@@ -366,7 +366,7 @@ postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.
 | Results display | Recipient → Module breakdown → Grouping (click to navigate) |
 | Totals row | YES - grand total across all modules |
 | Sorting | Asc/desc on years and totaal |
-| Recipient normalization | V1.0: `UPPER(Ontvanger)`, V2.0: entity mapping table |
+| Recipient normalization | V1.0: `normalize_recipient()` (B.V./N.V./casing) → 451,445 entities |
 | Navigation | Click grouping → module page with filter applied |
 
 **Key insight:** Cross-module = discovery layer, Module page = detail layer.
@@ -463,8 +463,8 @@ Dedicated overview page showing module-level totals with year columns.
 | provincie | 67,456 |
 | gemeente | 126,377 |
 | publiek | 115,020 |
-| universal_search | 1,456,095 (materialized view) |
-| **Total** | **~3.1 million rows** |
+| universal_search | 451,445 (materialized view, after entity resolution) |
+| **Total** | **~1.6 million source rows + 451K aggregated** |
 
 **Scripts created:**
 - `scripts/data/transform-csv-headers.py` - CSV transformation (NULL handling, UTF-8)
@@ -708,8 +708,8 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 | provincie | 67,456 | ✅ Migrated |
 | gemeente | 126,377 | ✅ Migrated |
 | publiek | 115,020 | ✅ Migrated |
-| universal_search | 1,456,095 | ✅ Materialized view |
-| **Total** | **~3.1M** | ✅ Complete |
+| universal_search | 451,445 | ✅ Materialized view (entity resolution applied) |
+| **Total** | **~1.6M source + 451K aggregated** | ✅ Complete |
 
 ### Key Context
 - **V1.0 = Single-View Architecture + New Features** (not 1:1 port)
@@ -727,4 +727,4 @@ See full sprint plan: `09-timelines/v1-sprint-plan.md`
 - 2026-01-21 - PM audit, UX brainstorm, folder restructure, Supabase setup, Typesense deployed
 - 2026-01-23 - Data migration complete (3.1M rows), Typesense sync (466K recipients)
 
-**This Session:** 2026-01-26 - **WEEK 2 COMPLETE.** FastAPI backend deployed, materialized views for performance (100x improvement), all 7 endpoints tested. Year filter Option B (show all years for recipients active in filtered year). Data Update Runbook created. Recharts selected (React 19 compatible). **Next:** Week 3 - Core UI Components
+**This Session:** 2026-01-26 - **WEEK 2 COMPLETE.** FastAPI backend deployed, materialized views for performance (100x improvement), all 7 endpoints tested. Year filter Option B (show all years for recipients active in filtered year). Data Update Runbook created. Recharts selected (React 19 compatible). Entity resolution: 15,382 duplicates merged (466,827 → 451,445). **Next:** Week 3 - Core UI Components (⚠️ First: re-sync Typesense)
