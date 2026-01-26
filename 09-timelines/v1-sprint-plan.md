@@ -281,10 +281,10 @@
 | CSV export button | Download visible results (max 500) |
 
 **Week 5 Deliverables:**
-- [ ] Global search with autocomplete
-- [ ] Header navigation complete
-- [ ] URL sharing (basic)
-- [ ] CSV export working
+- [x] Global search with autocomplete (2026-01-26: Typesense integration, <50ms)
+- [x] Header navigation complete (2026-01-26: modules dropdown, mobile menu)
+- [x] URL sharing (basic) (2026-01-26: filters in URL via module-page)
+- [x] CSV export working (2026-01-26: max 500 rows, Dutch format)
 
 ---
 

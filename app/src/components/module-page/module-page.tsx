@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { DataTable, ExpandedRow } from '@/components/data-table'
 import { FilterPanel, type FilterValues } from '@/components/filter-panel'
+import { DetailPanel } from '@/components/detail-panel'
+import { CrossModuleResults } from '@/components/cross-module-results'
 import { fetchModuleData } from '@/lib/api'
 import type { ModuleDataResponse, RecipientRow } from '@/types/api'
 
@@ -120,6 +122,8 @@ function ModulePageContent({ moduleId, config }: { moduleId: string; config: Mod
   const [perPage, setPerPage] = useState(25)
   const [sortBy, setSortBy] = useState<string>('total')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const [selectedRecipient, setSelectedRecipient] = useState<string | null>(null)
+  const [isDetailOpen, setIsDetailOpen] = useState(false)
 
   // Initialize filters from URL params
   const [filters, setFilters] = useState<FilterValues>(() => ({
@@ -197,6 +201,15 @@ function ModulePageContent({ moduleId, config }: { moduleId: string; config: Mod
     router.push(`/${targetModule}?q=${encodeURIComponent(recipient)}`)
   }, [router])
 
+  const handleRowClick = useCallback((recipientName: string) => {
+    setSelectedRecipient(recipientName)
+    setIsDetailOpen(true)
+  }, [])
+
+  const handleCloseDetail = useCallback(() => {
+    setIsDetailOpen(false)
+  }, [])
+
   const renderExpandedRow = useCallback((row: RecipientRow) => (
     <ExpandedRow
       row={row}
@@ -250,6 +263,14 @@ function ModulePageContent({ moduleId, config }: { moduleId: string; config: Mod
           </div>
         )}
 
+        {/* Cross-module search results */}
+        {filters.search && moduleId !== 'integraal' && (
+          <CrossModuleResults
+            searchQuery={filters.search}
+            currentModule={moduleId}
+          />
+        )}
+
         <DataTable
           data={data?.rows ?? []}
           availableYears={data?.availableYears ?? []}
@@ -262,10 +283,22 @@ function ModulePageContent({ moduleId, config }: { moduleId: string; config: Mod
           onPerPageChange={handlePerPageChange}
           onSortChange={handleSortChange}
           onRowExpand={handleRowExpand}
+          onRowClick={handleRowClick}
           renderExpandedRow={renderExpandedRow}
           moduleId={moduleId}
         />
       </main>
+
+      {/* Detail Side Panel */}
+      {selectedRecipient && (
+        <DetailPanel
+          recipientName={selectedRecipient}
+          moduleId={moduleId}
+          isOpen={isDetailOpen}
+          onClose={handleCloseDetail}
+          onNavigateToModule={handleNavigateToModule}
+        />
+      )}
     </div>
   )
 }

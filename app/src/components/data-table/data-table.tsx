@@ -42,6 +42,7 @@ interface DataTableProps {
   onPerPageChange?: (perPage: number) => void
   onSortChange?: (column: string, direction: 'asc' | 'desc') => void
   onRowExpand?: (primaryValue: string) => void
+  onRowClick?: (primaryValue: string) => void // Click on recipient name to open detail panel
   renderExpandedRow?: (row: RecipientRow) => React.ReactNode
   moduleId?: string // For export filename
 }
@@ -144,6 +145,7 @@ export function DataTable({
   onPerPageChange,
   onSortChange,
   onRowExpand,
+  onRowClick,
   renderExpandedRow,
   moduleId = 'export',
 }: DataTableProps) {
@@ -211,8 +213,13 @@ export function DataTable({
           </SortableHeader>
         ),
         cell: ({ row }) => (
-          <div className="font-medium text-[var(--navy-dark)]">
-            {row.original.primary_value}
+          <div>
+            <button
+              onClick={() => onRowClick?.(row.original.primary_value)}
+              className="font-medium text-[var(--navy-dark)] hover:text-[var(--pink)] hover:underline text-left transition-colors"
+            >
+              {row.original.primary_value}
+            </button>
             {/* Cross-module indicator */}
             {row.original.sources && row.original.sources.length > 1 && (
               <div className="text-xs text-[var(--navy-medium)] mt-0.5">
