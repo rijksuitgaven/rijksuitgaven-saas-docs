@@ -536,48 +536,49 @@ async def get_integraal_details(
     """
     Get module breakdown for a specific recipient in integraal view.
 
-    Shows how much the recipient received from each module.
+    Shows how much the recipient received from each module by querying
+    each module's aggregated view.
     """
-    # Query universal_search_source for module breakdown
-    where_clauses = ["ontvanger = $1"]
-    params = [primary_value]
-
-    if jaar:
-        where_clauses.append("jaar = $2")
-        params.append(jaar)
-
-    where_sql = f"WHERE {' AND '.join(where_clauses)}"
-
-    # Build year columns
-    year_columns = ", ".join([
-        f"COALESCE(SUM(CASE WHEN jaar = {year} THEN bedrag END), 0) AS \"y{year}\""
-        for year in YEARS
-    ])
-
-    query = f"""
-        SELECT
-            source AS group_value,
-            {year_columns},
-            COALESCE(SUM(bedrag), 0) AS totaal,
-            COUNT(*) AS row_count
-        FROM universal_search_source
-        {where_sql}
-        GROUP BY source
-        ORDER BY totaal DESC
-        LIMIT 100
-    """
-
-    rows = await fetch_all(query, *params)
+    # Modules that have ontvanger as primary field (not apparaat)
+    modules_to_query = [
+        ("instrumenten", "instrumenten_aggregated"),
+        ("inkoop", "inkoop_aggregated"),
+        ("provincie", "provincie_aggregated"),
+        ("gemeente", "gemeente_aggregated"),
+        ("publiek", "publiek_aggregated"),
+    ]
 
     result = []
-    for row in rows:
-        years_dict = {year: float(row.get(f"y{year}", 0) or 0) for year in YEARS}
-        result.append({
-            "group_by": "module",
-            "group_value": row["group_value"],
-            "years": years_dict,
-            "totaal": float(row["totaal"] or 0),
-            "row_count": row["row_count"],
-        })
+
+    for module_name, agg_table in modules_to_query:
+        # Year filter clause
+        year_filter = f'AND "{jaar}" > 0' if jaar else ""
+
+        query = f"""
+            SELECT
+                "2016" AS y2016, "2017" AS y2017, "2018" AS y2018,
+                "2019" AS y2019, "2020" AS y2020, "2021" AS y2021,
+                "2022" AS y2022, "2023" AS y2023, "2024" AS y2024,
+                totaal,
+                row_count
+            FROM {agg_table}
+            WHERE ontvanger = $1 {year_filter}
+        """
+
+        rows = await fetch_all(query, primary_value)
+
+        if rows:
+            row = rows[0]
+            years_dict = {year: float(row.get(f"y{year}", 0) or 0) for year in YEARS}
+            result.append({
+                "group_by": "module",
+                "group_value": module_name,
+                "years": years_dict,
+                "totaal": float(row["totaal"] or 0),
+                "row_count": row["row_count"],
+            })
+
+    # Sort by totaal descending
+    result.sort(key=lambda x: x["totaal"], reverse=True)
 
     return result
