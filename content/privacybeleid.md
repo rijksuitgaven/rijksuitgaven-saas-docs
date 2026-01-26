@@ -1,6 +1,6 @@
 # Privacybeleid
 
-**Laatst bijgewerkt:** [datum V1.0 launch]
+**Laatst bijgewerkt:** 26 januari 2026
 
 ---
 
@@ -101,4 +101,4 @@
 
 ---
 
-*Dit privacybeleid is voor het laatst bijgewerkt op [datum].*
+*Dit privacybeleid is voor het laatst bijgewerkt op 26 januari 2026.*

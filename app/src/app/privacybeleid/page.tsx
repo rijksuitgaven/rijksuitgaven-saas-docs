@@ -18,7 +18,7 @@ export default function PrivacybeleidPage() {
             Privacybeleid
           </h1>
           <p className="text-[var(--blue-light)] mt-1 text-sm">
-            Laatst bijgewerkt: januari 2026
+            Laatst bijgewerkt: 26 januari 2026
           </p>
         </div>
       </header>
