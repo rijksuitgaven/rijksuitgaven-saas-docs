@@ -151,16 +151,14 @@ ORDER BY view_name;
 ```bash
 cd /Users/michielmaandag/SynologyDrive/code/watchtower/rijksuitgaven
 
+# Set environment variable (replace password if needed)
+export SUPABASE_DB_URL="postgresql://postgres.kmdelrgtgglcrupprkqf:bahwyq-6botry-veStad@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
+
 # Full re-sync (recreates collections)
-SUPABASE_DB_URL="postgresql://postgres.kmdelrgtgglcrupprkqf:${SUPABASE_DB_PASSWORD}@aws-1-eu-west-1.pooler.supabase.com:5432/postgres" \
-  python3 scripts/typesense/sync_to_typesense.py --recreate
+python3 scripts/typesense/sync_to_typesense.py --recreate
 ```
 
-**For incremental sync (if supported):**
-```bash
-# Sync only new/changed records (faster)
-SUPABASE_DB_URL="..." python3 scripts/typesense/sync_to_typesense.py
-```
+**Expected output:** ~451,445 recipients + module collections indexed.
 
 ### Verify Typesense Sync
 
